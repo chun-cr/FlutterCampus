@@ -82,8 +82,8 @@ class AppTheme {
             borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           ),
           side: BorderSide(
-            color: AppColors.greyLight,
-            width: 1,
+            color: AppColors.greyDark,
+            width: 1.5,
           ),
           elevation: 2,
         ),
@@ -130,15 +130,15 @@ class AppTheme {
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
-            color: AppColors.greyLight,
-            width: 1,
+            color: AppColors.greyDark,
+            width: 1.5,
           ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
-            color: AppColors.greyLight.withOpacity(0.8),
-            width: 1,
+            color: AppColors.grey,
+            width: 1.5,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -176,12 +176,14 @@ class AppTheme {
       ),
       // 应用栏样式
       appBarTheme: AppBarTheme(
-        backgroundColor: AppColors.background,
+        backgroundColor: AppColors.surface,
         foregroundColor: AppColors.textPrimary,
         elevation: 2,
+        shadowColor: AppColors.greyLight,
         centerTitle: true,
         titleTextStyle: AppTextStyles.titleMedium.copyWith(
           color: AppColors.textPrimary,
+          fontWeight: FontWeight.w700,
         ),
         toolbarHeight: AppSpacing.appBarHeight,
         iconTheme: IconThemeData(color: AppColors.textPrimary),
@@ -215,7 +217,7 @@ class AppTheme {
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.largeBorderRadius),
-          side: BorderSide(color: AppColors.greyLight.withOpacity(0.5), width: 1),
+          side: BorderSide(color: AppColors.greyDark, width: 1),
         ),
         titleTextStyle: AppTextStyles.titleLarge,
         contentTextStyle: AppTextStyles.bodyMedium,

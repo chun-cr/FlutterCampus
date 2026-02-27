@@ -79,11 +79,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -96,21 +96,28 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
   void _register() async {
     if (_formKey.currentState?.validate() ?? false) {
+      final username = _usernameController.text.trim();
+      final password = _passwordController.text.trim();
+      final name = _nameController.text.trim();
+      final email = _emailController.text.trim();
+      final phone = _phoneController.text.trim();
+      final studentId = _userType == UserType.student ? _studentIdController.text.trim() : null;
+      final department = _departmentController.text.trim();
+
       final user = User(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
-        username: _usernameController.text.trim(),
-        password: _passwordController.text.trim(),
-        name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
-        phone: _phoneController.text.trim(),
+        username: username,
+        name: name,
+        email: email,
+        phone: phone,
         type: _userType,
-        studentId: _userType == UserType.student ? _studentIdController.text.trim() : null,
-        department: _departmentController.text.trim(),
-        isLoggedIn: true,
+        studentId: studentId,
+        department: department,
       );
 
-      await ref.read(authStateProvider.notifier).register(user);
+      await ref.read(authStateProvider.notifier).register(user, password);
 
+      if (!mounted) return;
       final authState = ref.read(authStateProvider);
       if (authState.user != null) {
         context.go('/home');
@@ -143,7 +150,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   const SizedBox(height: 16),
-                  // 标题
                   Text(
                     '创建账号',
                     style: AppTextStyles.headlineMedium.copyWith(
@@ -159,7 +165,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  // 用户类型选择
                   Container(
                     margin: const EdgeInsets.only(bottom: 32),
                     padding: const EdgeInsets.all(4),
@@ -242,7 +247,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                       ],
                     ),
                   ),
-                  // 注册表单
                   Form(
                     key: _formKey,
                     child: Column(
@@ -369,7 +373,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             ),
                           ),
                         
-                        // 注册按钮
                         ElevatedButton(
                           onPressed: authState.isLoading ? null : _register,
                           style: ElevatedButton.styleFrom(
@@ -401,7 +404,6 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         ),
                         const SizedBox(height: 48),
 
-                        // 登录链接
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [

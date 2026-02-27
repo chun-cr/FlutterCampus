@@ -44,7 +44,7 @@ class ProfilePage extends ConsumerWidget {
           Icon(Icons.person_outline_rounded, size: 80, color: AppColors.grey.withOpacity(0.5)),
           const SizedBox(height: 24),
           Text(
-            'Welcome',
+            '欢迎使用',
             style: AppTextStyles.titleLarge.copyWith(
               fontWeight: FontWeight.w300,
               letterSpacing: 1.2,
@@ -52,7 +52,7 @@ class ProfilePage extends ConsumerWidget {
           ),
           const SizedBox(height: 8),
           Text(
-            'Sign in to access your profile',
+            '登录后查看个人资料',
             style: AppTextStyles.bodyLarge.copyWith(color: AppColors.textSecondary),
           ),
           const SizedBox(height: 40),
@@ -67,7 +67,7 @@ class ProfilePage extends ConsumerWidget {
               ),
             ),
             onPressed: () => context.go('/login'),
-            child: const Text('Sign In', style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5)),
+            child: const Text('立即登录', style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5)),
           ),
         ],
       ),
@@ -130,7 +130,7 @@ class ProfilePage extends ConsumerWidget {
                 ),
                 const SizedBox(height: 6),
                 Text(
-                  user.department ?? 'Member',
+                  user.department ?? '校园成员',
                   style: AppTextStyles.bodyLarge.copyWith(
                     color: AppColors.textSecondary,
                     letterSpacing: 0.5,
@@ -147,26 +147,26 @@ class ProfilePage extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildSectionHeader('ACCOUNT'),
+                _buildSectionHeader('账号信息'),
                 const SizedBox(height: 16),
                 _buildProfileGroup([
-                  _buildProfileRow(Icons.phone_iphone_rounded, 'Phone', user.phone),
-                  _buildProfileRow(Icons.mail_outline_rounded, 'Email', user.email),
-                  _buildProfileRow(Icons.badge_outlined, 'ID', user.username),
+                  _buildProfileRow(Icons.phone_iphone_rounded, '手机号', user.phone),
+                  _buildProfileRow(Icons.mail_outline_rounded, '邮箱', user.email),
+                  _buildProfileRow(Icons.badge_outlined, '账号', user.username),
                   _buildProfileRow(
-                    Icons.verified_user_outlined, 
-                    'Role', 
-                    user.type == UserType.student ? 'Student' : (user.type == UserType.teacher ? 'Teacher' : 'Staff'),
+                    Icons.verified_user_outlined,
+                    '角色',
+                    user.type == UserType.student ? '学生' : (user.type == UserType.teacher ? '教师' : '工作人员'),
                     isLast: true,
                   ),
                 ]),
                 const SizedBox(height: 40),
-                _buildSectionHeader('PREFERENCES'),
+                _buildSectionHeader('偏好设置'),
                 const SizedBox(height: 16),
                 _buildProfileGroup([
-                  _buildActionRow(Icons.tune_rounded, 'Settings', onTap: () {}),
-                  _buildActionRow(Icons.help_outline_rounded, 'Help & Support', onTap: () {}),
-                  _buildActionRow(Icons.info_outline_rounded, 'About', isLast: true, onTap: () {}),
+                  _buildActionRow(Icons.tune_rounded, '设置', onTap: () {}),
+                  _buildActionRow(Icons.help_outline_rounded, '帮助与反馈', onTap: () {}),
+                  _buildActionRow(Icons.info_outline_rounded, '关于', isLast: true, onTap: () {}),
                 ]),
                 const SizedBox(height: 48),
                 Center(
@@ -183,7 +183,7 @@ class ProfilePage extends ConsumerWidget {
                       }
                     },
                     child: const Text(
-                      'Sign Out',
+                      '退出登录',
                       style: TextStyle(fontWeight: FontWeight.w600, letterSpacing: 0.5, fontSize: 16),
                     ),
                   ),

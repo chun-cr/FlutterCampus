@@ -100,7 +100,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 type: BottomNavigationBarType.fixed,
                 backgroundColor: Colors.white,
                 selectedItemColor: AppColors.primary,
-                unselectedItemColor: AppColors.grey.withOpacity(0.5),
+                unselectedItemColor: AppColors.grey,
                 items: const [
                   BottomNavigationBarItem(
                     icon: Padding(
@@ -144,7 +144,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
 
     return Container(
-      color: const Color(0xFFF7F7F7), // Neutral premium background for desktop
+      color: const Color(0xFFDDDDDD), // 加深桌面背景
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),

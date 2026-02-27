@@ -1,80 +1,85 @@
 import 'package:riverpod/riverpod.dart';
-import 'package:hive/hive.dart';
-import '../../domain/models/user.dart';
+import '../../domain/models/user.dart' as models;
+import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 
 class AuthService {
-  late Box<User> _userBox;
+  final SupabaseClient _supabaseClient;
+  AuthService(this._supabaseClient);
 
-  Future<void> init() async {
-    _userBox = await Hive.openBox<User>('users');
-  }
-
-  Future<User?> login(String username, String password) async {
-    // 模拟登录验证
-    for (var i = 0; i < _userBox.length; i++) {
-      final user = _userBox.getAt(i);
-      if (user != null && user.username == username && user.password == password) {
-        final updatedUser = user.copyWith(isLoggedIn: true);
-        await _userBox.putAt(i, updatedUser);
-        return updatedUser;
+  Future<models.User?> login(String email, String password) async {
+    try {
+      final AuthResponse response = await _supabaseClient.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+      if (response.user != null) {
+        return models.User.fromSupabase(response.user!);
       }
+    } catch (e) {
+      print('Login error: $e');
     }
     return null;
   }
 
   Future<void> logout() async {
-    for (var i = 0; i < _userBox.length; i++) {
-      final user = _userBox.getAt(i);
-      if (user != null && user.isLoggedIn) {
-        final updatedUser = user.copyWith(isLoggedIn: false);
-        await _userBox.putAt(i, updatedUser);
-        break;
-      }
-    }
+    await _supabaseClient.auth.signOut();
   }
 
-  Future<User> register(User user) async {
-    await _userBox.add(user);
-    return user;
-  }
-
-  Future<User?> getCurrentUser() async {
-    for (var i = 0; i < _userBox.length; i++) {
-      final user = _userBox.getAt(i);
-      if (user != null && user.isLoggedIn) {
-        return user;
+  Future<models.User?> register(models.User user, String password) async {
+    try {
+      final AuthResponse response = await _supabaseClient.auth.signUp(
+        email: user.email,
+        password: password,
+        data: {
+          'username': user.username,
+          'name': user.name,
+          'type': user.type.toString(),
+          'student_id': user.studentId,
+          'department': user.department,
+          'phone': user.phone,
+        },
+      );
+      if (response.user != null) {
+        return models.User.fromSupabase(response.user!);
       }
+    } catch (e) {
+      print('Register error: $e');
+      rethrow;
     }
     return null;
   }
 
-  Future<void> updateUser(User user) async {
-    for (var i = 0; i < _userBox.length; i++) {
-      final existingUser = _userBox.getAt(i);
-      if (existingUser != null && existingUser.id == user.id) {
-        await _userBox.putAt(i, user);
-        break;
-      }
+  Future<models.User?> getCurrentUser() async {
+    final supabaseUser = _supabaseClient.auth.currentUser;
+    if (supabaseUser != null) {
+      return models.User.fromSupabase(supabaseUser);
     }
+    return null;
   }
 
-  Future<void> deleteUser(String userId) async {
-    for (var i = 0; i < _userBox.length; i++) {
-      final user = _userBox.getAt(i);
-      if (user != null && user.id == userId) {
-        await _userBox.deleteAt(i);
-        break;
-      }
+  Future<void> updateUser(models.User user) async {
+    try {
+      await _supabaseClient.auth.updateUser(
+        UserAttributes(
+          data: {
+            'username': user.username,
+            'name': user.name,
+            'type': user.type.toString(),
+            'student_id': user.studentId,
+            'department': user.department,
+            'phone': user.phone,
+          },
+        ),
+      );
+    } catch (e) {
+      print('Update user error: $e');
+      rethrow;
     }
-  }
-
-  Future<List<User>> getAllUsers() async {
-    return _userBox.values.toList();
   }
 }
 
 final authServiceProvider = Provider<AuthService>((ref) {
-  return AuthService();
+  return AuthService(Supabase.instance.client);
 });
 
 final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
@@ -82,7 +87,7 @@ final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 });
 
 class AuthState {
-  final User? user;
+  final models.User? user;
   final bool isLoading;
   final String? error;
 
@@ -93,7 +98,7 @@ class AuthState {
   });
 
   AuthState copyWith({
-    User? user,
+    models.User? user,
     bool? isLoading,
     String? error,
   }) {
@@ -115,7 +120,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> _loadCurrentUser() async {
     state = state.copyWith(isLoading: true);
     try {
-      await _authService.init();
       final user = await _authService.getCurrentUser();
       state = state.copyWith(user: user, isLoading: false);
     } catch (e) {
@@ -150,17 +154,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> register(User user) async {
+  Future<void> register(models.User user, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final newUser = await _authService.register(user);
+      final newUser = await _authService.register(user, password);
       state = state.copyWith(user: newUser, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
-  Future<void> updateUser(User user) async {
+  Future<void> updateUser(models.User user) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
       await _authService.updateUser(user);

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../components/components.dart';
 import '../../theme/theme.dart';
@@ -17,7 +17,7 @@ class LifePage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. 校园头条 (Premium Feed)
-              _buildSectionHeader('Campus Insights'),
+              _buildSectionHeader('校园资讯'),
               SizedBox(
                 height: 240,
                 child: ListView.builder(
@@ -59,7 +59,7 @@ class LifePage extends ConsumerWidget {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  index == 0 ? 'Spring 2026 Opening Ceremonies' : 'Annual Campus Music Festival',
+                                  index == 0 ? '2026年春季开学典礼' : '年度校园音乐节',
                                   style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w500, height: 1.3),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
@@ -76,16 +76,16 @@ class LifePage extends ConsumerWidget {
               const SizedBox(height: 48),
 
               // 2. 食堂与后勤 (Daily Menu - Minimalist)
-              _buildSectionHeader('Culinary Selections'),
+              _buildSectionHeader('食堂菜单'),
               _buildPremiumCard(
                 child: Column(
                   children: [
-                    _buildCanteenItem('Dining Hall I', 'Braised Pork, Mapo Tofu', 4.8),
+                    _buildCanteenItem('一食堂', '红烧肉、麻婆豆腐', 4.8),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
                     ),
-                    _buildCanteenItem('Dining Hall II', 'Sweet & Sour Ribs, Seasonal Greens', 4.5),
+                    _buildCanteenItem('二食堂', '糖醉排骨、时令蔬菜', 4.5),
                     const SizedBox(height: 32),
                     SizedBox(
                       width: double.infinity,
@@ -100,7 +100,7 @@ class LifePage extends ConsumerWidget {
                           ),
                         ),
                         child: Text(
-                          'View Full Menu',
+                          '查看全部菜单',
                           style: AppTextStyles.button.copyWith(color: AppColors.textPrimary),
                         ),
                       ),
@@ -111,7 +111,7 @@ class LifePage extends ConsumerWidget {
               const SizedBox(height: 48),
 
               // 3. 校车与地图 (Campus Transit - Sleek)
-              _buildSectionHeader('Transit & Maps'),
+              _buildSectionHeader('校车与地图'),
               _buildPremiumCard(
                 padding: EdgeInsets.zero,
                 child: Column(
@@ -140,7 +140,7 @@ class LifePage extends ConsumerWidget {
                             children: [
                               const Icon(Icons.location_on_outlined, size: 16, color: AppColors.textPrimary),
                               const SizedBox(width: 6),
-                              Text('View Map', style: AppTextStyles.labelMedium),
+                              Text('查看地图', style: AppTextStyles.labelMedium),
                             ],
                           ),
                         ),
@@ -165,7 +165,7 @@ class LifePage extends ConsumerWidget {
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('Campus Shuttle A', style: AppTextStyles.titleMedium),
+                                  Text('校园専车 A线', style: AppTextStyles.titleMedium),
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
@@ -178,7 +178,7 @@ class LifePage extends ConsumerWidget {
                                         ),
                                       ),
                                       const SizedBox(width: 6),
-                                      Text('Arriving in 5 mins', style: AppTextStyles.caption),
+                                      Text('5分钟后到达', style: AppTextStyles.caption),
                                     ],
                                   ),
                                 ],

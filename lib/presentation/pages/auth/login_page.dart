@@ -33,7 +33,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           );
 
       final authState = ref.read(authStateProvider);
-      if (authState.user != null && authState.user!.isLoggedIn) {
+      if (authState.user != null) {
         context.go('/home');
       }
     }
@@ -113,11 +113,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                    borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                    borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../components/components.dart';
@@ -17,49 +17,49 @@ class HelpPage extends ConsumerWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. Concierge Services (Quick Actions)
-              _buildSectionHeader('Concierge Services'),
+              // 1. 快速功能入口
+              _buildSectionHeader('快速功能'),
               Row(
                 children: [
                   Expanded(child: _buildActionButton(
-                    Icons.vpn_key_outlined, 'Lost & Found',
+                    Icons.vpn_key_outlined, '失物招领',
                     () => context.push('/help/post?type=lostAndFound')
                   )),
                   const SizedBox(width: 16),
                   Expanded(child: _buildActionButton(
-                    Icons.shopping_bag_outlined, 'Marketplace',
+                    Icons.shopping_bag_outlined, '闲置交换',
                     () => context.push('/help/post?type=secondHand')
                   )),
                   const SizedBox(width: 16),
                   Expanded(child: _buildActionButton(
-                    Icons.people_outline, 'Community',
+                    Icons.people_outline, '校园搭子',
                     () => context.push('/help/post?type=helpTask')
                   )),
                 ],
               ),
               const SizedBox(height: 48),
 
-              // 2. 失物招领 (Lost & Found)
-              _buildSectionHeader('Recent Recoveries'),
+              // 2. 失物招领
+              _buildSectionHeader('最新失物招领'),
               _buildPremiumCard(
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
                     _buildListItem(
                       icon: Icons.directions_car_outlined,
-                      title: 'BMW Car Key',
-                      subtitle: 'Found near Dining Hall II',
-                      time: '10m ago',
-                      tag: 'FOUND',
+                      title: '宝马车钥匙',
+                      subtitle: '在二食堂附近拾到',
+                      time: '10分钟前',
+                      tag: '已找到',
                       isUrgent: false,
                     ),
                     const Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
                     _buildListItem(
                       icon: Icons.credit_card_outlined,
-                      title: 'Student ID Card',
-                      subtitle: 'Ending in 01',
-                      time: '1h ago',
-                      tag: 'LOST',
+                      title: '学生证',
+                      subtitle: '尾号 01',
+                      time: '1小时前',
+                      tag: '已丢失',
                       isUrgent: true,
                     ),
                   ],
@@ -71,10 +71,10 @@ class HelpPage extends ConsumerWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildSectionHeader('Curated Marketplace'),
+                  _buildSectionHeader('闲置市场'),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16, right: 4),
-                    child: Text('View All', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                    child: Text('查看全部', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
                   ),
                 ],
               ),
@@ -118,7 +118,7 @@ class HelpPage extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  index % 2 == 0 ? 'Design Book' : 'Wireless Mouse', 
+                                  index % 2 == 0 ? '设计类图书' : '无线鼠标', 
                                   style: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w600), 
                                   maxLines: 1
                                 ),
@@ -139,16 +139,16 @@ class HelpPage extends ConsumerWidget {
               const SizedBox(height: 48),
 
               // 4. 校园搭子 (Community Requests)
-              _buildSectionHeader('Community Requests'),
+              _buildSectionHeader('互助请求'),
               _buildPremiumCard(
                 child: Column(
                   children: [
-                    _buildTaskItem('Dining Hall II Pickup', 'Errand · ¥20 reward', '5m ago'),
+                    _buildTaskItem('二食堂帮打饭', '跑腿任务 · 奖励20元', '5分钟前'),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
                       child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
                     ),
-                    _buildTaskItem('Saturday Badminton Partner', 'Sports · Need 2', '30m ago'),
+                    _buildTaskItem('周六打羽毛球搭子', '运动 ·缺2人', '30分钟前'),
                   ],
                 ),
               ),

@@ -23,7 +23,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await Future.delayed(const Duration(seconds: 2));
 
     final authState = ref.read(authStateProvider);
-    if (authState.user != null && authState.user!.isLoggedIn) {
+    if (authState.user != null) {
       // 已登录，跳转到首页
       context.go('/home');
     } else {

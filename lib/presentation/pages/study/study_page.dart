@@ -18,7 +18,7 @@ class StudyPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. 智能课表模块
-              _buildSectionHeader('Smart Schedule'),
+              _buildSectionHeader('智能课表'),
               _buildPremiumCard(
                 child: Column(
                   children: [
@@ -38,11 +38,11 @@ class StudyPage extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('Advanced Mathematics', style: AppTextStyles.titleMedium),
-                              const SizedBox(height: 4),
-                              Text('08:00 - 09:40', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-                              const SizedBox(height: 2),
-                              Text('Building 1 · Room 301', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                            Text('高等数学', style: AppTextStyles.titleMedium),
+                            const SizedBox(height: 4),
+                            Text('08:00 - 09:40', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
+                            const SizedBox(height: 2),
+                            Text('一号楼 · 301室', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
                             ],
                           ),
                         ),
@@ -52,7 +52,7 @@ class StudyPage extends ConsumerWidget {
                             border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.5),
                             borderRadius: BorderRadius.circular(24),
                           ),
-                          child: Text('Navigate', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                          child: Text('导航', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
                         ),
                       ],
                     ),
@@ -63,9 +63,9 @@ class StudyPage extends ConsumerWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildQuickAction(Icons.calendar_today_outlined, 'Full Schedule'),
-                        _buildQuickAction(Icons.notifications_none_outlined, 'Reminders'),
-                        _buildQuickAction(Icons.meeting_room_outlined, 'Find Room'),
+                        _buildQuickAction(Icons.calendar_today_outlined, '完整课表'),
+                        _buildQuickAction(Icons.notifications_none_outlined, '课程提醒'),
+                        _buildQuickAction(Icons.meeting_room_outlined, '查找教室'),
                       ],
                     ),
                   ],
@@ -74,18 +74,18 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 2. 图书馆助手
-              _buildSectionHeader('Library Services'),
+              _buildSectionHeader('图书馆服务'),
               _buildPremiumCard(
                 child: Column(
                   children: [
                     Row(
                       children: [
                         Expanded(
-                          child: _buildLibraryStat('Active Loans', '3', '1 returning soon', AppColors.textPrimary),
+                          child: _buildLibraryStat('在借图书', '3', '1本即将到期', AppColors.textPrimary),
                         ),
                         Container(width: 1, height: 48, color: AppColors.greyLight.withOpacity(0.5)),
                         Expanded(
-                          child: _buildLibraryStat('Study Rooms', '42', 'Zone A available', AppColors.primary),
+                          child: _buildLibraryStat('自习座位', '42', 'A区有空位', AppColors.primary),
                         ),
                       ],
                     ),
@@ -100,7 +100,7 @@ class StudyPage extends ConsumerWidget {
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
                         ),
                         child: Text(
-                          'Reserve Seat / Search Books',
+                          '预约座位 / 搜索图书',
                           style: AppTextStyles.button.copyWith(color: AppColors.primary),
                         ),
                       ),
@@ -111,7 +111,7 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 3. 学业进度看板 (Mock Chart)
-              _buildSectionHeader('Academic Progress'),
+              _buildSectionHeader('学业进度'),
               _buildPremiumCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,12 +123,12 @@ class StudyPage extends ConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('Term GPA', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                            Text('本学期绩点', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
                             const SizedBox(height: 4),
                             Text('3.8', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primary, fontWeight: FontWeight.w300)),
                           ],
                         ),
-                        Text('+0.2 from last term', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
+                        Text('+0.2 较上学期提升', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -150,7 +150,7 @@ class StudyPage extends ConsumerWidget {
                         children: [
                           Icon(Icons.auto_graph_rounded, size: 16, color: AppColors.textSecondary),
                           const SizedBox(width: 8),
-                          Text('View Detailed Analysis', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                          Text('查看详细分析', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
                         ],
                       ),
                     ),
