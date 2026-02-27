@@ -31,14 +31,14 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: titleStyle ?? AppTextStyles.titleMedium.copyWith(
-          color: AppColors.white,
+          color: AppColors.textPrimary,
         ),
       ),
       leading: showBackButton
           ? IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: AppColors.white,
+                color: AppColors.textPrimary,
               ),
               onPressed: () {
                 context.pop();
@@ -46,10 +46,10 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           : null,
       actions: actions,
-      backgroundColor: backgroundColor ?? AppColors.primary,
+      backgroundColor: backgroundColor ?? AppColors.background,
       centerTitle: centerTitle,
-      elevation: elevation ?? 2,
-      shadowColor: AppColors.black.withOpacity(0.1),
+      elevation: elevation ?? 0,
+      shadowColor: AppColors.black.withOpacity(0.03),
       toolbarHeight: AppSpacing.appBarHeight,
     );
   }
@@ -83,14 +83,14 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
       title: Text(
         title,
         style: AppTextStyles.titleMedium.copyWith(
-          color: AppColors.white,
+          color: AppColors.textPrimary,
         ),
       ),
       leading: showBackButton
           ? IconButton(
               icon: Icon(
                 Icons.arrow_back,
-                color: AppColors.white,
+                color: AppColors.textPrimary,
               ),
               onPressed: () {
                 context.pop();
@@ -98,10 +98,10 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
             )
           : null,
       actions: actions,
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.background,
       centerTitle: true,
-      elevation: 2,
-      shadowColor: AppColors.black.withOpacity(0.1),
+      elevation: 0,
+      shadowColor: AppColors.black.withOpacity(0.03),
       toolbarHeight: AppSpacing.appBarHeight,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(56),
@@ -110,23 +110,23 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
           ),
-          color: AppColors.primary,
+          color: AppColors.background,
           child: TextField(
             controller: searchController,
             decoration: InputDecoration(
               hintText: '搜索...',
               hintStyle: AppTextStyles.bodyMedium.copyWith(
-                color: AppColors.white.withOpacity(0.7),
+                color: AppColors.textSecondary,
               ),
               prefixIcon: Icon(
                 Icons.search,
-                color: AppColors.white.withOpacity(0.7),
+                color: AppColors.textSecondary,
               ),
               suffixIcon: searchController.text.isNotEmpty
                   ? IconButton(
                       icon: Icon(
                         Icons.clear,
-                        color: AppColors.white.withOpacity(0.7),
+                        color: AppColors.textSecondary,
                       ),
                       onPressed: () {
                         searchController.clear();
@@ -135,7 +135,7 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
                     )
                   : null,
               filled: true,
-              fillColor: AppColors.white.withOpacity(0.2),
+              fillColor: AppColors.surface,
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
                 borderSide: BorderSide.none,
@@ -146,7 +146,7 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
               ),
             ),
             style: AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.white,
+              color: AppColors.textPrimary,
             ),
             onChanged: onSearch,
             onSubmitted: (value) {
@@ -154,7 +154,7 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
             },
           ),
         ),
-      ),
-    );
-  }
-}
+      ), // closes PreferredSize
+    ); // closes AppBar
+  } // closes build
+} // closes CampusSearchAppBar

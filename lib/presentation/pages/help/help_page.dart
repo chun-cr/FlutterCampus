@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../components/components.dart';
 import '../../theme/theme.dart';
 
@@ -8,134 +9,200 @@ class HelpPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return SingleChildScrollView(
-      padding: EdgeInsets.all(AppSpacing.md),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 1. 快捷发布
-          Row(
+    return Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 600),
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: _buildActionButton(Icons.campaign, '失物招领', AppColors.error)),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(child: _buildActionButton(Icons.shopping_bag, '闲置交易', AppColors.campusGreen)),
-              const SizedBox(width: AppSpacing.md),
-              Expanded(child: _buildActionButton(Icons.group_add, '寻找搭子', AppColors.campusPurple)),
+              // 1. Concierge Services (Quick Actions)
+              _buildSectionHeader('Concierge Services'),
+              Row(
+                children: [
+                  Expanded(child: _buildActionButton(
+                    Icons.vpn_key_outlined, 'Lost & Found',
+                    () => context.push('/help/post?type=lostAndFound')
+                  )),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildActionButton(
+                    Icons.shopping_bag_outlined, 'Marketplace',
+                    () => context.push('/help/post?type=secondHand')
+                  )),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildActionButton(
+                    Icons.people_outline, 'Community',
+                    () => context.push('/help/post?type=helpTask')
+                  )),
+                ],
+              ),
+              const SizedBox(height: 48),
+
+              // 2. 失物招领 (Lost & Found)
+              _buildSectionHeader('Recent Recoveries'),
+              _buildPremiumCard(
+                padding: EdgeInsets.zero,
+                child: Column(
+                  children: [
+                    _buildListItem(
+                      icon: Icons.directions_car_outlined,
+                      title: 'BMW Car Key',
+                      subtitle: 'Found near Dining Hall II',
+                      time: '10m ago',
+                      tag: 'FOUND',
+                      isUrgent: false,
+                    ),
+                    const Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                    _buildListItem(
+                      icon: Icons.credit_card_outlined,
+                      title: 'Student ID Card',
+                      subtitle: 'Ending in 01',
+                      time: '1h ago',
+                      tag: 'LOST',
+                      isUrgent: true,
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 48),
+
+              // 3. 闲置流转 (Curated Marketplace)
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSectionHeader('Curated Marketplace'),
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 16, right: 4),
+                    child: Text('View All', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 200,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  clipBehavior: Clip.none,
+                  itemCount: 4,
+                  itemBuilder: (context, index) {
+                    return Container(
+                      width: 160,
+                      margin: const EdgeInsets.only(right: 20),
+                      decoration: BoxDecoration(
+                        color: AppColors.surface,
+                        borderRadius: BorderRadius.circular(24),
+                        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: AppColors.background,
+                                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                image: DecorationImage(
+                                  image: NetworkImage(
+                                    index % 2 == 0 
+                                      ? 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400' 
+                                      : 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&q=80&w=400'
+                                  ),
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  index % 2 == 0 ? 'Design Book' : 'Wireless Mouse', 
+                                  style: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w600), 
+                                  maxLines: 1
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '¥ ${index % 2 == 0 ? '150' : '280'}', 
+                                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+              const SizedBox(height: 48),
+
+              // 4. 校园搭子 (Community Requests)
+              _buildSectionHeader('Community Requests'),
+              _buildPremiumCard(
+                child: Column(
+                  children: [
+                    _buildTaskItem('Dining Hall II Pickup', 'Errand · ¥20 reward', '5m ago'),
+                    const Padding(
+                      padding: EdgeInsets.symmetric(vertical: 16),
+                      child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                    ),
+                    _buildTaskItem('Saturday Badminton Partner', 'Sports · Need 2', '30m ago'),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 80),
             ],
           ),
-          const SizedBox(height: AppSpacing.lg),
-
-          // 2. 失物招领
-          _buildSectionHeader('最新失物招领'),
-          CampusCard(
-            padding: EdgeInsets.zero,
-            child: Column(
-              children: [
-                _buildListItem(
-                  icon: Icons.vpn_key,
-                  title: '捡到一把宝马车钥匙',
-                  subtitle: '地点：二食堂门口',
-                  time: '10分钟前',
-                  tag: '招领',
-                  tagColor: AppColors.primary,
-                ),
-                const Divider(height: 1),
-                _buildListItem(
-                  icon: Icons.credit_card,
-                  title: '丢失校园卡',
-                  subtitle: '卡号：2023***01',
-                  time: '1小时前',
-                  tag: '寻物',
-                  tagColor: AppColors.error,
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-
-          // 3. 闲置流转
-          _buildSectionHeader('二手好物'),
-          SizedBox(
-            height: 180,
-            child: ListView.builder(
-              scrollDirection: Axis.horizontal,
-              itemCount: 4,
-              itemBuilder: (context, index) {
-                return Container(
-                  width: 140,
-                  margin: EdgeInsets.only(right: AppSpacing.md),
-                  child: CampusCard(
-                    padding: EdgeInsets.zero,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppColors.greyLight,
-                              borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-                            ),
-                            child: Center(child: Icon(Icons.image, color: AppColors.grey)),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.all(8),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(index % 2 == 0 ? '考研英语词汇' : '罗技鼠标', style: AppTextStyles.bodyMedium, maxLines: 1),
-                              Text('¥ ${index % 2 == 0 ? '15' : '50'}', style: AppTextStyles.titleSmall.copyWith(color: AppColors.error)),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: AppSpacing.lg),
-
-          // 4. 校园搭子
-          _buildSectionHeader('互助任务 / 找搭子'),
-          CampusCard(
-            padding: EdgeInsets.all(AppSpacing.md),
-            child: Column(
-              children: [
-                _buildTaskItem('求带二食堂的黄焖鸡', '跑腿 · 悬赏 ¥2', '5分钟前'),
-                const SizedBox(height: 12),
-                _buildTaskItem('周六下午约羽毛球', '运动 · 缺2人', '30分钟前'),
-              ],
-            ),
-          ),
-          const SizedBox(height: 80),
-        ],
+        ),
       ),
+    );
+  }
+
+  Widget _buildPremiumCard({required Widget child, EdgeInsetsGeometry? padding}) {
+    return Container(
+      padding: padding ?? const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+      ),
+      child: child,
     );
   }
 
   Widget _buildSectionHeader(String title) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: AppSpacing.sm, left: 4),
-      child: Text(title, style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+      padding: const EdgeInsets.only(bottom: 16, left: 4),
+      child: Text(
+        title.toUpperCase(),
+        style: AppTextStyles.labelLarge.copyWith(
+          letterSpacing: 1.5,
+          color: AppColors.textSecondary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
     );
   }
 
-  Widget _buildActionButton(IconData icon, String label, Color color) {
-    return Container(
-      padding: EdgeInsets.symmetric(vertical: 16),
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.1),
-        borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color.withOpacity(0.3)),
-      ),
-      child: Column(
-        children: [
-          Icon(icon, color: color, size: 28),
-          const SizedBox(height: 8),
-          Text(label, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.bold, color: color)),
-        ],
+  Widget _buildActionButton(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+        ),
+        child: Column(
+          children: [
+            Icon(icon, color: AppColors.primary, size: 24),
+            const SizedBox(height: 12),
+            Text(label, style: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w500)),
+          ],
+        ),
       ),
     );
   }
@@ -146,27 +213,46 @@ class HelpPage extends ConsumerWidget {
     required String subtitle,
     required String time,
     required String tag,
-    required Color tagColor,
+    required bool isUrgent,
   }) {
-    return ListTile(
-      leading: Container(
-        padding: EdgeInsets.all(8),
-        decoration: BoxDecoration(color: AppColors.background, borderRadius: BorderRadius.circular(8)),
-        child: Icon(icon, color: AppColors.textPrimary),
-      ),
-      title: Text(title, style: AppTextStyles.bodyMedium),
-      subtitle: Text(subtitle, style: AppTextStyles.caption),
-      trailing: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.end,
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Row(
         children: [
           Container(
-            padding: EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-            decoration: BoxDecoration(color: tagColor.withOpacity(0.1), borderRadius: BorderRadius.circular(4)),
-            child: Text(tag, style: AppTextStyles.caption.copyWith(fontSize: 10, color: tagColor)),
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: isUrgent ? AppColors.error.withOpacity(0.05) : AppColors.primary.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Icon(icon, color: isUrgent ? AppColors.error : AppColors.primary, size: 24),
           ),
-          const SizedBox(height: 4),
-          Text(time, style: AppTextStyles.caption.copyWith(fontSize: 10)),
+          const SizedBox(width: 20),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title, style: AppTextStyles.titleMedium),
+                const SizedBox(height: 4),
+                Text(subtitle, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+              ],
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Text(
+                tag,
+                style: AppTextStyles.overline.copyWith(
+                  letterSpacing: 1.2,
+                  color: isUrgent ? AppColors.error : AppColors.primary,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 6),
+              Text(time, style: AppTextStyles.caption.copyWith(color: AppColors.greyDark)),
+            ],
+          ),
         ],
       ),
     );
@@ -175,18 +261,28 @@ class HelpPage extends ConsumerWidget {
   Widget _buildTaskItem(String title, String tag, String time) {
     return Row(
       children: [
-        CircleAvatar(backgroundColor: AppColors.greyLight, radius: 16, child: Icon(Icons.person, size: 16, color: AppColors.grey)),
-        const SizedBox(width: 12),
+        Container(
+          width: 48,
+          height: 48,
+          decoration: BoxDecoration(
+            color: AppColors.background,
+            shape: BoxShape.circle,
+            border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+          ),
+          child: const Icon(Icons.person_outline, size: 20, color: AppColors.textSecondary),
+        ),
+        const SizedBox(width: 20),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(title, style: AppTextStyles.bodyMedium),
+              Text(title, style: AppTextStyles.titleMedium),
+              const SizedBox(height: 4),
               Text(tag, style: AppTextStyles.caption.copyWith(color: AppColors.primary)),
             ],
           ),
         ),
-        Text(time, style: AppTextStyles.caption),
+        Text(time, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
       ],
     );
   }

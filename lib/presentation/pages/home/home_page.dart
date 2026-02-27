@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../components/components.dart';
 import '../../theme/theme.dart';
+import '../../../core/services/auth_service.dart';
 import '../study/study_page.dart';
 import '../life/life_page.dart';
 import '../help/help_page.dart';
@@ -30,21 +32,37 @@ class _HomePageState extends ConsumerState<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final authState = ref.watch(authStateProvider);
+    final user = authState.user;
+
+    final scaffold = Scaffold(
       backgroundColor: AppColors.background,
       appBar: CampusAppBar(
         title: _titles[_currentIndex],
         showBackButton: false,
         actions: [
           IconButton(
-            icon: Icon(Icons.notifications, color: AppColors.white),
+            icon: const Icon(Icons.notifications_none_rounded, color: AppColors.white),
             onPressed: () {},
           ),
-          IconButton(
-            icon: Icon(Icons.person, color: AppColors.white),
-            onPressed: () {
-              // TODO: Navigate to Profile
-            },
+          GestureDetector(
+            onTap: () => context.push('/profile'),
+            child: Padding(
+              padding: const EdgeInsets.only(right: 20, left: 8),
+              child: Hero(
+                tag: 'profile_avatar',
+                child: CircleAvatar(
+                  radius: 16,
+                  backgroundColor: AppColors.white.withOpacity(0.2),
+                  backgroundImage: user?.avatar != null && user!.avatar!.isNotEmpty
+                      ? NetworkImage(user.avatar!)
+                      : null,
+                  child: user?.avatar == null || user!.avatar!.isEmpty
+                      ? const Icon(Icons.person_outline_rounded, size: 20, color: AppColors.white)
+                      : null,
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -52,45 +70,87 @@ class _HomePageState extends ConsumerState<HomePage> {
         index: _currentIndex,
         children: _pages,
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 10,
-              offset: const Offset(0, -2),
+      bottomNavigationBar: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.only(left: 32, right: 32, bottom: 24, top: 12),
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(40),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.06),
+                  blurRadius: 24,
+                  offset: const Offset(0, 8),
+                ),
+              ],
             ),
-          ],
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(40),
+              child: BottomNavigationBar(
+                elevation: 0,
+                currentIndex: _currentIndex,
+                onTap: (index) {
+                  setState(() {
+                    _currentIndex = index;
+                  });
+                },
+                showSelectedLabels: false,
+                showUnselectedLabels: false,
+                type: BottomNavigationBarType.fixed,
+                backgroundColor: Colors.white,
+                selectedItemColor: AppColors.primary,
+                unselectedItemColor: AppColors.grey.withOpacity(0.5),
+                items: const [
+                  BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.school_outlined, size: 26),
+                    ),
+                    activeIcon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.school_rounded, size: 26),
+                    ),
+                    label: '学习',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.local_cafe_outlined, size: 26),
+                    ),
+                    activeIcon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.local_cafe_rounded, size: 26),
+                    ),
+                    label: '生活',
+                  ),
+                  BottomNavigationBarItem(
+                    icon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.volunteer_activism_outlined, size: 26),
+                    ),
+                    activeIcon: Padding(
+                      padding: EdgeInsets.only(top: 8.0),
+                      child: Icon(Icons.volunteer_activism_rounded, size: 26),
+                    ),
+                    label: '互助',
+                  ),
+                ],
+              ),
+            ),
+          ),
         ),
-        child: BottomNavigationBar(
-          currentIndex: _currentIndex,
-          onTap: (index) {
-            setState(() {
-              _currentIndex = index;
-            });
-          },
-          type: BottomNavigationBarType.fixed,
-          backgroundColor: Colors.white,
-          selectedItemColor: AppColors.primary,
-          unselectedItemColor: AppColors.grey,
-          selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
-          items: const [
-            BottomNavigationBarItem(
-              icon: Icon(Icons.school_outlined),
-              activeIcon: Icon(Icons.school),
-              label: '学习',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.local_cafe_outlined),
-              activeIcon: Icon(Icons.local_cafe),
-              label: '生活',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.volunteer_activism_outlined),
-              activeIcon: Icon(Icons.volunteer_activism),
-              label: '互助',
-            ),
-          ],
+      ),
+    );
+
+    return Container(
+      color: const Color(0xFFF7F7F7), // Neutral premium background for desktop
+      child: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 600),
+          child: ClipRect(
+            child: scaffold,
+          ),
         ),
       ),
     );

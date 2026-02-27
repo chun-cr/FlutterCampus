@@ -40,6 +40,60 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     super.dispose();
   }
 
+  Widget _buildLabel(String text) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          text,
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.textSecondary,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+        const SizedBox(height: 8),
+      ],
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String hintText,
+    bool obscureText = false,
+    Widget? suffixIcon,
+    TextInputType? keyboardType,
+    String? Function(String?)? validator,
+  }) {
+    return TextFormField(
+      controller: controller,
+      obscureText: obscureText,
+      keyboardType: keyboardType,
+      style: AppTextStyles.bodyMedium,
+      cursorColor: AppColors.primary,
+      decoration: InputDecoration(
+        hintText: hintText,
+        hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+        filled: true,
+        fillColor: AppColors.surface,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        suffixIcon: suffixIcon,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: AppColors.primary, width: 1),
+        ),
+      ),
+      validator: validator,
+    );
+  }
+
   void _register() async {
     if (_formKey.currentState?.validate() ?? false) {
       final user = User(
@@ -70,133 +124,148 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
 
     return Scaffold(
       backgroundColor: AppColors.background,
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 20),
+          onPressed: () => context.pop(),
+        ),
+      ),
+      extendBodyBehindAppBar: true,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 48),
-              // 标题
-              Text(
-                '创建账号',
-                style: AppTextStyles.headlineMedium,
-              ),
-              Text(
-                '加入校园通',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 32),
-              // 用户类型选择
-              Container(
-                margin: EdgeInsets.only(bottom: AppSpacing.lg),
-                decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.greyLight),
-                  borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                ),
-                child: Row(
-                  children: [
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _userType = UserType.student;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.md,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _userType == UserType.student ? AppColors.primary : AppColors.white,
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(AppSpacing.borderRadius),
-                              bottomLeft: Radius.circular(AppSpacing.borderRadius),
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              '学生',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: _userType == UserType.student ? AppColors.white : AppColors.textPrimary,
-                                fontWeight: _userType == UserType.student ? FontWeight.w600 : FontWeight.normal,
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 16),
+                  // 标题
+                  Text(
+                    '创建账号',
+                    style: AppTextStyles.headlineMedium.copyWith(
+                      fontWeight: FontWeight.w400,
+                      letterSpacing: 1.0,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '加入校园通',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                  const SizedBox(height: 32),
+                  // 用户类型选择
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 32),
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: AppColors.greyLight.withOpacity(0.4),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _userType = UserType.student;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: _userType == UserType.student ? AppColors.surface : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: _userType == UserType.student
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.black.withOpacity(0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        )
+                                      ]
+                                    : [],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '学生',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: _userType == UserType.student ? AppColors.textPrimary : AppColors.textSecondary,
+                                    fontWeight: _userType == UserType.student ? FontWeight.w500 : FontWeight.w400,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            _userType = UserType.teacher;
-                          });
-                        },
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.md,
-                          ),
-                          decoration: BoxDecoration(
-                            color: _userType == UserType.teacher ? AppColors.primary : AppColors.white,
-                          ),
-                          child: Center(
-                            child: Text(
-                              '教职工',
-                              style: AppTextStyles.bodyMedium.copyWith(
-                                color: _userType == UserType.teacher ? AppColors.white : AppColors.textPrimary,
-                                fontWeight: _userType == UserType.teacher ? FontWeight.w600 : FontWeight.normal,
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                _userType = UserType.teacher;
+                              });
+                            },
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 200),
+                              padding: const EdgeInsets.symmetric(vertical: 12),
+                              decoration: BoxDecoration(
+                                color: _userType == UserType.teacher ? AppColors.surface : Colors.transparent,
+                                borderRadius: BorderRadius.circular(8),
+                                boxShadow: _userType == UserType.teacher
+                                    ? [
+                                        BoxShadow(
+                                          color: AppColors.black.withOpacity(0.05),
+                                          blurRadius: 4,
+                                          offset: const Offset(0, 2),
+                                        )
+                                      ]
+                                    : [],
+                              ),
+                              child: Center(
+                                child: Text(
+                                  '教职工',
+                                  style: AppTextStyles.bodyMedium.copyWith(
+                                    color: _userType == UserType.teacher ? AppColors.textPrimary : AppColors.textSecondary,
+                                    fontWeight: _userType == UserType.teacher ? FontWeight.w500 : FontWeight.w400,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              // 注册表单
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // 用户名输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          labelText: '用户名',
-                          hintText: '请输入用户名',
-                          prefixIcon: Icon(Icons.person, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
+                  ),
+                  // 注册表单
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildLabel('用户名'),
+                        _buildTextField(
+                          controller: _usernameController,
+                          hintText: '输入您的用户名',
+                          validator: (value) => (value == null || value.isEmpty) ? '请输入用户名' : null,
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入用户名';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 密码输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        obscureText: !_isPasswordVisible,
-                        decoration: InputDecoration(
-                          labelText: '密码',
-                          hintText: '请输入密码',
-                          prefixIcon: Icon(Icons.lock, color: AppColors.grey),
+                        const SizedBox(height: 24),
+                        
+                        _buildLabel('密码'),
+                        _buildTextField(
+                          controller: _passwordController,
+                          hintText: '设置密码（至少6位）',
+                          obscureText: !_isPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              _isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                               color: AppColors.grey,
+                              size: 20,
                             ),
                             onPressed: () {
                               setState(() {
@@ -204,35 +273,24 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               });
                             },
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return '请输入密码';
+                            if (value.length < 6) return '密码长度至少6位';
+                            return null;
+                          },
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入密码';
-                          }
-                          if (value.length < 6) {
-                            return '密码长度至少6位';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 确认密码输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _confirmPasswordController,
-                        obscureText: !_isConfirmPasswordVisible,
-                        decoration: InputDecoration(
-                          labelText: '确认密码',
-                          hintText: '请再次输入密码',
-                          prefixIcon: Icon(Icons.lock, color: AppColors.grey),
+                        const SizedBox(height: 24),
+
+                        _buildLabel('确认密码'),
+                        _buildTextField(
+                          controller: _confirmPasswordController,
+                          hintText: '再次输入密码',
+                          obscureText: !_isConfirmPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                              _isConfirmPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
                               color: AppColors.grey,
+                              size: 20,
                             ),
                             onPressed: () {
                               setState(() {
@@ -240,198 +298,146 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               });
                             },
                           ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请确认密码';
-                          }
-                          if (value != _passwordController.text) {
-                            return '两次输入的密码不一致';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 姓名输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _nameController,
-                        decoration: InputDecoration(
-                          labelText: '姓名',
-                          hintText: '请输入姓名',
-                          prefixIcon: Icon(Icons.person_outline, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入姓名';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 邮箱输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _emailController,
-                        keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
-                          labelText: '邮箱',
-                          hintText: '请输入邮箱',
-                          prefixIcon: Icon(Icons.email, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入邮箱';
-                          }
-                          if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) {
-                            return '请输入有效的邮箱地址';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 手机号输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _phoneController,
-                        keyboardType: TextInputType.phone,
-                        decoration: InputDecoration(
-                          labelText: '手机号',
-                          hintText: '请输入手机号',
-                          prefixIcon: Icon(Icons.phone, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入手机号';
-                          }
-                          if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value)) {
-                            return '请输入有效的手机号';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 学号输入（仅学生）
-                    if (_userType == UserType.student)
-                      Container(
-                        margin: EdgeInsets.only(bottom: AppSpacing.md),
-                        child: TextFormField(
-                          controller: _studentIdController,
-                          decoration: InputDecoration(
-                            labelText: '学号',
-                            hintText: '请输入学号',
-                            prefixIcon: Icon(Icons.confirmation_number, color: AppColors.grey),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                            ),
-                          ),
                           validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return '请输入学号';
-                            }
+                            if (value == null || value.isEmpty) return '请确认密码';
+                            if (value != _passwordController.text) return '两次输入的密码不一致';
                             return null;
                           },
                         ),
-                      ),
-                    // 院系输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _departmentController,
-                        decoration: InputDecoration(
-                          labelText: _userType == UserType.student ? '院系' : '部门',
-                          hintText: _userType == UserType.student ? '请输入院系' : '请输入部门',
-                          prefixIcon: Icon(Icons.business, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
+                        const SizedBox(height: 24),
+
+                        _buildLabel('姓名'),
+                        _buildTextField(
+                          controller: _nameController,
+                          hintText: '输入您的真实姓名',
+                          validator: (value) => (value == null || value.isEmpty) ? '请输入姓名' : null,
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return _userType == UserType.student ? '请输入院系' : '请输入部门';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 错误信息
-                    if (authState.error != null)
-                      Container(
-                        margin: EdgeInsets.only(bottom: AppSpacing.md),
-                        child: Text(
-                          authState.error!,
-                          style: AppTextStyles.error,
-                        ),
-                      ),
-                    // 注册按钮
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: ElevatedButton(
-                        onPressed: authState.isLoading ? null : _register,
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.buttonPadding,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        child: authState.isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-                                ),
-                              )
-                            : Text('注册'),
-                      ),
-                    ),
-                    // 登录链接
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          '已有账号？',
-                          style: AppTextStyles.bodyMedium.copyWith(
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            context.push('/login');
+                        const SizedBox(height: 24),
+
+                        _buildLabel('邮箱'),
+                        _buildTextField(
+                          controller: _emailController,
+                          hintText: '输入您的邮箱',
+                          keyboardType: TextInputType.emailAddress,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return '请输入邮箱';
+                            if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) return '请输入有效的邮箱地址';
+                            return null;
                           },
-                          child: Text(
-                            '立即登录',
-                            style: AppTextStyles.bodyMedium.copyWith(
-                              color: AppColors.primary,
-                              fontWeight: FontWeight.w600,
+                        ),
+                        const SizedBox(height: 24),
+
+                        _buildLabel('手机号'),
+                        _buildTextField(
+                          controller: _phoneController,
+                          hintText: '输入您的手机号',
+                          keyboardType: TextInputType.phone,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) return '请输入手机号';
+                            if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value)) return '请输入有效的手机号';
+                            return null;
+                          },
+                        ),
+                        const SizedBox(height: 24),
+
+                        if (_userType == UserType.student) ...[
+                          _buildLabel('学号'),
+                          _buildTextField(
+                            controller: _studentIdController,
+                            hintText: '输入您的学号',
+                            validator: (value) => (value == null || value.isEmpty) ? '请输入学号' : null,
+                          ),
+                          const SizedBox(height: 24),
+                        ],
+
+                        _buildLabel(_userType == UserType.student ? '院系' : '部门'),
+                        _buildTextField(
+                          controller: _departmentController,
+                          hintText: _userType == UserType.student ? '输入您的院系' : '输入您的部门',
+                          validator: (value) => (value == null || value.isEmpty) ? (_userType == UserType.student ? '请输入院系' : '请输入部门') : null,
+                        ),
+                        
+                        const SizedBox(height: 32),
+
+                        if (authState.error != null)
+                          Padding(
+                            padding: const EdgeInsets.only(bottom: 16),
+                            child: Text(
+                              authState.error!,
+                              style: AppTextStyles.error,
+                              textAlign: TextAlign.center,
                             ),
                           ),
+                        
+                        // 注册按钮
+                        ElevatedButton(
+                          onPressed: authState.isLoading ? null : _register,
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.black,
+                            foregroundColor: AppColors.white,
+                            elevation: 0,
+                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: authState.isLoading
+                              ? const SizedBox(
+                                  width: 20,
+                                  height: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.5,
+                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                  ),
+                                )
+                              : Text(
+                                  '注册',
+                                  style: AppTextStyles.button.copyWith(
+                                    color: AppColors.white,
+                                    fontWeight: FontWeight.w400,
+                                    letterSpacing: 1.0,
+                                  ),
+                                ),
                         ),
+                        const SizedBox(height: 48),
+
+                        // 登录链接
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '已有账号？',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            TextButton(
+                              onPressed: () {
+                                context.push('/login');
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                '立即登录',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
                       ],
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
       ),

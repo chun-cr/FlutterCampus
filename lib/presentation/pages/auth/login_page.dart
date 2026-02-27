@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../theme/theme.dart';
+import '../../components/campus_card.dart';
 import '../../../core/services/auth_service.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -45,185 +46,254 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.all(AppSpacing.md),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 64),
-              // 应用图标
-              Container(
-                width: 100,
-                height: 100,
-                decoration: BoxDecoration(
-                  color: AppColors.primary,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: Center(
-                  child: Icon(
-                    Icons.school,
-                    size: 50,
-                    color: AppColors.white,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 32),
-              // 标题
-              Text(
-                '欢迎回来',
-                style: AppTextStyles.headlineMedium,
-              ),
-              Text(
-                '请登录您的账号',
-                style: AppTextStyles.bodyMedium.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-              ),
-              const SizedBox(height: 48),
-              // 登录表单
-              Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    // 用户名输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _usernameController,
-                        decoration: InputDecoration(
-                          labelText: '用户名',
-                          hintText: '请输入用户名',
-                          prefixIcon: Icon(Icons.person, color: AppColors.grey),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入用户名';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 密码输入
-                    Container(
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: TextFormField(
-                        controller: _passwordController,
-                        obscureText: !_isPasswordVisible,
-                        decoration: InputDecoration(
-                          labelText: '密码',
-                          hintText: '请输入密码',
-                          prefixIcon: Icon(Icons.lock, color: AppColors.grey),
-                          suffixIcon: IconButton(
-                            icon: Icon(
-                              _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                              color: AppColors.grey,
-                            ),
-                            onPressed: () {
-                              setState(() {
-                                _isPasswordVisible = !_isPasswordVisible;
-                              });
-                            },
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '请输入密码';
-                          }
-                          if (value.length < 6) {
-                            return '密码长度至少6位';
-                          }
-                          return null;
-                        },
-                      ),
-                    ),
-                    // 错误信息
-                    if (authState.error != null)
-                      Container(
-                        margin: EdgeInsets.only(bottom: AppSpacing.md),
-                        child: Text(
-                          authState.error!,
-                          style: AppTextStyles.error,
-                        ),
-                      ),
-                    // 登录按钮
-                    Container(
-                      width: double.infinity,
-                      margin: EdgeInsets.only(bottom: AppSpacing.md),
-                      child: ElevatedButton(
-                        onPressed: authState.isLoading ? null : _login,
-                        style: ElevatedButton.styleFrom(
-                          padding: EdgeInsets.symmetric(
-                            vertical: AppSpacing.buttonPadding,
-                          ),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-                          ),
-                        ),
-                        child: authState.isLoading
-                            ? SizedBox(
-                                width: 20,
-                                height: 20,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
-                                ),
-                              )
-                            : Text('登录'),
-                      ),
-                    ),
-                    // 忘记密码
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: TextButton(
-                        onPressed: () {
-                          context.push('/forgot_password');
-                        },
-                        child: Text(
-                          '忘记密码？',
-                          style: AppTextStyles.bodyMedium.copyWith(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 400),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  const SizedBox(height: 32),
+                  CampusCard(
+                    padding: const EdgeInsets.all(32.0),
+                    margin: EdgeInsets.zero,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Center(
+                          child: Icon(
+                            Icons.school_outlined,
+                            size: 48,
                             color: AppColors.primary,
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 48),
-              // 注册链接
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    '还没有账号？',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      context.push('/register');
-                    },
-                    child: Text(
-                      '立即注册',
-                      style: AppTextStyles.bodyMedium.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
+                        const SizedBox(height: 24),
+                        Text(
+                          '欢迎回来',
+                          style: AppTextStyles.headlineMedium.copyWith(
+                            fontWeight: FontWeight.w400,
+                            letterSpacing: 1.0,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '请登录您的账号',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 32),
+                        // 登录表单
+                        Form(
+                          key: _formKey,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              // 用户名输入
+                              Text(
+                                '用户名',
+                                style: AppTextStyles.labelMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _usernameController,
+                                style: AppTextStyles.bodyMedium,
+                                cursorColor: AppColors.primary,
+                                decoration: InputDecoration(
+                                  hintText: '输入您的用户名',
+                                  hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+                                  filled: true,
+                                  fillColor: AppColors.surface,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '请输入用户名';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 24),
+                              // 密码输入
+                              Text(
+                                '密码',
+                                style: AppTextStyles.labelMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              TextFormField(
+                                controller: _passwordController,
+                                obscureText: !_isPasswordVisible,
+                                style: AppTextStyles.bodyMedium,
+                                cursorColor: AppColors.primary,
+                                decoration: InputDecoration(
+                                  hintText: '输入您的密码',
+                                  hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+                                  filled: true,
+                                  fillColor: AppColors.surface,
+                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  suffixIcon: IconButton(
+                                    icon: Icon(
+                                      _isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                      color: AppColors.grey,
+                                      size: 20,
+                                    ),
+                                    onPressed: () {
+                                      setState(() {
+                                        _isPasswordVisible = !_isPasswordVisible;
+                                      });
+                                    },
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null || value.isEmpty) {
+                                    return '请输入密码';
+                                  }
+                                  if (value.length < 6) {
+                                    return '密码长度至少6位';
+                                  }
+                                  return null;
+                                },
+                              ),
+                              const SizedBox(height: 16),
+                              // 错误信息
+                              if (authState.error != null)
+                                Padding(
+                                  padding: const EdgeInsets.only(bottom: 16),
+                                  child: Text(
+                                    authState.error!,
+                                    style: AppTextStyles.error,
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              // 忘记密码
+                              Align(
+                                alignment: Alignment.centerRight,
+                                child: TextButton(
+                                  onPressed: () {
+                                    context.push('/forgot_password');
+                                  },
+                                  style: TextButton.styleFrom(
+                                    foregroundColor: AppColors.textSecondary,
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: Size.zero,
+                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                  ),
+                                  child: Text(
+                                    '忘记密码？',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      color: AppColors.primary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 32),
+                              ElevatedButton(
+                                onPressed: authState.isLoading ? null : _login,
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  foregroundColor: AppColors.surface,
+                                  elevation: 2,
+                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                ),
+                                child: authState.isLoading
+                                    ? const SizedBox(
+                                        width: 20,
+                                        height: 20,
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 1.5,
+                                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                        ),
+                                      )
+                                    : Text(
+                                        '登录',
+                                        style: AppTextStyles.button.copyWith(
+                                          color: AppColors.surface,
+                                          fontWeight: FontWeight.w500,
+                                          letterSpacing: 1.0,
+                                        ),
+                                      ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        // 注册链接
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '还没有账号？',
+                              style: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                            const SizedBox(width: 4),
+                            TextButton(
+                              onPressed: () {
+                                context.push('/register');
+                              },
+                              style: TextButton.styleFrom(
+                                padding: EdgeInsets.zero,
+                                minimumSize: Size.zero,
+                                tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              ),
+                              child: Text(
+                                '立即注册',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.primary,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 32),
+                      ],
+                    ), // closes Column (CampusCard child)
+                  ), // closes CampusCard
                 ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
+              ), // closes Column (SingleChildScrollView child)
+            ), // closes SingleChildScrollView
+          ), // closes ConstrainedBox
+        ), // closes Center
+      ), // closes SafeArea
+    ); // closes Scaffold
+  } // closes build
+} // closes _LoginPageState

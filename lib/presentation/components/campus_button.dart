@@ -96,7 +96,7 @@ class CampusButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
             ),
-            elevation: elevation ?? 2,
+            elevation: elevation ?? 0,
             disabledBackgroundColor: AppColors.greyLight,
             disabledForegroundColor: AppColors.textDisabled,
           ),
@@ -120,7 +120,7 @@ class CampusButton extends StatelessWidget {
             shape: RoundedRectangleBorder(
               borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
             ),
-            elevation: elevation ?? 2,
+            elevation: elevation ?? 0,
             disabledBackgroundColor: AppColors.greyLight,
             disabledForegroundColor: AppColors.textDisabled,
           ),
@@ -389,7 +389,7 @@ class CampusIconButton extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
         ),
-        elevation: elevation ?? 2,
+        elevation: elevation ?? 0,
         shadowColor: AppColors.black.withOpacity(0.1),
         disabledBackgroundColor: AppColors.greyLight,
         disabledForegroundColor: AppColors.textDisabled,

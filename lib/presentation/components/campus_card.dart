@@ -27,25 +27,29 @@ class CampusCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final cardContent = Container(
-      padding: padding ?? EdgeInsets.all(AppSpacing.md),
-      margin: margin ?? EdgeInsets.all(AppSpacing.sm),
-      decoration: BoxDecoration(
+    Widget cardContent = Container(
+      margin: margin ?? EdgeInsets.all(AppSpacing.md),
+      child: Material(
         color: backgroundColor ?? AppColors.surface,
+        elevation: elevation ?? 2.0,
         borderRadius: BorderRadius.circular(borderRadius ?? AppSpacing.borderRadius),
-        border: border,
-        boxShadow: shadow != null
-            ? [shadow!]
-            : [
-                BoxShadow(
-                  color: AppColors.black.withOpacity(0.1),
-                  offset: Offset(AppSpacing.shadowOffset, AppSpacing.shadowOffset),
-                  blurRadius: AppSpacing.shadowBlur,
-                  spreadRadius: 0,
-                ),
-              ],
+        child: Container(
+          padding: padding ?? EdgeInsets.all(AppSpacing.lg),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(borderRadius ?? AppSpacing.borderRadius),
+            border: border ?? Border.all(color: AppColors.divider, width: 1),
+          ),
+          child: child,
+        ),
       ),
-      child: child,
+    );
+
+    // Make the card responsive by restricting max width
+    cardContent = Center(
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 800),
+        child: cardContent,
+      ),
     );
 
     if (onTap != null) {
@@ -87,11 +91,11 @@ class CampusFeatureCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            width: 56,
-            height: 56,
+            width: 64,
+            height: 64,
             decoration: BoxDecoration(
               color: (backgroundColor ?? AppColors.primary).withOpacity(0.1),
-              borderRadius: BorderRadius.circular(28),
+              borderRadius: BorderRadius.circular(32),
             ),
             child: Center(
               child: Icon(
@@ -109,7 +113,7 @@ class CampusFeatureCard extends StatelessWidget {
           ),
           if (subtitle != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.xs),
+              padding: EdgeInsets.only(top: AppSpacing.sm),
               child: Text(
                 subtitle!,
                 style: AppTextStyles.bodySmall.copyWith(
@@ -147,7 +151,7 @@ class CampusNewsCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CampusCard(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -230,8 +234,13 @@ class CampusCourseCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return CampusCard(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.md),
-      border: Border(left: BorderSide(color: color ?? AppColors.primary, width: 4)),
+      padding: EdgeInsets.all(AppSpacing.lg),
+      border: Border(
+        left: BorderSide(color: color ?? AppColors.primary, width: 4),
+        top: BorderSide(color: AppColors.divider),
+        right: BorderSide(color: AppColors.divider),
+        bottom: BorderSide(color: AppColors.divider),
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

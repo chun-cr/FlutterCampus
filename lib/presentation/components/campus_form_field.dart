@@ -108,7 +108,16 @@ class _CampusFormFieldState extends State<CampusFormField> {
           borderSide: BorderSide(
             color: hasError
                 ? AppColors.error
-                : widget.borderColor ?? AppColors.greyLight,
+                : widget.borderColor ?? AppColors.greyLight.withOpacity(0.8),
+            width: 1,
+          ),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderSide: BorderSide(
+            color: hasError
+                ? AppColors.error
+                : widget.borderColor ?? AppColors.greyLight.withOpacity(0.8),
             width: 1,
           ),
         ),
@@ -116,7 +125,7 @@ class _CampusFormFieldState extends State<CampusFormField> {
           borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
             color: hasError ? AppColors.error : AppColors.primary,
-            width: 2,
+            width: 1.5,
           ),
         ),
         errorBorder: OutlineInputBorder(
@@ -130,7 +139,7 @@ class _CampusFormFieldState extends State<CampusFormField> {
           borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
             color: AppColors.error,
-            width: 2,
+            width: 1.5,
           ),
         ),
         disabledBorder: OutlineInputBorder(

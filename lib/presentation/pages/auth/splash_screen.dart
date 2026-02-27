@@ -35,45 +35,44 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.primary,
+      backgroundColor: AppColors.background,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // 应用图标
-            Container(
-              width: 120,
-              height: 120,
-              decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Center(
-                child: Icon(
-                  Icons.school,
-                  size: 64,
-                  color: AppColors.primary,
-                ),
-              ),
+            Icon(
+              Icons.school_outlined,
+              size: 56,
+              color: AppColors.primary,
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 32),
             // 应用名称
             Text(
               '校园通',
               style: AppTextStyles.headlineLarge.copyWith(
-                color: AppColors.white,
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w400,
+                letterSpacing: 2.0,
               ),
             ),
+            const SizedBox(height: 8),
             Text(
-              'CampusLife',
-              style: AppTextStyles.titleMedium.copyWith(
-                color: AppColors.white.withOpacity(0.9),
+              '智慧校园',
+              style: AppTextStyles.labelMedium.copyWith(
+                color: AppColors.textSecondary,
+                letterSpacing: 4.0,
               ),
             ),
-            const SizedBox(height: 48),
+            const SizedBox(height: 64),
             // 加载指示器
-            CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+            SizedBox(
+              width: 24,
+              height: 24,
+              child: CircularProgressIndicator(
+                strokeWidth: 1.5,
+                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+              ),
             ),
           ],
         ),
