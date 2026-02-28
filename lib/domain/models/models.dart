@@ -11,3 +11,4 @@ export 'library_status.dart';
 export 'campus_news.dart';
 export 'canteen.dart';
 export 'community.dart';
+export 'exam_countdown.dart';

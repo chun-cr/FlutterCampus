@@ -1,23 +1,25 @@
 /// 成绩实体
 class Grade {
   final String id;
-  final String courseId;
+  final String userId;
   final String courseName;
   final String semester; // e.g. '2025-2026-1'
   final double score; // 百分制成绩
   final double gradePoint; // 绩点
   final double credit; // 学分
   final GradeStatus status;
+  final DateTime createdAt;
 
   Grade({
     required this.id,
-    required this.courseId,
+    required this.userId,
     required this.courseName,
     required this.semester,
     required this.score,
     required this.gradePoint,
     required this.credit,
     this.status = GradeStatus.passed,
+    required this.createdAt,
   });
 
   /// 等级制显示，如 A / B+ / C
@@ -34,54 +36,74 @@ class Grade {
     return 'F';
   }
 
+  /// 从百分制成绩计算4分制绩点
+  static double calculateGradePoint(double score) {
+    if (score >= 90) return 4.0;
+    if (score >= 85) return 3.7;
+    if (score >= 82) return 3.3;
+    if (score >= 78) return 3.0;
+    if (score >= 75) return 2.7;
+    if (score >= 72) return 2.3;
+    if (score >= 68) return 2.0;
+    if (score >= 64) return 1.5;
+    if (score >= 60) return 1.0;
+    return 0.0;
+  }
+
   Grade copyWith({
     String? id,
-    String? courseId,
+    String? userId,
     String? courseName,
     String? semester,
     double? score,
     double? gradePoint,
     double? credit,
     GradeStatus? status,
+    DateTime? createdAt,
   }) {
     return Grade(
       id: id ?? this.id,
-      courseId: courseId ?? this.courseId,
+      userId: userId ?? this.userId,
       courseName: courseName ?? this.courseName,
       semester: semester ?? this.semester,
       score: score ?? this.score,
       gradePoint: gradePoint ?? this.gradePoint,
       credit: credit ?? this.credit,
       status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
     );
   }
 
+  /// 转换为 Supabase JSON (snake_case)
   Map<String, dynamic> toJson() {
     return {
       'id': id,
-      'courseId': courseId,
-      'courseName': courseName,
+      'user_id': userId,
+      'course_name': courseName,
       'semester': semester,
       'score': score,
-      'gradePoint': gradePoint,
+      'grade_point': gradePoint,
       'credit': credit,
       'status': status.name,
+      'created_at': createdAt.toIso8601String(),
     };
   }
 
+  /// 从 Supabase JSON 解析 (snake_case)
   factory Grade.fromJson(Map<String, dynamic> json) {
     return Grade(
       id: json['id'] as String,
-      courseId: json['courseId'] as String,
-      courseName: json['courseName'] as String,
+      userId: json['user_id'] as String,
+      courseName: json['course_name'] as String,
       semester: json['semester'] as String,
       score: (json['score'] as num).toDouble(),
-      gradePoint: (json['gradePoint'] as num).toDouble(),
+      gradePoint: (json['grade_point'] as num).toDouble(),
       credit: (json['credit'] as num).toDouble(),
       status: GradeStatus.values.firstWhere(
         (e) => e.name == json['status'],
         orElse: () => GradeStatus.passed,
       ),
+      createdAt: DateTime.parse(json['created_at'] as String),
     );
   }
 

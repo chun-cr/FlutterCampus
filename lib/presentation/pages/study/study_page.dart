@@ -157,6 +157,35 @@ class StudyPage extends ConsumerWidget {
                   ],
                 ),
               ),
+              const SizedBox(height: 40),
+
+              // 4. 学习工具
+              _buildSectionHeader('学习工具'),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildToolCard(
+                      context,
+                      icon: Icons.school_outlined,
+                      title: '成绩查询',
+                      subtitle: 'GPA计算器',
+                      color: AppColors.primary,
+                      onTap: () => context.push('/grades'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildToolCard(
+                      context,
+                      icon: Icons.timer_outlined,
+                      title: '考试倒计时',
+                      subtitle: '备考提醒',
+                      color: AppColors.campusOrange,
+                      onTap: () => context.push('/exam-countdown'),
+                    ),
+                  ),
+                ],
+              ),
               const SizedBox(height: 80), // Bottom padding for scrolling
             ],
           ),
@@ -211,6 +240,47 @@ class StudyPage extends ConsumerWidget {
         const SizedBox(height: 6),
         Text(sub, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
       ],
+    );
+  }
+
+  Widget _buildToolCard(
+    BuildContext context, {
+    required IconData icon,
+    required String title,
+    required String subtitle,
+    required Color color,
+    required VoidCallback onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: color.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 24),
+            ),
+            const SizedBox(height: 16),
+            Text(title, style: AppTextStyles.titleMedium),
+            const SizedBox(height: 4),
+            Text(
+              subtitle,
+              style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

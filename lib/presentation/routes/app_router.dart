@@ -11,6 +11,8 @@ import '../pages/study/book_search_page.dart';
 import '../pages/study/seat_reservation_page.dart';
 import '../pages/study/my_loans_page.dart';
 import '../pages/study/library_stats_page.dart';
+import '../pages/study/grades_page.dart';
+import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -87,6 +89,16 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const LibraryStatsPage(),
         ),
       ],
+    ),
+    // 成绩查询/GPA计算器
+    GoRoute(
+      path: '/grades',
+      builder: (context, state) => const GradesPage(),
+    ),
+    // 考试倒计时
+    GoRoute(
+      path: '/exam-countdown',
+      builder: (context, state) => const ExamCountdownPage(),
     ),
   ],
 );
