@@ -14,13 +14,13 @@ class LoginPage extends ConsumerStatefulWidget {
 
 class _LoginPageState extends ConsumerState<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _identifierController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isPasswordVisible = false;
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _identifierController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -28,7 +28,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   void _login() async {
     if (_formKey.currentState?.validate() ?? false) {
       await ref.read(authStateProvider.notifier).login(
-            _usernameController.text.trim(),
+            _identifierController.text.trim(),
             _passwordController.text.trim(),
           );
 
@@ -92,9 +92,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.stretch,
                             children: [
-                              // 用户名输入
+                              // 手机号/学号输入
                               Text(
-                                '用户名',
+                                '手机号 / 学号',
                                 style: AppTextStyles.labelMedium.copyWith(
                                   color: AppColors.textSecondary,
                                   fontWeight: FontWeight.w500,
@@ -102,11 +102,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ),
                               const SizedBox(height: 8),
                               TextFormField(
-                                controller: _usernameController,
+                                controller: _identifierController,
                                 style: AppTextStyles.bodyMedium,
                                 cursorColor: AppColors.primary,
+                                keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
-                                  hintText: '输入您的用户名',
+                                  hintText: '输入手机号或学号',
                                   hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
                                   filled: true,
                                   fillColor: AppColors.surface,
@@ -126,7 +127,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 ),
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return '请输入用户名';
+                                    return '请输入手机号或学号';
                                   }
                                   return null;
                                 },
@@ -266,9 +267,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                             const SizedBox(width: 4),
                             TextButton(
-                              onPressed: () {
-                                context.push('/register');
-                              },
+                            onPressed: () {
+                              ref.read(authStateProvider.notifier).clearError();
+                              context.push('/register');
+                            },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: Size.zero,

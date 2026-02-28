@@ -20,8 +20,8 @@ void main() async {
   
   // 初始化Supabase
   await Supabase.initialize(
-    // url: 'https://ddqwnntaycxfdsnvdiab.supabase.co',
-    // anonKey: 'sb_publishable_l3zEsZ0KChBVaDk2bahRLQ_Z8BJLJL8',
+    url: 'https://ddqwnntaycxfdsnvdiab.supabase.co',
+    anonKey: 'sb_publishable_l3zEsZ0KChBVaDk2bahRLQ_Z8BJLJL8',
   );
   // Temporarily trigger migration
   // For a real app, this migration should be triggered carefully,

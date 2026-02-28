@@ -6,7 +6,8 @@ class AuthService {
   final SupabaseClient _supabaseClient;
   AuthService(this._supabaseClient);
 
-  Future<models.User?> login(String email, String password) async {
+  /// Login with email directly
+  Future<models.User?> loginWithEmail(String email, String password) async {
     try {
       final AuthResponse response = await _supabaseClient.auth.signInWithPassword(
         email: email,
@@ -17,8 +18,58 @@ class AuthService {
       }
     } catch (e) {
       print('Login error: $e');
+      rethrow;
     }
     return null;
+  }
+
+  /// Find user email by phone number or student ID
+  Future<String?> findEmailByPhoneOrStudentId(String identifier) async {
+    try {
+      // Try to find by phone first
+      final phoneResponse = await _supabaseClient
+          .from('users')
+          .select('email')
+          .eq('phone', identifier)
+          .maybeSingle();
+      
+      if (phoneResponse != null && phoneResponse['email'] != null) {
+        return phoneResponse['email'] as String;
+      }
+
+      // Try to find by student_id
+      final studentIdResponse = await _supabaseClient
+          .from('users')
+          .select('email')
+          .eq('student_id', identifier)
+          .maybeSingle();
+      
+      if (studentIdResponse != null && studentIdResponse['email'] != null) {
+        return studentIdResponse['email'] as String;
+      }
+    } catch (e) {
+      print('Find email error: $e');
+    }
+    return null;
+  }
+
+  /// Login with phone number or student ID
+  Future<models.User?> loginWithPhoneOrStudentId(String identifier, String password) async {
+    final email = await findEmailByPhoneOrStudentId(identifier);
+    if (email != null) {
+      return loginWithEmail(email, password);
+    }
+    return null;
+  }
+
+  /// Check if identifier is a valid phone number (11 digits starting with 1)
+  static bool isPhoneNumber(String identifier) {
+    return RegExp(r'^1[3-9]\d{9}$').hasMatch(identifier);
+  }
+
+  /// Check if identifier looks like a student ID (alphanumeric, typically 8-12 chars)
+  static bool isStudentId(String identifier) {
+    return RegExp(r'^[A-Za-z0-9]{6,20}$').hasMatch(identifier);
   }
 
   Future<void> logout() async {
@@ -127,20 +178,34 @@ class AuthNotifier extends StateNotifier<AuthState> {
     }
   }
 
-  Future<void> login(String username, String password) async {
+  Future<void> login(String identifier, String password) async {
     state = state.copyWith(isLoading: true, error: null);
     try {
-      final user = await _authService.login(username, password);
+      models.User? user;
+      // Try login with phone or student ID first
+      user = await _authService.loginWithPhoneOrStudentId(identifier, password);
+      
+      // If not found, try as email directly
+      if (user == null && identifier.contains('@')) {
+        user = await _authService.loginWithEmail(identifier, password);
+      }
+      
       if (user != null) {
         state = state.copyWith(user: user, isLoading: false);
       } else {
         state = state.copyWith(
-          error: '用户名或密码错误',
+          error: '手机号/学号或密码错误',
           isLoading: false,
         );
       }
     } catch (e) {
-      state = state.copyWith(error: e.toString(), isLoading: false);
+      String errorMsg = '登录失败';
+      if (e.toString().contains('Invalid login credentials')) {
+        errorMsg = '手机号/学号或密码错误';
+      } else {
+        errorMsg = e.toString();
+      }
+      state = state.copyWith(error: errorMsg, isLoading: false);
     }
   }
 
@@ -172,5 +237,9 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
   }
 }

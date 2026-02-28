@@ -14,21 +14,58 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
-  final _passwordController = TextEditingController();
-  final _confirmPasswordController = TextEditingController();
-  final _nameController = TextEditingController();
-  final _emailController = TextEditingController();
-  final _phoneController = TextEditingController();
-  final _studentIdController = TextEditingController();
-  final _departmentController = TextEditingController();
+  
+  // Controllers - initialized in initState
+  late final TextEditingController _usernameController;
+  late final TextEditingController _passwordController;
+  late final TextEditingController _confirmPasswordController;
+  late final TextEditingController _nameController;
+  late final TextEditingController _emailController;
+  late final TextEditingController _phoneController;
+  late final TextEditingController _studentIdController;
+  late final TextEditingController _departmentController;
+  
+  // FocusNodes for proper keyboard event handling
+  late final FocusNode _usernameFocus;
+  late final FocusNode _passwordFocus;
+  late final FocusNode _confirmPasswordFocus;
+  late final FocusNode _nameFocus;
+  late final FocusNode _emailFocus;
+  late final FocusNode _phoneFocus;
+  late final FocusNode _studentIdFocus;
+  late final FocusNode _departmentFocus;
   
   UserType _userType = UserType.student;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
 
   @override
+  void initState() {
+    super.initState();
+    // Initialize controllers
+    _usernameController = TextEditingController();
+    _passwordController = TextEditingController();
+    _confirmPasswordController = TextEditingController();
+    _nameController = TextEditingController();
+    _emailController = TextEditingController();
+    _phoneController = TextEditingController();
+    _studentIdController = TextEditingController();
+    _departmentController = TextEditingController();
+    
+    // Initialize focus nodes
+    _usernameFocus = FocusNode();
+    _passwordFocus = FocusNode();
+    _confirmPasswordFocus = FocusNode();
+    _nameFocus = FocusNode();
+    _emailFocus = FocusNode();
+    _phoneFocus = FocusNode();
+    _studentIdFocus = FocusNode();
+    _departmentFocus = FocusNode();
+  }
+
+  @override
   void dispose() {
+    // Dispose controllers
     _usernameController.dispose();
     _passwordController.dispose();
     _confirmPasswordController.dispose();
@@ -37,6 +74,17 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     _phoneController.dispose();
     _studentIdController.dispose();
     _departmentController.dispose();
+    
+    // Dispose focus nodes
+    _usernameFocus.dispose();
+    _passwordFocus.dispose();
+    _confirmPasswordFocus.dispose();
+    _nameFocus.dispose();
+    _emailFocus.dispose();
+    _phoneFocus.dispose();
+    _studentIdFocus.dispose();
+    _departmentFocus.dispose();
+    
     super.dispose();
   }
 
@@ -59,6 +107,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   Widget _buildTextField({
     required TextEditingController controller,
     required String hintText,
+    required FocusNode focusNode,
     bool obscureText = false,
     Widget? suffixIcon,
     TextInputType? keyboardType,
@@ -66,6 +115,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   }) {
     return TextFormField(
       controller: controller,
+      focusNode: focusNode,
       obscureText: obscureText,
       keyboardType: keyboardType,
       style: AppTextStyles.bodyMedium,
@@ -255,6 +305,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('用户名'),
                         _buildTextField(
                           controller: _usernameController,
+                          focusNode: _usernameFocus,
                           hintText: '输入您的用户名',
                           validator: (value) => (value == null || value.isEmpty) ? '请输入用户名' : null,
                         ),
@@ -263,6 +314,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('密码'),
                         _buildTextField(
                           controller: _passwordController,
+                          focusNode: _passwordFocus,
                           hintText: '设置密码（至少6位）',
                           obscureText: !_isPasswordVisible,
                           suffixIcon: IconButton(
@@ -288,6 +340,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('确认密码'),
                         _buildTextField(
                           controller: _confirmPasswordController,
+                          focusNode: _confirmPasswordFocus,
                           hintText: '再次输入密码',
                           obscureText: !_isConfirmPasswordVisible,
                           suffixIcon: IconButton(
@@ -313,6 +366,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('姓名'),
                         _buildTextField(
                           controller: _nameController,
+                          focusNode: _nameFocus,
                           hintText: '输入您的真实姓名',
                           validator: (value) => (value == null || value.isEmpty) ? '请输入姓名' : null,
                         ),
@@ -321,6 +375,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('邮箱'),
                         _buildTextField(
                           controller: _emailController,
+                          focusNode: _emailFocus,
                           hintText: '输入您的邮箱',
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
@@ -334,6 +389,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel('手机号'),
                         _buildTextField(
                           controller: _phoneController,
+                          focusNode: _phoneFocus,
                           hintText: '输入您的手机号',
                           keyboardType: TextInputType.phone,
                           validator: (value) {
@@ -348,6 +404,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           _buildLabel('学号'),
                           _buildTextField(
                             controller: _studentIdController,
+                            focusNode: _studentIdFocus,
                             hintText: '输入您的学号',
                             validator: (value) => (value == null || value.isEmpty) ? '请输入学号' : null,
                           ),
@@ -357,6 +414,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         _buildLabel(_userType == UserType.student ? '院系' : '部门'),
                         _buildTextField(
                           controller: _departmentController,
+                          focusNode: _departmentFocus,
                           hintText: _userType == UserType.student ? '输入您的院系' : '输入您的部门',
                           validator: (value) => (value == null || value.isEmpty) ? (_userType == UserType.student ? '请输入院系' : '请输入部门') : null,
                         ),
@@ -416,6 +474,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             const SizedBox(width: 4),
                             TextButton(
                               onPressed: () {
+                                ref.read(authStateProvider.notifier).clearError();
                                 context.push('/login');
                               },
                               style: TextButton.styleFrom(
