@@ -30,49 +30,57 @@ class LibraryHomePage extends ConsumerWidget {
             // 1. 搜索框入口
             _buildSearchBar(context),
             const SizedBox(height: AppSpacing.lg),
-            
+
             // 2. 核心功能入口
             const Row(
               children: [
-                Expanded(child: _QuickFeatureCard(
-                  icon: Icons.book_rounded,
-                  title: '我的借阅',
-                  count: '3',
-                  badge: '1天后到期',
-                  color: Colors.blue,
-                  route: '/library/loans',
-                )),
+                Expanded(
+                  child: _QuickFeatureCard(
+                    icon: Icons.book_rounded,
+                    title: '我的借阅',
+                    count: '3',
+                    badge: '1天后到期',
+                    color: Colors.blue,
+                    route: '/library/loans',
+                  ),
+                ),
                 SizedBox(width: AppSpacing.md),
-                Expanded(child: _QuickFeatureCard(
-                  icon: Icons.chair_rounded,
-                  title: '座位预约',
-                  count: '余 42',
-                  badge: '自习室',
-                  color: Colors.green,
-                  route: '/library/seats',
-                )),
+                Expanded(
+                  child: _QuickFeatureCard(
+                    icon: Icons.chair_rounded,
+                    title: '座位预约',
+                    count: '余 42',
+                    badge: '自习室',
+                    color: Colors.green,
+                    route: '/library/seats',
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.md),
             const Row(
               children: [
-                Expanded(child: _QuickFeatureCard(
-                  icon: Icons.event_available,
-                  title: '图书预定',
-                  count: '0',
-                  badge: '暂无待取',
-                  color: Colors.orange,
-                  route: '/library/reservations',
-                )),
+                Expanded(
+                  child: _QuickFeatureCard(
+                    icon: Icons.event_available,
+                    title: '图书预定',
+                    count: '0',
+                    badge: '暂无待取',
+                    color: Colors.orange,
+                    route: '/library/reservations',
+                  ),
+                ),
                 SizedBox(width: AppSpacing.md),
-                Expanded(child: _QuickFeatureCard(
-                  icon: Icons.analytics_rounded,
-                  title: '阅读报告',
-                  count: '34本',
-                  badge: '击败90%',
-                  color: Colors.purple,
-                  route: '/library/stats',
-                )),
+                Expanded(
+                  child: _QuickFeatureCard(
+                    icon: Icons.analytics_rounded,
+                    title: '阅读报告',
+                    count: '34本',
+                    badge: '击败90%',
+                    color: Colors.purple,
+                    route: '/library/stats',
+                  ),
+                ),
               ],
             ),
             const SizedBox(height: AppSpacing.lg),
@@ -89,7 +97,7 @@ class LibraryHomePage extends ConsumerWidget {
               date: '2025-06-10',
               type: '活动',
             ),
-            
+
             const SizedBox(height: AppSpacing.lg),
             // 4. 推荐图书
             _buildSectionHeader('图书推荐', () {}),
@@ -98,9 +106,21 @@ class LibraryHomePage extends ConsumerWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: const [
-                  _RecommendedBookCard(title: '三体', author: '刘慈欣', cover: 'https://via.placeholder.com/100x140'),
-                  _RecommendedBookCard(title: '解忧杂货店', author: '东野圭吾', cover: 'https://via.placeholder.com/100x140'),
-                  _RecommendedBookCard(title: '百年孤独', author: '马尔克斯', cover: 'https://via.placeholder.com/100x140'),
+                  _RecommendedBookCard(
+                    title: '三体',
+                    author: '刘慈欣',
+                    cover: 'https://via.placeholder.com/100x140',
+                  ),
+                  _RecommendedBookCard(
+                    title: '解忧杂货店',
+                    author: '东野圭吾',
+                    cover: 'https://via.placeholder.com/100x140',
+                  ),
+                  _RecommendedBookCard(
+                    title: '百年孤独',
+                    author: '马尔克斯',
+                    cover: 'https://via.placeholder.com/100x140',
+                  ),
                 ],
               ),
             ),
@@ -130,7 +150,10 @@ class LibraryHomePage extends ConsumerWidget {
           children: [
             Icon(Icons.search, color: AppColors.grey),
             const SizedBox(width: 8),
-            Text('书名/作者/ISBN', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.grey)),
+            Text(
+              '书名/作者/ISBN',
+              style: AppTextStyles.bodyMedium.copyWith(color: AppColors.grey),
+            ),
             const Spacer(),
             const VerticalDivider(width: 20),
             Icon(Icons.history, color: AppColors.grey, size: 20),
@@ -146,10 +169,18 @@ class LibraryHomePage extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(title, style: AppTextStyles.titleSmall.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            title,
+            style: AppTextStyles.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           TextButton(
             onPressed: onTap,
-            child: Text('查看全部', style: AppTextStyles.caption.copyWith(color: AppColors.primary)),
+            child: Text(
+              '查看全部',
+              style: AppTextStyles.caption.copyWith(color: AppColors.primary),
+            ),
           ),
         ],
       ),
@@ -203,19 +234,36 @@ class _QuickFeatureCard extends StatelessWidget {
               child: Icon(icon, color: color, size: 24),
             ),
             const SizedBox(height: 12),
-            Text(title, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+            Text(
+              title,
+              style: AppTextStyles.bodyLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 4),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(count, style: AppTextStyles.headlineSmall.copyWith(color: color, fontSize: 18)),
+                Text(
+                  count,
+                  style: AppTextStyles.headlineSmall.copyWith(
+                    color: color,
+                    fontSize: 18,
+                  ),
+                ),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 6,
+                    vertical: 2,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.greyLight,
                     borderRadius: BorderRadius.circular(4),
                   ),
-                  child: Text(badge, style: AppTextStyles.overline.copyWith(fontSize: 8)),
+                  child: Text(
+                    badge,
+                    style: AppTextStyles.overline.copyWith(fontSize: 8),
+                  ),
                 ),
               ],
             ),
@@ -251,7 +299,9 @@ class _LibraryAnnouncementCard extends StatelessWidget {
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
             decoration: BoxDecoration(
-              color: type == '通知' ? AppColors.primary.withOpacity(0.1) : Colors.orange.withOpacity(0.1),
+              color: type == '通知'
+                  ? AppColors.primary.withOpacity(0.1)
+                  : Colors.orange.withOpacity(0.1),
               borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
@@ -267,7 +317,12 @@ class _LibraryAnnouncementCard extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(title, style: AppTextStyles.bodyMedium, maxLines: 1, overflow: TextOverflow.ellipsis),
+                Text(
+                  title,
+                  style: AppTextStyles.bodyMedium,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
                 Text(date, style: AppTextStyles.caption.copyWith(fontSize: 10)),
               ],
             ),
@@ -301,12 +356,27 @@ class _RecommendedBookCard extends StatelessWidget {
             height: 130,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(8),
-              image: DecorationImage(image: NetworkImage(cover), fit: BoxFit.cover),
+              image: DecorationImage(
+                image: NetworkImage(cover),
+                fit: BoxFit.cover,
+              ),
             ),
           ),
           const SizedBox(height: 4),
-          Text(title, style: AppTextStyles.bodySmall.copyWith(fontWeight: FontWeight.bold), maxLines: 1, overflow: TextOverflow.ellipsis),
-          Text(author, style: AppTextStyles.overline, maxLines: 1, overflow: TextOverflow.ellipsis),
+          Text(
+            title,
+            style: AppTextStyles.bodySmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+          Text(
+            author,
+            style: AppTextStyles.overline,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
         ],
       ),
     );

@@ -31,7 +31,10 @@ class LifePage extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+                        border: Border.all(
+                          color: AppColors.greyLight.withOpacity(0.6),
+                          width: 0.5,
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -40,9 +43,13 @@ class LifePage extends ConsumerWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: AppColors.greyLight.withOpacity(0.3),
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(24),
+                                ),
                                 image: DecorationImage(
-                                  image: NetworkImage('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800&h=400'),
+                                  image: NetworkImage(
+                                    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800&h=400',
+                                  ),
                                   fit: BoxFit.cover,
                                 ),
                               ),
@@ -55,12 +62,18 @@ class LifePage extends ConsumerWidget {
                               children: [
                                 Text(
                                   'EDITION ${index + 1}',
-                                  style: AppTextStyles.overline.copyWith(letterSpacing: 2, color: AppColors.primary),
+                                  style: AppTextStyles.overline.copyWith(
+                                    letterSpacing: 2,
+                                    color: AppColors.primary,
+                                  ),
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
                                   index == 0 ? '2026年春季开学典礼' : '年度校园音乐节',
-                                  style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w500, height: 1.3),
+                                  style: AppTextStyles.titleMedium.copyWith(
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.3,
+                                  ),
                                   maxLines: 2,
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -83,7 +96,11 @@ class LifePage extends ConsumerWidget {
                     _buildCanteenItem('一食堂', '红烧肉、麻婆豆腐', 4.8),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                      child: Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: AppColors.greyLight,
+                      ),
                     ),
                     _buildCanteenItem('二食堂', '糖醉排骨、时令蔬菜', 4.5),
                     const SizedBox(height: 32),
@@ -96,12 +113,17 @@ class LifePage extends ConsumerWidget {
                           backgroundColor: Colors.transparent,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(color: AppColors.primary.withOpacity(0.3), width: 0.5),
+                            side: BorderSide(
+                              color: AppColors.primary.withOpacity(0.3),
+                              width: 0.5,
+                            ),
                           ),
                         ),
                         child: Text(
                           '查看全部菜单',
-                          style: AppTextStyles.button.copyWith(color: AppColors.textPrimary),
+                          style: AppTextStyles.button.copyWith(
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                       ),
                     ),
@@ -121,16 +143,23 @@ class LifePage extends ConsumerWidget {
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(24),
+                        ),
                         image: const DecorationImage(
-                          image: NetworkImage('https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800&h=400'),
+                          image: NetworkImage(
+                            'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800&h=400',
+                          ),
                           fit: BoxFit.cover,
                           opacity: 0.6,
                         ),
                       ),
                       child: Center(
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.surface.withOpacity(0.9),
                             borderRadius: BorderRadius.circular(20),
@@ -138,7 +167,11 @@ class LifePage extends ConsumerWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const Icon(Icons.location_on_outlined, size: 16, color: AppColors.textPrimary),
+                              const Icon(
+                                Icons.location_on_outlined,
+                                size: 16,
+                                color: AppColors.textPrimary,
+                              ),
                               const SizedBox(width: 6),
                               Text('查看地图', style: AppTextStyles.labelMedium),
                             ],
@@ -159,13 +192,20 @@ class LifePage extends ConsumerWidget {
                                   color: AppColors.primary.withOpacity(0.08),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
-                                child: const Icon(Icons.directions_bus_outlined, color: AppColors.primary, size: 24),
+                                child: const Icon(
+                                  Icons.directions_bus_outlined,
+                                  color: AppColors.primary,
+                                  size: 24,
+                                ),
                               ),
                               const SizedBox(width: 20),
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text('校园専车 A线', style: AppTextStyles.titleMedium),
+                                  Text(
+                                    '校园専车 A线',
+                                    style: AppTextStyles.titleMedium,
+                                  ),
                                   const SizedBox(height: 4),
                                   Row(
                                     children: [
@@ -178,14 +218,21 @@ class LifePage extends ConsumerWidget {
                                         ),
                                       ),
                                       const SizedBox(width: 6),
-                                      Text('5分钟后到达', style: AppTextStyles.caption),
+                                      Text(
+                                        '5分钟后到达',
+                                        style: AppTextStyles.caption,
+                                      ),
                                     ],
                                   ),
                                 ],
                               ),
                             ],
                           ),
-                          const Icon(Icons.arrow_forward_ios_rounded, size: 16, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.arrow_forward_ios_rounded,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
                         ],
                       ),
                     ),
@@ -200,13 +247,19 @@ class LifePage extends ConsumerWidget {
     );
   }
 
-  Widget _buildPremiumCard({required Widget child, EdgeInsetsGeometry? padding}) {
+  Widget _buildPremiumCard({
+    required Widget child,
+    EdgeInsetsGeometry? padding,
+  }) {
     return Container(
       padding: padding ?? const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+        border: Border.all(
+          color: AppColors.greyLight.withOpacity(0.6),
+          width: 0.5,
+        ),
       ),
       child: child,
     );
@@ -235,7 +288,14 @@ class LifePage extends ConsumerWidget {
             children: [
               Text(name, style: AppTextStyles.titleMedium),
               const SizedBox(height: 4),
-              Text(menu, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary), maxLines: 1, overflow: TextOverflow.ellipsis),
+              Text(
+                menu,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
             ],
           ),
         ),
@@ -247,7 +307,11 @@ class LifePage extends ConsumerWidget {
           ),
           child: Row(
             children: [
-              const Icon(Icons.star_rounded, size: 14, color: AppColors.textPrimary),
+              const Icon(
+                Icons.star_rounded,
+                size: 14,
+                color: AppColors.textPrimary,
+              ),
               const SizedBox(width: 4),
               Text(rating.toString(), style: AppTextStyles.labelMedium),
             ],

@@ -32,11 +32,15 @@ class CampusCard extends StatelessWidget {
       child: Material(
         color: backgroundColor ?? AppColors.surface,
         elevation: elevation ?? 2.0,
-        borderRadius: BorderRadius.circular(borderRadius ?? AppSpacing.borderRadius),
+        borderRadius: BorderRadius.circular(
+          borderRadius ?? AppSpacing.borderRadius,
+        ),
         child: Container(
           padding: padding ?? EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(borderRadius ?? AppSpacing.borderRadius),
+            borderRadius: BorderRadius.circular(
+              borderRadius ?? AppSpacing.borderRadius,
+            ),
             border: border ?? Border.all(color: AppColors.divider, width: 1),
           ),
           child: child,
@@ -53,10 +57,7 @@ class CampusCard extends StatelessWidget {
     );
 
     if (onTap != null) {
-      return GestureDetector(
-        onTap: onTap,
-        child: cardContent,
-      );
+      return GestureDetector(onTap: onTap, child: cardContent);
     }
 
     return cardContent;
@@ -192,16 +193,9 @@ class CampusNewsCard extends StatelessWidget {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (date != null)
-                    Text(
-                      date!,
-                      style: AppTextStyles.caption,
-                    ),
+                  if (date != null) Text(date!, style: AppTextStyles.caption),
                   if (source != null)
-                    Text(
-                      source!,
-                      style: AppTextStyles.caption,
-                    ),
+                    Text(source!, style: AppTextStyles.caption),
                 ],
               ),
             ),
@@ -263,22 +257,11 @@ class CampusCourseCard extends StatelessWidget {
             padding: EdgeInsets.only(top: AppSpacing.sm),
             child: Row(
               children: [
-                Icon(
-                  Icons.access_time,
-                  size: 14,
-                  color: AppColors.grey,
-                ),
+                Icon(Icons.access_time, size: 14, color: AppColors.grey),
                 const SizedBox(width: AppSpacing.xs),
-                Text(
-                  time,
-                  style: AppTextStyles.caption,
-                ),
+                Text(time, style: AppTextStyles.caption),
                 const SizedBox(width: AppSpacing.md),
-                Icon(
-                  Icons.location_on,
-                  size: 14,
-                  color: AppColors.grey,
-                ),
+                Icon(Icons.location_on, size: 14, color: AppColors.grey),
                 const SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: Text(

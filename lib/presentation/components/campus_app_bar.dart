@@ -30,16 +30,13 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(
         title,
-        style: titleStyle ?? AppTextStyles.titleMedium.copyWith(
-          color: AppColors.textPrimary,
-        ),
+        style:
+            titleStyle ??
+            AppTextStyles.titleMedium.copyWith(color: AppColors.textPrimary),
       ),
       leading: showBackButton
           ? IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: AppColors.textPrimary,
-              ),
+              icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
               onPressed: () {
                 context.pop();
               },
@@ -56,7 +53,8 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
 }
 
 // 带搜索功能的AppBar
-class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget {
+class CampusSearchAppBar extends StatelessWidget
+    implements PreferredSizeWidget {
   final String title;
   final TextEditingController searchController;
   final Function(String)? onSearch;
@@ -82,16 +80,11 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
     return AppBar(
       title: Text(
         title,
-        style: AppTextStyles.titleMedium.copyWith(
-          color: AppColors.textPrimary,
-        ),
+        style: AppTextStyles.titleMedium.copyWith(color: AppColors.textPrimary),
       ),
       leading: showBackButton
           ? IconButton(
-              icon: Icon(
-                Icons.arrow_back,
-                color: AppColors.textPrimary,
-              ),
+              icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
               onPressed: () {
                 context.pop();
               },
@@ -118,16 +111,10 @@ class CampusSearchAppBar extends StatelessWidget implements PreferredSizeWidget 
               hintStyle: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.textSecondary,
               ),
-              prefixIcon: Icon(
-                Icons.search,
-                color: AppColors.textSecondary,
-              ),
+              prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
               suffixIcon: searchController.text.isNotEmpty
                   ? IconButton(
-                      icon: Icon(
-                        Icons.clear,
-                        color: AppColors.textSecondary,
-                      ),
+                      icon: Icon(Icons.clear, color: AppColors.textSecondary),
                       onPressed: () {
                         searchController.clear();
                         onSearch?.call('');

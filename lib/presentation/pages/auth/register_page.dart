@@ -14,7 +14,7 @@ class RegisterPage extends ConsumerStatefulWidget {
 
 class _RegisterPageState extends ConsumerState<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
-  
+
   // Controllers - initialized in initState
   late final TextEditingController _usernameController;
   late final TextEditingController _passwordController;
@@ -24,7 +24,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   late final TextEditingController _phoneController;
   late final TextEditingController _studentIdController;
   late final TextEditingController _departmentController;
-  
+
   // FocusNodes for proper keyboard event handling
   late final FocusNode _usernameFocus;
   late final FocusNode _passwordFocus;
@@ -34,7 +34,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
   late final FocusNode _phoneFocus;
   late final FocusNode _studentIdFocus;
   late final FocusNode _departmentFocus;
-  
+
   UserType _userType = UserType.student;
   bool _isPasswordVisible = false;
   bool _isConfirmPasswordVisible = false;
@@ -51,7 +51,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     _phoneController = TextEditingController();
     _studentIdController = TextEditingController();
     _departmentController = TextEditingController();
-    
+
     // Initialize focus nodes
     _usernameFocus = FocusNode();
     _passwordFocus = FocusNode();
@@ -74,7 +74,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     _phoneController.dispose();
     _studentIdController.dispose();
     _departmentController.dispose();
-    
+
     // Dispose focus nodes
     _usernameFocus.dispose();
     _passwordFocus.dispose();
@@ -84,7 +84,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
     _phoneFocus.dispose();
     _studentIdFocus.dispose();
     _departmentFocus.dispose();
-    
+
     super.dispose();
   }
 
@@ -122,10 +122,15 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       cursorColor: AppColors.primary,
       decoration: InputDecoration(
         hintText: hintText,
-        hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+        hintStyle: AppTextStyles.bodyMedium.copyWith(
+          color: AppColors.textDisabled,
+        ),
         filled: true,
         fillColor: AppColors.surface,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 16,
+        ),
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -151,7 +156,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       final name = _nameController.text.trim();
       final email = _emailController.text.trim();
       final phone = _phoneController.text.trim();
-      final studentId = _userType == UserType.student ? _studentIdController.text.trim() : null;
+      final studentId = _userType == UserType.student
+          ? _studentIdController.text.trim()
+          : null;
       final department = _departmentController.text.trim();
 
       final user = User(
@@ -185,7 +192,11 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.textPrimary,
+            size: 20,
+          ),
           onPressed: () => context.pop(),
         ),
       ),
@@ -195,7 +206,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 24.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32.0,
+                vertical: 24.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -235,15 +249,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
-                                color: _userType == UserType.student ? AppColors.surface : Colors.transparent,
+                                color: _userType == UserType.student
+                                    ? AppColors.surface
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                                 boxShadow: _userType == UserType.student
                                     ? [
                                         BoxShadow(
-                                          color: AppColors.black.withOpacity(0.05),
+                                          color: AppColors.black.withOpacity(
+                                            0.05,
+                                          ),
                                           blurRadius: 4,
                                           offset: const Offset(0, 2),
-                                        )
+                                        ),
                                       ]
                                     : [],
                               ),
@@ -251,8 +269,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 child: Text(
                                   '学生',
                                   style: AppTextStyles.bodyMedium.copyWith(
-                                    color: _userType == UserType.student ? AppColors.textPrimary : AppColors.textSecondary,
-                                    fontWeight: _userType == UserType.student ? FontWeight.w500 : FontWeight.w400,
+                                    color: _userType == UserType.student
+                                        ? AppColors.textPrimary
+                                        : AppColors.textSecondary,
+                                    fontWeight: _userType == UserType.student
+                                        ? FontWeight.w500
+                                        : FontWeight.w400,
                                   ),
                                 ),
                               ),
@@ -270,15 +292,19 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               duration: const Duration(milliseconds: 200),
                               padding: const EdgeInsets.symmetric(vertical: 12),
                               decoration: BoxDecoration(
-                                color: _userType == UserType.teacher ? AppColors.surface : Colors.transparent,
+                                color: _userType == UserType.teacher
+                                    ? AppColors.surface
+                                    : Colors.transparent,
                                 borderRadius: BorderRadius.circular(8),
                                 boxShadow: _userType == UserType.teacher
                                     ? [
                                         BoxShadow(
-                                          color: AppColors.black.withOpacity(0.05),
+                                          color: AppColors.black.withOpacity(
+                                            0.05,
+                                          ),
                                           blurRadius: 4,
                                           offset: const Offset(0, 2),
-                                        )
+                                        ),
                                       ]
                                     : [],
                               ),
@@ -286,8 +312,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 child: Text(
                                   '教职工',
                                   style: AppTextStyles.bodyMedium.copyWith(
-                                    color: _userType == UserType.teacher ? AppColors.textPrimary : AppColors.textSecondary,
-                                    fontWeight: _userType == UserType.teacher ? FontWeight.w500 : FontWeight.w400,
+                                    color: _userType == UserType.teacher
+                                        ? AppColors.textPrimary
+                                        : AppColors.textSecondary,
+                                    fontWeight: _userType == UserType.teacher
+                                        ? FontWeight.w500
+                                        : FontWeight.w400,
                                   ),
                                 ),
                               ),
@@ -307,10 +337,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           controller: _usernameController,
                           focusNode: _usernameFocus,
                           hintText: '输入您的用户名',
-                          validator: (value) => (value == null || value.isEmpty) ? '请输入用户名' : null,
+                          validator: (value) => (value == null || value.isEmpty)
+                              ? '请输入用户名'
+                              : null,
                         ),
                         const SizedBox(height: 24),
-                        
+
                         _buildLabel('密码'),
                         _buildTextField(
                           controller: _passwordController,
@@ -319,7 +351,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           obscureText: !_isPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                              _isPasswordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
                               color: AppColors.grey,
                               size: 20,
                             ),
@@ -345,19 +379,23 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           obscureText: !_isConfirmPasswordVisible,
                           suffixIcon: IconButton(
                             icon: Icon(
-                              _isConfirmPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                              _isConfirmPasswordVisible
+                                  ? Icons.visibility_outlined
+                                  : Icons.visibility_off_outlined,
                               color: AppColors.grey,
                               size: 20,
                             ),
                             onPressed: () {
                               setState(() {
-                                _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+                                _isConfirmPasswordVisible =
+                                    !_isConfirmPasswordVisible;
                               });
                             },
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) return '请确认密码';
-                            if (value != _passwordController.text) return '两次输入的密码不一致';
+                            if (value != _passwordController.text)
+                              return '两次输入的密码不一致';
                             return null;
                           },
                         ),
@@ -368,7 +406,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           controller: _nameController,
                           focusNode: _nameFocus,
                           hintText: '输入您的真实姓名',
-                          validator: (value) => (value == null || value.isEmpty) ? '请输入姓名' : null,
+                          validator: (value) =>
+                              (value == null || value.isEmpty) ? '请输入姓名' : null,
                         ),
                         const SizedBox(height: 24),
 
@@ -380,7 +419,10 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           keyboardType: TextInputType.emailAddress,
                           validator: (value) {
                             if (value == null || value.isEmpty) return '请输入邮箱';
-                            if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) return '请输入有效的邮箱地址';
+                            if (!RegExp(
+                              r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                            ).hasMatch(value))
+                              return '请输入有效的邮箱地址';
                             return null;
                           },
                         ),
@@ -394,7 +436,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           keyboardType: TextInputType.phone,
                           validator: (value) {
                             if (value == null || value.isEmpty) return '请输入手机号';
-                            if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value)) return '请输入有效的手机号';
+                            if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value))
+                              return '请输入有效的手机号';
                             return null;
                           },
                         ),
@@ -406,19 +449,30 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             controller: _studentIdController,
                             focusNode: _studentIdFocus,
                             hintText: '输入您的学号',
-                            validator: (value) => (value == null || value.isEmpty) ? '请输入学号' : null,
+                            validator: (value) =>
+                                (value == null || value.isEmpty)
+                                ? '请输入学号'
+                                : null,
                           ),
                           const SizedBox(height: 24),
                         ],
 
-                        _buildLabel(_userType == UserType.student ? '院系' : '部门'),
+                        _buildLabel(
+                          _userType == UserType.student ? '院系' : '部门',
+                        ),
                         _buildTextField(
                           controller: _departmentController,
                           focusNode: _departmentFocus,
-                          hintText: _userType == UserType.student ? '输入您的院系' : '输入您的部门',
-                          validator: (value) => (value == null || value.isEmpty) ? (_userType == UserType.student ? '请输入院系' : '请输入部门') : null,
+                          hintText: _userType == UserType.student
+                              ? '输入您的院系'
+                              : '输入您的部门',
+                          validator: (value) => (value == null || value.isEmpty)
+                              ? (_userType == UserType.student
+                                    ? '请输入院系'
+                                    : '请输入部门')
+                              : null,
                         ),
-                        
+
                         const SizedBox(height: 32),
 
                         if (authState.error != null)
@@ -430,7 +484,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               textAlign: TextAlign.center,
                             ),
                           ),
-                        
+
                         ElevatedButton(
                           onPressed: authState.isLoading ? null : _register,
                           style: ElevatedButton.styleFrom(
@@ -448,7 +502,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                   height: 20,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 1.5,
-                                    valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                      AppColors.white,
+                                    ),
                                   ),
                                 )
                               : Text(
@@ -474,7 +530,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             const SizedBox(width: 4),
                             TextButton(
                               onPressed: () {
-                                ref.read(authStateProvider.notifier).clearError();
+                                ref
+                                    .read(authStateProvider.notifier)
+                                    .clearError();
                                 context.push('/login');
                               },
                               style: TextButton.styleFrom(

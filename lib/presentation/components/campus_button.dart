@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
-enum CampusButtonType {
-  primary,
-  secondary,
-  outline,
-  text,
-}
+enum CampusButtonType { primary, secondary, outline, text }
 
 class CampusButton extends StatelessWidget {
   final String text;
@@ -51,13 +46,8 @@ class CampusButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (icon != null && !isLoading)
-          Icon(
-            icon,
-            color: _getTextColor(),
-            size: 20,
-          ),
-        if (icon != null && !isLoading)
-          const SizedBox(width: 8),
+          Icon(icon, color: _getTextColor(), size: 20),
+        if (icon != null && !isLoading) const SizedBox(width: 8),
         if (isLoading)
           SizedBox(
             width: 20,
@@ -70,10 +60,9 @@ class CampusButton extends StatelessWidget {
         else
           Text(
             text,
-            style: textStyle ??
-                AppTextStyles.button.copyWith(
-                  color: _getTextColor(),
-                ),
+            style:
+                textStyle ??
+                AppTextStyles.button.copyWith(color: _getTextColor()),
           ),
       ],
     );
@@ -88,13 +77,16 @@ class CampusButton extends StatelessWidget {
                 : backgroundColor ?? AppColors.primary,
             foregroundColor: _getTextColor(),
             minimumSize: Size(width ?? double.infinity, height ?? 48),
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
             shape: RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+              borderRadius:
+                  borderRadius ??
+                  BorderRadius.circular(AppSpacing.borderRadius),
             ),
             elevation: elevation ?? 0,
             disabledBackgroundColor: AppColors.greyLight,
@@ -102,7 +94,7 @@ class CampusButton extends StatelessWidget {
           ),
           child: buttonContent,
         );
-      
+
       case CampusButtonType.secondary:
         return ElevatedButton(
           onPressed: (isLoading || isDisabled) ? null : onPressed,
@@ -112,13 +104,16 @@ class CampusButton extends StatelessWidget {
                 : backgroundColor ?? AppColors.secondary,
             foregroundColor: _getTextColor(),
             minimumSize: Size(width ?? double.infinity, height ?? 48),
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
             shape: RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+              borderRadius:
+                  borderRadius ??
+                  BorderRadius.circular(AppSpacing.borderRadius),
             ),
             elevation: elevation ?? 0,
             disabledBackgroundColor: AppColors.greyLight,
@@ -126,7 +121,7 @@ class CampusButton extends StatelessWidget {
           ),
           child: buttonContent,
         );
-      
+
       case CampusButtonType.outline:
         return OutlinedButton(
           onPressed: (isLoading || isDisabled) ? null : onPressed,
@@ -139,26 +134,30 @@ class CampusButton extends StatelessWidget {
             ),
             foregroundColor: _getTextColor(),
             minimumSize: Size(width ?? double.infinity, height ?? 48),
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
             shape: RoundedRectangleBorder(
-              borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+              borderRadius:
+                  borderRadius ??
+                  BorderRadius.circular(AppSpacing.borderRadius),
             ),
             disabledForegroundColor: AppColors.textDisabled,
           ),
           child: buttonContent,
         );
-      
+
       case CampusButtonType.text:
         return TextButton(
           onPressed: (isLoading || isDisabled) ? null : onPressed,
           style: TextButton.styleFrom(
             foregroundColor: _getTextColor(),
             minimumSize: Size(width ?? double.infinity, height ?? 48),
-            padding: padding ??
+            padding:
+                padding ??
                 EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
@@ -221,26 +220,24 @@ class CampusOutlineButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (icon != null && !isLoading)
-          Icon(
-            icon,
-            color: textColor ?? AppColors.primary,
-            size: 20,
-          ),
-        if (icon != null && !isLoading)
-          const SizedBox(width: 8),
+          Icon(icon, color: textColor ?? AppColors.primary, size: 20),
+        if (icon != null && !isLoading) const SizedBox(width: 8),
         if (isLoading)
           SizedBox(
             width: 20,
             height: 20,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(textColor ?? AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                textColor ?? AppColors.primary,
+              ),
             ),
           )
         else
           Text(
             text,
-            style: textStyle ??
+            style:
+                textStyle ??
                 AppTextStyles.button.copyWith(
                   color: textColor ?? AppColors.primary,
                 ),
@@ -258,13 +255,15 @@ class CampusOutlineButton extends StatelessWidget {
           width: 1,
         ),
         minimumSize: Size(width ?? double.infinity, height ?? 48),
-        padding: padding ??
+        padding:
+            padding ??
             EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,
               vertical: AppSpacing.buttonPadding,
             ),
         shape: RoundedRectangleBorder(
-          borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderRadius:
+              borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
         ),
         foregroundColor: textColor ?? AppColors.primary,
         disabledForegroundColor: AppColors.textDisabled,
@@ -305,26 +304,24 @@ class CampusTextButton extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (icon != null && !isLoading)
-          Icon(
-            icon,
-            color: textColor ?? AppColors.primary,
-            size: 16,
-          ),
-        if (icon != null && !isLoading)
-          const SizedBox(width: 4),
+          Icon(icon, color: textColor ?? AppColors.primary, size: 16),
+        if (icon != null && !isLoading) const SizedBox(width: 4),
         if (isLoading)
           SizedBox(
             width: 16,
             height: 16,
             child: CircularProgressIndicator(
               strokeWidth: 2,
-              valueColor: AlwaysStoppedAnimation<Color>(textColor ?? AppColors.primary),
+              valueColor: AlwaysStoppedAnimation<Color>(
+                textColor ?? AppColors.primary,
+              ),
             ),
           )
         else
           Text(
             text,
-            style: textStyle ??
+            style:
+                textStyle ??
                 AppTextStyles.bodyMedium.copyWith(
                   color: textColor ?? AppColors.primary,
                 ),
@@ -336,7 +333,8 @@ class CampusTextButton extends StatelessWidget {
       onPressed: (isLoading || isDisabled) ? null : onPressed,
       style: TextButton.styleFrom(
         foregroundColor: textColor ?? AppColors.primary,
-        padding: padding ??
+        padding:
+            padding ??
             EdgeInsets.symmetric(
               horizontal: AppSpacing.sm,
               vertical: AppSpacing.sm,
@@ -375,11 +373,7 @@ class CampusIconButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton.icon(
       onPressed: isDisabled ? null : onPressed,
-      icon: Icon(
-        icon,
-        color: iconColor ?? AppColors.white,
-        size: size ?? 24,
-      ),
+      icon: Icon(icon, color: iconColor ?? AppColors.white, size: size ?? 24),
       label: const SizedBox.shrink(),
       style: ElevatedButton.styleFrom(
         backgroundColor: isDisabled
@@ -387,7 +381,8 @@ class CampusIconButton extends StatelessWidget {
             : backgroundColor ?? AppColors.primary,
         minimumSize: Size(size ?? 48, size ?? 48),
         shape: RoundedRectangleBorder(
-          borderRadius: borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderRadius:
+              borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
         ),
         elevation: elevation ?? 0,
         shadowColor: AppColors.black.withOpacity(0.1),

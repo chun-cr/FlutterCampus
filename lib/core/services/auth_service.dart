@@ -1,6 +1,7 @@
 import 'package:riverpod/riverpod.dart';
 import '../../domain/models/user.dart' as models;
 import 'package:supabase_flutter/supabase_flutter.dart' hide User;
+import 'package:supabase_flutter/supabase_flutter.dart' as sup;
 
 class AuthService {
   final SupabaseClient _supabaseClient;
@@ -9,18 +10,54 @@ class AuthService {
   /// Login with email directly
   Future<models.User?> loginWithEmail(String email, String password) async {
     try {
-      final AuthResponse response = await _supabaseClient.auth.signInWithPassword(
-        email: email,
-        password: password,
-      );
+      final AuthResponse response = await _supabaseClient.auth
+          .signInWithPassword(email: email, password: password);
       if (response.user != null) {
-        return models.User.fromSupabase(response.user!);
+        return await _getUserFromPublicTable(response.user!);
       }
     } catch (e) {
       print('Login error: $e');
       rethrow;
     }
     return null;
+  }
+
+  Future<models.User> _getUserFromPublicTable(sup.User supabaseUser) async {
+    try {
+      final response = await _supabaseClient
+          .from('users')
+          .select()
+          .eq('id', supabaseUser.id)
+          .maybeSingle();
+
+      if (response != null) {
+        // Merge auth info with public table info
+        return models.User(
+          id: supabaseUser.id,
+          email: supabaseUser.email ?? response['email'] ?? '',
+          username:
+              response['username'] ??
+              supabaseUser.userMetadata?['username'] ??
+              '',
+          name: response['name'] ?? supabaseUser.userMetadata?['name'] ?? '',
+          phone: response['phone'] ?? supabaseUser.phone ?? '',
+          type: models.UserType.fromString(
+            response['type'] ?? supabaseUser.userMetadata?['type'] ?? 'student',
+          ),
+          studentId:
+              response['student_id'] ??
+              supabaseUser.userMetadata?['student_id'],
+          department:
+              response['department'] ??
+              supabaseUser.userMetadata?['department'],
+          avatar: response['avatar'] ?? supabaseUser.userMetadata?['avatar'],
+        );
+      }
+    } catch (e) {
+      print('Failed to fetch user profile: $e');
+    }
+    // Fallback if public table record not found (shouldn't happen with trigger)
+    return await _getUserFromPublicTable(supabaseUser);
   }
 
   /// Find user email by phone number or student ID
@@ -32,7 +69,7 @@ class AuthService {
           .select('email')
           .eq('phone', identifier)
           .maybeSingle();
-      
+
       if (phoneResponse != null && phoneResponse['email'] != null) {
         return phoneResponse['email'] as String;
       }
@@ -43,7 +80,7 @@ class AuthService {
           .select('email')
           .eq('student_id', identifier)
           .maybeSingle();
-      
+
       if (studentIdResponse != null && studentIdResponse['email'] != null) {
         return studentIdResponse['email'] as String;
       }
@@ -54,7 +91,10 @@ class AuthService {
   }
 
   /// Login with phone number or student ID
-  Future<models.User?> loginWithPhoneOrStudentId(String identifier, String password) async {
+  Future<models.User?> loginWithPhoneOrStudentId(
+    String identifier,
+    String password,
+  ) async {
     final email = await findEmailByPhoneOrStudentId(identifier);
     if (email != null) {
       return loginWithEmail(email, password);
@@ -84,14 +124,17 @@ class AuthService {
         data: {
           'username': user.username,
           'name': user.name,
-          'type': user.type.toString(),
+          'type': user.type
+              .toString()
+              .split('.')
+              .last, // Ensure we just send the string value, like 'student'
           'student_id': user.studentId,
           'department': user.department,
           'phone': user.phone,
         },
       );
       if (response.user != null) {
-        return models.User.fromSupabase(response.user!);
+        return await _getUserFromPublicTable(response.user!);
       }
     } catch (e) {
       print('Register error: $e');
@@ -103,7 +146,7 @@ class AuthService {
   Future<models.User?> getCurrentUser() async {
     final supabaseUser = _supabaseClient.auth.currentUser;
     if (supabaseUser != null) {
-      return models.User.fromSupabase(supabaseUser);
+      return await _getUserFromPublicTable(supabaseUser);
     }
     return null;
   }
@@ -142,17 +185,9 @@ class AuthState {
   final bool isLoading;
   final String? error;
 
-  AuthState({
-    this.user,
-    this.isLoading = false,
-    this.error,
-  });
+  AuthState({this.user, this.isLoading = false, this.error});
 
-  AuthState copyWith({
-    models.User? user,
-    bool? isLoading,
-    String? error,
-  }) {
+  AuthState copyWith({models.User? user, bool? isLoading, String? error}) {
     return AuthState(
       user: user ?? this.user,
       isLoading: isLoading ?? this.isLoading,
@@ -184,19 +219,16 @@ class AuthNotifier extends StateNotifier<AuthState> {
       models.User? user;
       // Try login with phone or student ID first
       user = await _authService.loginWithPhoneOrStudentId(identifier, password);
-      
+
       // If not found, try as email directly
       if (user == null && identifier.contains('@')) {
         user = await _authService.loginWithEmail(identifier, password);
       }
-      
+
       if (user != null) {
         state = state.copyWith(user: user, isLoading: false);
       } else {
-        state = state.copyWith(
-          error: '手机号/学号或密码错误',
-          isLoading: false,
-        );
+        state = state.copyWith(error: '手机号/学号或密码错误', isLoading: false);
       }
     } catch (e) {
       String errorMsg = '登录失败';

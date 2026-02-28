@@ -18,17 +18,9 @@ class HomePage extends ConsumerStatefulWidget {
 class _HomePageState extends ConsumerState<HomePage> {
   int _currentIndex = 0;
 
-  final List<Widget> _pages = const [
-    StudyPage(),
-    LifePage(),
-    HelpPage(),
-  ];
+  final List<Widget> _pages = const [StudyPage(), LifePage(), HelpPage()];
 
-  final List<String> _titles = const [
-    '学习中心',
-    '校园生活',
-    '互助社区',
-  ];
+  final List<String> _titles = const ['学习中心', '校园生活', '互助社区'];
 
   @override
   Widget build(BuildContext context) {
@@ -42,7 +34,10 @@ class _HomePageState extends ConsumerState<HomePage> {
         showBackButton: false,
         actions: [
           IconButton(
-            icon: const Icon(Icons.notifications_none_rounded, color: AppColors.white),
+            icon: const Icon(
+              Icons.notifications_none_rounded,
+              color: AppColors.white,
+            ),
             onPressed: () {},
           ),
           GestureDetector(
@@ -54,11 +49,16 @@ class _HomePageState extends ConsumerState<HomePage> {
                 child: CircleAvatar(
                   radius: 16,
                   backgroundColor: AppColors.white.withOpacity(0.2),
-                  backgroundImage: user?.avatar != null && user!.avatar!.isNotEmpty
+                  backgroundImage:
+                      user?.avatar != null && user!.avatar!.isNotEmpty
                       ? NetworkImage(user.avatar!)
                       : null,
                   child: user?.avatar == null || user!.avatar!.isEmpty
-                      ? const Icon(Icons.person_outline_rounded, size: 20, color: AppColors.white)
+                      ? const Icon(
+                          Icons.person_outline_rounded,
+                          size: 20,
+                          color: AppColors.white,
+                        )
                       : null,
                 ),
               ),
@@ -66,13 +66,15 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      body: IndexedStack(
-        index: _currentIndex,
-        children: _pages,
-      ),
+      body: IndexedStack(index: _currentIndex, children: _pages),
       bottomNavigationBar: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 32, right: 32, bottom: 24, top: 12),
+          padding: const EdgeInsets.only(
+            left: 32,
+            right: 32,
+            bottom: 24,
+            top: 12,
+          ),
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -148,9 +150,7 @@ class _HomePageState extends ConsumerState<HomePage> {
       child: Center(
         child: ConstrainedBox(
           constraints: const BoxConstraints(maxWidth: 600),
-          child: ClipRect(
-            child: scaffold,
-          ),
+          child: ClipRect(child: scaffold),
         ),
       ),
     );

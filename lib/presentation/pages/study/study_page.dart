@@ -31,40 +31,75 @@ class StudyPage extends ConsumerWidget {
                             color: AppColors.primary.withOpacity(0.08),
                             borderRadius: BorderRadius.circular(16),
                           ),
-                          child: const Icon(Icons.schedule_rounded, color: AppColors.primary, size: 24),
+                          child: const Icon(
+                            Icons.schedule_rounded,
+                            color: AppColors.primary,
+                            size: 24,
+                          ),
                         ),
                         const SizedBox(width: 20),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                            Text('高等数学', style: AppTextStyles.titleMedium),
-                            const SizedBox(height: 4),
-                            Text('08:00 - 09:40', style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary)),
-                            const SizedBox(height: 2),
-                            Text('一号楼 · 301室', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                              Text('高等数学', style: AppTextStyles.titleMedium),
+                              const SizedBox(height: 4),
+                              Text(
+                                '08:00 - 09:40',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                '一号楼 · 301室',
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
                             ],
                           ),
                         ),
                         Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.primary.withOpacity(0.3), width: 0.5),
+                            border: Border.all(
+                              color: AppColors.primary.withOpacity(0.3),
+                              width: 0.5,
+                            ),
                             borderRadius: BorderRadius.circular(24),
                           ),
-                          child: Text('导航', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                          child: Text(
+                            '导航',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.primary,
+                            ),
+                          ),
                         ),
                       ],
                     ),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                      child: Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: AppColors.greyLight,
+                      ),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        _buildQuickAction(Icons.calendar_today_outlined, '完整课表'),
-                        _buildQuickAction(Icons.notifications_none_outlined, '课程提醒'),
+                        _buildQuickAction(
+                          Icons.calendar_today_outlined,
+                          '完整课表',
+                        ),
+                        _buildQuickAction(
+                          Icons.notifications_none_outlined,
+                          '课程提醒',
+                        ),
                         _buildQuickAction(Icons.meeting_room_outlined, '查找教室'),
                       ],
                     ),
@@ -81,11 +116,25 @@ class StudyPage extends ConsumerWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildLibraryStat('在借图书', '3', '1本即将到期', AppColors.textPrimary),
+                          child: _buildLibraryStat(
+                            '在借图书',
+                            '3',
+                            '1本即将到期',
+                            AppColors.textPrimary,
+                          ),
                         ),
-                        Container(width: 1, height: 48, color: AppColors.greyLight.withOpacity(0.5)),
+                        Container(
+                          width: 1,
+                          height: 48,
+                          color: AppColors.greyLight.withOpacity(0.5),
+                        ),
                         Expanded(
-                          child: _buildLibraryStat('自习座位', '42', 'A区有空位', AppColors.primary),
+                          child: _buildLibraryStat(
+                            '自习座位',
+                            '42',
+                            'A区有空位',
+                            AppColors.primary,
+                          ),
                         ),
                       ],
                     ),
@@ -97,11 +146,15 @@ class StudyPage extends ConsumerWidget {
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           backgroundColor: AppColors.primary.withOpacity(0.05),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(16),
+                          ),
                         ),
                         child: Text(
                           '预约座位 / 搜索图书',
-                          style: AppTextStyles.button.copyWith(color: AppColors.primary),
+                          style: AppTextStyles.button.copyWith(
+                            color: AppColors.primary,
+                          ),
                         ),
                       ),
                     ),
@@ -123,12 +176,28 @@ class StudyPage extends ConsumerWidget {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text('本学期绩点', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                            Text(
+                              '本学期绩点',
+                              style: AppTextStyles.labelMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
                             const SizedBox(height: 4),
-                            Text('3.8', style: AppTextStyles.headlineLarge.copyWith(color: AppColors.primary, fontWeight: FontWeight.w300)),
+                            Text(
+                              '3.8',
+                              style: AppTextStyles.headlineLarge.copyWith(
+                                color: AppColors.primary,
+                                fontWeight: FontWeight.w300,
+                              ),
+                            ),
                           ],
                         ),
-                        Text('+0.2 较上学期提升', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
+                        Text(
+                          '+0.2 较上学期提升',
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.success,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 32),
@@ -139,18 +208,25 @@ class StudyPage extends ConsumerWidget {
                         color: AppColors.background.withOpacity(0.5),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: CustomPaint(
-                        painter: _MockChartPainter(),
-                      ),
+                      child: CustomPaint(painter: _MockChartPainter()),
                     ),
                     const SizedBox(height: 24),
                     Center(
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.auto_graph_rounded, size: 16, color: AppColors.textSecondary),
+                          Icon(
+                            Icons.auto_graph_rounded,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 8),
-                          Text('查看详细分析', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                          Text(
+                            '查看详细分析',
+                            style: AppTextStyles.labelMedium.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -200,7 +276,10 @@ class StudyPage extends ConsumerWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+        border: Border.all(
+          color: AppColors.greyLight.withOpacity(0.6),
+          width: 0.5,
+        ),
       ),
       child: child,
     );
@@ -226,19 +305,38 @@ class StudyPage extends ConsumerWidget {
       children: [
         Icon(icon, color: AppColors.textPrimary.withOpacity(0.7), size: 28),
         const SizedBox(height: 12),
-        Text(label, style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+        Text(
+          label,
+          style: AppTextStyles.labelMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
       ],
     );
   }
 
-  Widget _buildLibraryStat(String label, String value, String sub, Color valueColor) {
+  Widget _buildLibraryStat(
+    String label,
+    String value,
+    String sub,
+    Color valueColor,
+  ) {
     return Column(
       children: [
-        Text(value, style: AppTextStyles.headlineMedium.copyWith(color: valueColor, fontWeight: FontWeight.w300)),
+        Text(
+          value,
+          style: AppTextStyles.headlineMedium.copyWith(
+            color: valueColor,
+            fontWeight: FontWeight.w300,
+          ),
+        ),
         const SizedBox(height: 4),
         Text(label, style: AppTextStyles.labelMedium),
         const SizedBox(height: 6),
-        Text(sub, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+        Text(
+          sub,
+          style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+        ),
       ],
     );
   }
@@ -258,7 +356,10 @@ class StudyPage extends ConsumerWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+          border: Border.all(
+            color: AppColors.greyLight.withOpacity(0.6),
+            width: 0.5,
+          ),
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -276,7 +377,9 @@ class StudyPage extends ConsumerWidget {
             const SizedBox(height: 4),
             Text(
               subtitle,
-              style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
             ),
           ],
         ),
@@ -284,6 +387,7 @@ class StudyPage extends ConsumerWidget {
     );
   }
 }
+
 class _MockChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
@@ -294,9 +398,19 @@ class _MockChartPainter extends CustomPainter {
 
     final path = Path();
     path.moveTo(0, size.height * 0.85);
-    path.quadraticBezierTo(size.width * 0.3, size.height * 0.6, size.width * 0.5, size.height * 0.7);
-    path.quadraticBezierTo(size.width * 0.8, size.height * 0.9, size.width, size.height * 0.2);
-    
+    path.quadraticBezierTo(
+      size.width * 0.3,
+      size.height * 0.6,
+      size.width * 0.5,
+      size.height * 0.7,
+    );
+    path.quadraticBezierTo(
+      size.width * 0.8,
+      size.height * 0.9,
+      size.width,
+      size.height * 0.2,
+    );
+
     canvas.drawPath(path, paint);
 
     // Gradient fill under the line

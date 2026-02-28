@@ -21,20 +21,29 @@ class HelpPage extends ConsumerWidget {
               _buildSectionHeader('快速功能'),
               Row(
                 children: [
-                  Expanded(child: _buildActionButton(
-                    Icons.vpn_key_outlined, '失物招领',
-                    () => context.push('/help/post?type=lostAndFound')
-                  )),
+                  Expanded(
+                    child: _buildActionButton(
+                      Icons.vpn_key_outlined,
+                      '失物招领',
+                      () => context.push('/help/post?type=lostAndFound'),
+                    ),
+                  ),
                   const SizedBox(width: 16),
-                  Expanded(child: _buildActionButton(
-                    Icons.shopping_bag_outlined, '闲置交换',
-                    () => context.push('/help/post?type=secondHand')
-                  )),
+                  Expanded(
+                    child: _buildActionButton(
+                      Icons.shopping_bag_outlined,
+                      '闲置交换',
+                      () => context.push('/help/post?type=secondHand'),
+                    ),
+                  ),
                   const SizedBox(width: 16),
-                  Expanded(child: _buildActionButton(
-                    Icons.people_outline, '校园搭子',
-                    () => context.push('/help/post?type=helpTask')
-                  )),
+                  Expanded(
+                    child: _buildActionButton(
+                      Icons.people_outline,
+                      '校园搭子',
+                      () => context.push('/help/post?type=helpTask'),
+                    ),
+                  ),
                 ],
               ),
               const SizedBox(height: 48),
@@ -53,7 +62,11 @@ class HelpPage extends ConsumerWidget {
                       tag: '已找到',
                       isUrgent: false,
                     ),
-                    const Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                    const Divider(
+                      height: 1,
+                      thickness: 0.5,
+                      color: AppColors.greyLight,
+                    ),
                     _buildListItem(
                       icon: Icons.credit_card_outlined,
                       title: '学生证',
@@ -74,7 +87,12 @@ class HelpPage extends ConsumerWidget {
                   _buildSectionHeader('闲置市场'),
                   Padding(
                     padding: const EdgeInsets.only(bottom: 16, right: 4),
-                    child: Text('查看全部', style: AppTextStyles.labelMedium.copyWith(color: AppColors.primary)),
+                    child: Text(
+                      '查看全部',
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ),
                 ],
               ),
@@ -91,7 +109,10 @@ class HelpPage extends ConsumerWidget {
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(24),
-                        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+                        border: Border.all(
+                          color: AppColors.greyLight.withOpacity(0.6),
+                          width: 0.5,
+                        ),
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,12 +121,14 @@ class HelpPage extends ConsumerWidget {
                             child: Container(
                               decoration: BoxDecoration(
                                 color: AppColors.background,
-                                borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
+                                borderRadius: const BorderRadius.vertical(
+                                  top: Radius.circular(24),
+                                ),
                                 image: DecorationImage(
                                   image: NetworkImage(
-                                    index % 2 == 0 
-                                      ? 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400' 
-                                      : 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&q=80&w=400'
+                                    index % 2 == 0
+                                        ? 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400'
+                                        : 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&q=80&w=400',
                                   ),
                                   fit: BoxFit.cover,
                                 ),
@@ -118,14 +141,18 @@ class HelpPage extends ConsumerWidget {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  index % 2 == 0 ? '设计类图书' : '无线鼠标', 
-                                  style: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w600), 
-                                  maxLines: 1
+                                  index % 2 == 0 ? '设计类图书' : '无线鼠标',
+                                  style: AppTextStyles.labelMedium.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                  maxLines: 1,
                                 ),
                                 const SizedBox(height: 4),
                                 Text(
-                                  '¥ ${index % 2 == 0 ? '150' : '280'}', 
-                                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)
+                                  '¥ ${index % 2 == 0 ? '150' : '280'}',
+                                  style: AppTextStyles.caption.copyWith(
+                                    color: AppColors.textSecondary,
+                                  ),
                                 ),
                               ],
                             ),
@@ -146,7 +173,11 @@ class HelpPage extends ConsumerWidget {
                     _buildTaskItem('二食堂帮打饭', '跑腿任务 · 奖励20元', '5分钟前'),
                     const Padding(
                       padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
+                      child: Divider(
+                        height: 1,
+                        thickness: 0.5,
+                        color: AppColors.greyLight,
+                      ),
                     ),
                     _buildTaskItem('周六打羽毛球搭子', '运动 ·缺2人', '30分钟前'),
                   ],
@@ -160,13 +191,19 @@ class HelpPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildPremiumCard({required Widget child, EdgeInsetsGeometry? padding}) {
+  Widget _buildPremiumCard({
+    required Widget child,
+    EdgeInsetsGeometry? padding,
+  }) {
     return Container(
       padding: padding ?? const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+        border: Border.all(
+          color: AppColors.greyLight.withOpacity(0.6),
+          width: 0.5,
+        ),
       ),
       child: child,
     );
@@ -194,13 +231,21 @@ class HelpPage extends ConsumerWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
-          border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+          border: Border.all(
+            color: AppColors.greyLight.withOpacity(0.6),
+            width: 0.5,
+          ),
         ),
         child: Column(
           children: [
             Icon(icon, color: AppColors.primary, size: 24),
             const SizedBox(height: 12),
-            Text(label, style: AppTextStyles.labelMedium.copyWith(fontWeight: FontWeight.w500)),
+            Text(
+              label,
+              style: AppTextStyles.labelMedium.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
@@ -222,10 +267,16 @@ class HelpPage extends ConsumerWidget {
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: isUrgent ? AppColors.error.withOpacity(0.05) : AppColors.primary.withOpacity(0.05),
+              color: isUrgent
+                  ? AppColors.error.withOpacity(0.05)
+                  : AppColors.primary.withOpacity(0.05),
               borderRadius: BorderRadius.circular(16),
             ),
-            child: Icon(icon, color: isUrgent ? AppColors.error : AppColors.primary, size: 24),
+            child: Icon(
+              icon,
+              color: isUrgent ? AppColors.error : AppColors.primary,
+              size: 24,
+            ),
           ),
           const SizedBox(width: 20),
           Expanded(
@@ -234,7 +285,12 @@ class HelpPage extends ConsumerWidget {
               children: [
                 Text(title, style: AppTextStyles.titleMedium),
                 const SizedBox(height: 4),
-                Text(subtitle, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                Text(
+                  subtitle,
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
+                ),
               ],
             ),
           ),
@@ -250,7 +306,12 @@ class HelpPage extends ConsumerWidget {
                 ),
               ),
               const SizedBox(height: 6),
-              Text(time, style: AppTextStyles.caption.copyWith(color: AppColors.greyDark)),
+              Text(
+                time,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.greyDark,
+                ),
+              ),
             ],
           ),
         ],
@@ -267,9 +328,16 @@ class HelpPage extends ConsumerWidget {
           decoration: BoxDecoration(
             color: AppColors.background,
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.greyLight.withOpacity(0.6), width: 0.5),
+            border: Border.all(
+              color: AppColors.greyLight.withOpacity(0.6),
+              width: 0.5,
+            ),
           ),
-          child: const Icon(Icons.person_outline, size: 20, color: AppColors.textSecondary),
+          child: const Icon(
+            Icons.person_outline,
+            size: 20,
+            color: AppColors.textSecondary,
+          ),
         ),
         const SizedBox(width: 20),
         Expanded(
@@ -278,11 +346,17 @@ class HelpPage extends ConsumerWidget {
             children: [
               Text(title, style: AppTextStyles.titleMedium),
               const SizedBox(height: 4),
-              Text(tag, style: AppTextStyles.caption.copyWith(color: AppColors.primary)),
+              Text(
+                tag,
+                style: AppTextStyles.caption.copyWith(color: AppColors.primary),
+              ),
             ],
           ),
         ),
-        Text(time, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+        Text(
+          time,
+          style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+        ),
       ],
     );
   }

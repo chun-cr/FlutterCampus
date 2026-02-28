@@ -27,7 +27,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _login() async {
     if (_formKey.currentState?.validate() ?? false) {
-      await ref.read(authStateProvider.notifier).login(
+      await ref
+          .read(authStateProvider.notifier)
+          .login(
             _identifierController.text.trim(),
             _passwordController.text.trim(),
           );
@@ -50,7 +52,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32.0,
+                vertical: 48.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -108,21 +113,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   hintText: '输入手机号或学号',
-                                  hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+                                  hintStyle: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.textDisabled,
+                                  ),
                                   filled: true,
                                   fillColor: AppColors.surface,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 16,
+                                  ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.grey,
+                                      width: 1.0,
+                                    ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.grey,
+                                      width: 1.0,
+                                    ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.primary,
+                                      width: 1,
+                                    ),
                                   ),
                                 ),
                                 validator: (value) {
@@ -149,33 +168,50 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 cursorColor: AppColors.primary,
                                 decoration: InputDecoration(
                                   hintText: '输入您的密码',
-                                  hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+                                  hintStyle: AppTextStyles.bodyMedium.copyWith(
+                                    color: AppColors.textDisabled,
+                                  ),
                                   filled: true,
                                   fillColor: AppColors.surface,
-                                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                                  contentPadding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 16,
+                                  ),
                                   suffixIcon: IconButton(
                                     icon: Icon(
-                                      _isPasswordVisible ? Icons.visibility_outlined : Icons.visibility_off_outlined,
+                                      _isPasswordVisible
+                                          ? Icons.visibility_outlined
+                                          : Icons.visibility_off_outlined,
                                       color: AppColors.grey,
                                       size: 20,
                                     ),
                                     onPressed: () {
                                       setState(() {
-                                        _isPasswordVisible = !_isPasswordVisible;
+                                        _isPasswordVisible =
+                                            !_isPasswordVisible;
                                       });
                                     },
                                   ),
                                   border: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.greyLight,
+                                      width: 0.5,
+                                    ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.greyLight,
+                                      width: 0.5,
+                                    ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
                                     borderRadius: BorderRadius.circular(12),
-                                    borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                    borderSide: const BorderSide(
+                                      color: AppColors.primary,
+                                      width: 1,
+                                    ),
                                   ),
                                 ),
                                 validator: (value) {
@@ -210,7 +246,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     foregroundColor: AppColors.textSecondary,
                                     padding: EdgeInsets.zero,
                                     minimumSize: Size.zero,
-                                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
                                   ),
                                   child: Text(
                                     '忘记密码？',
@@ -228,7 +265,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   backgroundColor: AppColors.primary,
                                   foregroundColor: AppColors.surface,
                                   elevation: 2,
-                                  padding: const EdgeInsets.symmetric(vertical: 16),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 16,
+                                  ),
                                   shape: RoundedRectangleBorder(
                                     borderRadius: BorderRadius.circular(12),
                                   ),
@@ -239,7 +278,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                         height: 20,
                                         child: CircularProgressIndicator(
                                           strokeWidth: 1.5,
-                                          valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                          valueColor:
+                                              AlwaysStoppedAnimation<Color>(
+                                                AppColors.white,
+                                              ),
                                         ),
                                       )
                                     : Text(
@@ -267,10 +309,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                             ),
                             const SizedBox(width: 4),
                             TextButton(
-                            onPressed: () {
-                              ref.read(authStateProvider.notifier).clearError();
-                              context.push('/register');
-                            },
+                              onPressed: () {
+                                ref
+                                    .read(authStateProvider.notifier)
+                                    .clearError();
+                                context.push('/register');
+                              },
                               style: TextButton.styleFrom(
                                 padding: EdgeInsets.zero,
                                 minimumSize: Size.zero,

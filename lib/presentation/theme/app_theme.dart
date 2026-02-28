@@ -71,9 +71,7 @@ class AppTheme {
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent,
           foregroundColor: AppColors.primary,
-          textStyle: AppTextStyles.button.copyWith(
-            color: AppColors.primary,
-          ),
+          textStyle: AppTextStyles.button.copyWith(color: AppColors.primary),
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.buttonPadding,
@@ -81,10 +79,7 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           ),
-          side: BorderSide(
-            color: AppColors.greyDark,
-            width: 1.5,
-          ),
+          side: BorderSide(color: AppColors.greyDark, width: 1.5),
           elevation: 2,
         ),
       ),
@@ -92,9 +87,7 @@ class AppTheme {
       textButtonTheme: TextButtonThemeData(
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
-          textStyle: AppTextStyles.button.copyWith(
-            color: AppColors.primary,
-          ),
+          textStyle: AppTextStyles.button.copyWith(color: AppColors.primary),
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
@@ -129,38 +122,23 @@ class AppTheme {
         suffixStyle: AppTextStyles.bodyMedium,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.greyDark,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: AppColors.greyDark, width: 1.5),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.grey,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: AppColors.grey, width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.primary,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.error,
-            width: 1,
-          ),
+          borderSide: BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.error,
-            width: 1.5,
-          ),
+          borderSide: BorderSide(color: AppColors.error, width: 1.5),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -284,12 +262,24 @@ class AppTheme {
       splashColor: AppColors.primaryLight.withOpacity(0.1),
       indicatorColor: AppColors.primary,
       textTheme: TextTheme(
-        displayLarge: AppTextStyles.headlineLarge.copyWith(color: AppColors.white),
-        displayMedium: AppTextStyles.headlineMedium.copyWith(color: AppColors.white),
-        displaySmall: AppTextStyles.headlineSmall.copyWith(color: AppColors.white),
-        headlineLarge: AppTextStyles.headlineLarge.copyWith(color: AppColors.white),
-        headlineMedium: AppTextStyles.headlineMedium.copyWith(color: AppColors.white),
-        headlineSmall: AppTextStyles.headlineSmall.copyWith(color: AppColors.white),
+        displayLarge: AppTextStyles.headlineLarge.copyWith(
+          color: AppColors.white,
+        ),
+        displayMedium: AppTextStyles.headlineMedium.copyWith(
+          color: AppColors.white,
+        ),
+        displaySmall: AppTextStyles.headlineSmall.copyWith(
+          color: AppColors.white,
+        ),
+        headlineLarge: AppTextStyles.headlineLarge.copyWith(
+          color: AppColors.white,
+        ),
+        headlineMedium: AppTextStyles.headlineMedium.copyWith(
+          color: AppColors.white,
+        ),
+        headlineSmall: AppTextStyles.headlineSmall.copyWith(
+          color: AppColors.white,
+        ),
         titleLarge: AppTextStyles.titleLarge.copyWith(color: AppColors.white),
         titleMedium: AppTextStyles.titleMedium.copyWith(color: AppColors.white),
         titleSmall: AppTextStyles.titleSmall.copyWith(color: AppColors.white),
