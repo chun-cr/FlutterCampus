@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../theme/theme.dart';
 
-class StudyPage extends ConsumerWidget {
-  const StudyPage({super.key});
+class TeacherOfficePage extends ConsumerWidget {
+  const TeacherOfficePage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +18,7 @@ class StudyPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. 智能课表模块
-              _buildSectionHeader('智能课表', subtitle: 'SCHEDULE'),
+              _buildSectionHeader('办公审批', subtitle: 'APPROVALS'),
               _buildPremiumCard(
                 child: Column(
                   children: [
@@ -41,17 +42,20 @@ class StudyPage extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('高等数学', style: AppTextStyles.titleMedium),
+                              Text(
+                                '王小明的请假申请',
+                                style: AppTextStyles.titleMedium,
+                              ),
                               const SizedBox(height: 4),
                               Text(
-                                '08:00 - 09:40',
+                                '事假: 2026-03-01 至 2026-03-03',
                                 style: AppTextStyles.bodyMedium.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                '一号楼 · 301室',
+                                '软工22级1班',
                                 style: AppTextStyles.caption.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
@@ -72,7 +76,7 @@ class StudyPage extends ConsumerWidget {
                             borderRadius: BorderRadius.circular(24),
                           ),
                           child: Text(
-                            '导航',
+                            '审批',
                             style: AppTextStyles.labelMedium.copyWith(
                               color: AppColors.primary,
                             ),
@@ -93,13 +97,13 @@ class StudyPage extends ConsumerWidget {
                       children: [
                         _buildQuickAction(
                           Icons.calendar_today_outlined,
-                          '完整课表',
+                          '请假审批',
                         ),
                         _buildQuickAction(
                           Icons.notifications_none_outlined,
-                          '课程提醒',
+                          '奖助学金',
                         ),
-                        _buildQuickAction(Icons.meeting_room_outlined, '查找教室'),
+                        _buildQuickAction(Icons.meeting_room_outlined, '场地借用'),
                       ],
                     ),
                   ],
@@ -108,7 +112,7 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 2. 图书馆助手
-              _buildSectionHeader('图书馆服务', subtitle: 'LIBRARY SERVICES'),
+              _buildSectionHeader('生活服务', subtitle: 'LIFE SERVICES'),
               _buildPremiumCard(
                 child: Column(
                   children: [
@@ -116,9 +120,9 @@ class StudyPage extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: _buildLibraryStat(
-                            '在借图书',
-                            '3',
-                            '1本即将到期',
+                            '财务报销',
+                            '2',
+                            '笔正在处理',
                             AppColors.textPrimary,
                           ),
                         ),
@@ -129,9 +133,9 @@ class StudyPage extends ConsumerWidget {
                         ),
                         Expanded(
                           child: _buildLibraryStat(
-                            '自习座位',
-                            '42',
-                            'A区有空位',
+                            '教工食堂',
+                            '11:30',
+                            '开始供餐',
                             AppColors.primary,
                           ),
                         ),
@@ -152,7 +156,7 @@ class StudyPage extends ConsumerWidget {
                           ),
                         ),
                         child: Text(
-                          '预约座位 / 搜索图书',
+                          '查看通勤班车时刻表',
                           style: AppTextStyles.button.copyWith(
                             color: AppColors.primary,
                           ),
@@ -165,7 +169,7 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 3. 学业进度看板 (Mock Chart)
-              _buildSectionHeader('学业进度', subtitle: 'ACADEMIC PROGRESS'),
+              _buildSectionHeader('科研概况', subtitle: 'RESEARCH PROGRESS'),
               _buildPremiumCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,14 +182,14 @@ class StudyPage extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '本学期绩点',
+                              '本年度科研经费结余',
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '3.8',
+                              '¥ 45,000',
                               style: AppTextStyles.headlineLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w300,
@@ -194,7 +198,7 @@ class StudyPage extends ConsumerWidget {
                           ],
                         ),
                         Text(
-                          '+0.2 较上学期提升',
+                          '正常使用中',
                           style: AppTextStyles.caption.copyWith(
                             color: AppColors.success,
                           ),
@@ -237,15 +241,15 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 4. 学习工具
-              _buildSectionHeader('学习工具', subtitle: 'STUDY TOOLS'),
+              _buildSectionHeader('教务通知', subtitle: 'OFFICIAL NOTICES'),
               Row(
                 children: [
                   Expanded(
                     child: _buildToolCard(
                       context,
                       icon: Icons.school_outlined,
-                      title: '成绩查询',
-                      subtitle: 'GPA计算器',
+                      title: '教务处通知',
+                      subtitle: '关于期中教学检查的通知',
                       color: AppColors.primary,
                       onTap: () => context.push('/grades'),
                     ),
@@ -255,8 +259,8 @@ class StudyPage extends ConsumerWidget {
                     child: _buildToolCard(
                       context,
                       icon: Icons.timer_outlined,
-                      title: '考试倒计时',
-                      subtitle: '备考提醒',
+                      title: '科研处通知',
+                      subtitle: '国家自然科学基金申报指南',
                       color: AppColors.campusOrange,
                       onTap: () => context.push('/exam-countdown'),
                     ),

@@ -15,11 +15,11 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.background,
       cardColor: AppColors.surface,
       dividerColor: AppColors.greyLight,
-      focusColor: AppColors.primary,
-      hoverColor: AppColors.primaryLight.withOpacity(0.1),
-      highlightColor: AppColors.primaryLight.withOpacity(0.1),
-      splashColor: AppColors.primaryLight.withOpacity(0.1),
-      indicatorColor: AppColors.primary,
+      focusColor: AppColors.primaryBrand,
+      hoverColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      highlightColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      splashColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      indicatorColor: AppColors.primaryBrand,
       // 文本样式
       textTheme: TextTheme(
         displayLarge: AppTextStyles.headlineLarge,
@@ -40,7 +40,7 @@ class AppTheme {
       ),
       // 按钮样式
       buttonTheme: ButtonThemeData(
-        buttonColor: AppColors.primary,
+        buttonColor: AppColors.primaryBrand,
         textTheme: ButtonTextTheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -53,7 +53,7 @@ class AppTheme {
       // ElevatedButton样式
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.primary,
+          backgroundColor: AppColors.primaryBrand,
           foregroundColor: AppColors.surface,
           textStyle: AppTextStyles.button,
           padding: EdgeInsets.symmetric(
@@ -63,14 +63,14 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           ),
-          elevation: 2,
+          elevation: 0,
         ),
       ),
       // OutlinedButton样式
       outlinedButtonTheme: OutlinedButtonThemeData(
         style: OutlinedButton.styleFrom(
           backgroundColor: Colors.transparent,
-          foregroundColor: AppColors.primary,
+          foregroundColor: AppColors.primaryBrand,
           textStyle: AppTextStyles.button.copyWith(color: AppColors.primary),
           padding: EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
@@ -79,8 +79,8 @@ class AppTheme {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           ),
-          side: BorderSide(color: AppColors.greyDark, width: 1.5),
-          elevation: 2,
+          side: BorderSide(color: AppColors.border, width: 1.0),
+          elevation: 0,
         ),
       ),
       // TextButton样式
@@ -97,7 +97,7 @@ class AppTheme {
       // 卡片样式
       cardTheme: CardThemeData(
         color: AppColors.surface,
-        elevation: 2,
+        elevation: 0,
         margin: EdgeInsets.all(AppSpacing.sm),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -107,7 +107,7 @@ class AppTheme {
       // 输入框样式
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: AppColors.surface,
+        fillColor: Colors.transparent,
         hintStyle: AppTextStyles.bodyMedium.copyWith(
           color: AppColors.textSecondary,
         ),
@@ -122,15 +122,15 @@ class AppTheme {
         suffixStyle: AppTextStyles.bodyMedium,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.greyDark, width: 1.5),
+          borderSide: BorderSide(color: AppColors.border, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.grey, width: 1.5),
+          borderSide: BorderSide(color: AppColors.border, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.primary, width: 1.5),
+          borderSide: BorderSide(color: AppColors.primaryBrand, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -143,7 +143,7 @@ class AppTheme {
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
-            color: AppColors.greyLight.withOpacity(0.5),
+            color: AppColors.greyLight.withValues(alpha: 0.5),
             width: 1,
           ),
         ),
@@ -181,7 +181,7 @@ class AppTheme {
       ),
       // 标签栏样式
       tabBarTheme: TabBarThemeData(
-        indicatorColor: AppColors.primary,
+        indicatorColor: AppColors.primaryBrand,
         labelColor: AppColors.primary,
         unselectedLabelColor: AppColors.grey,
         labelStyle: AppTextStyles.labelMedium,
@@ -191,37 +191,37 @@ class AppTheme {
       ),
       // 弹窗样式
       dialogTheme: DialogThemeData(
-        elevation: 4,
+        elevation: 0,
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.largeBorderRadius),
-          side: BorderSide(color: AppColors.greyDark, width: 1),
+          side: BorderSide(color: AppColors.border, width: 1),
         ),
         titleTextStyle: AppTextStyles.titleLarge,
         contentTextStyle: AppTextStyles.bodyMedium,
       ),
       // 开关样式
       switchTheme: SwitchThemeData(
-        thumbColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        thumbColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.white;
           }
           return AppColors.white;
         }),
-        trackColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        trackColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return AppColors.primary;
           }
           return AppColors.greyLight;
         }),
-        trackOutlineColor: MaterialStateProperty.all(Colors.transparent),
+        trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
       ),
       // 滑块样式
       sliderTheme: SliderThemeData(
         activeTrackColor: AppColors.primary,
         inactiveTrackColor: AppColors.greyLight,
         thumbColor: AppColors.white,
-        overlayColor: AppColors.primaryLight.withOpacity(0.1),
+        overlayColor: AppColors.primaryLight.withValues(alpha: 0.1),
         valueIndicatorColor: AppColors.primary,
         valueIndicatorTextStyle: AppTextStyles.labelSmall.copyWith(
           color: AppColors.white,
@@ -256,11 +256,11 @@ class AppTheme {
       scaffoldBackgroundColor: AppColors.black,
       cardColor: AppColors.greyDark,
       dividerColor: AppColors.greyDark,
-      focusColor: AppColors.primaryLight.withOpacity(0.1),
-      hoverColor: AppColors.primaryLight.withOpacity(0.1),
-      highlightColor: AppColors.primaryLight.withOpacity(0.1),
-      splashColor: AppColors.primaryLight.withOpacity(0.1),
-      indicatorColor: AppColors.primary,
+      focusColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      hoverColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      highlightColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      splashColor: AppColors.primaryLight.withValues(alpha: 0.1),
+      indicatorColor: AppColors.primaryBrand,
       textTheme: TextTheme(
         displayLarge: AppTextStyles.headlineLarge.copyWith(
           color: AppColors.white,

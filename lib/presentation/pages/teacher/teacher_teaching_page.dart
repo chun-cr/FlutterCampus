@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+
 import '../../theme/theme.dart';
 
-class StudyPage extends ConsumerWidget {
-  const StudyPage({super.key});
+class TeacherTeachingPage extends ConsumerWidget {
+  const TeacherTeachingPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -17,7 +18,7 @@ class StudyPage extends ConsumerWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               // 1. 智能课表模块
-              _buildSectionHeader('智能课表', subtitle: 'SCHEDULE'),
+              _buildSectionHeader('今日授课', subtitle: "TODAY'S CLASSES"),
               _buildPremiumCard(
                 child: Column(
                   children: [
@@ -41,7 +42,10 @@ class StudyPage extends ConsumerWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text('高等数学', style: AppTextStyles.titleMedium),
+                              Text(
+                                '高等数学A (上) - 软件工程',
+                                style: AppTextStyles.titleMedium,
+                              ),
                               const SizedBox(height: 4),
                               Text(
                                 '08:00 - 09:40',
@@ -51,7 +55,7 @@ class StudyPage extends ConsumerWidget {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                '一号楼 · 301室',
+                                '教一 301 · 22级软工1、2班',
                                 style: AppTextStyles.caption.copyWith(
                                   color: AppColors.textSecondary,
                                 ),
@@ -93,13 +97,13 @@ class StudyPage extends ConsumerWidget {
                       children: [
                         _buildQuickAction(
                           Icons.calendar_today_outlined,
-                          '完整课表',
+                          '教学日历',
                         ),
                         _buildQuickAction(
                           Icons.notifications_none_outlined,
-                          '课程提醒',
+                          '班级名册',
                         ),
-                        _buildQuickAction(Icons.meeting_room_outlined, '查找教室'),
+                        _buildQuickAction(Icons.meeting_room_outlined, '调课申请'),
                       ],
                     ),
                   ],
@@ -108,7 +112,7 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 2. 图书馆助手
-              _buildSectionHeader('图书馆服务', subtitle: 'LIBRARY SERVICES'),
+              _buildSectionHeader('教学工具', subtitle: 'TEACHING TOOLS'),
               _buildPremiumCard(
                 child: Column(
                   children: [
@@ -116,9 +120,9 @@ class StudyPage extends ConsumerWidget {
                       children: [
                         Expanded(
                           child: _buildLibraryStat(
-                            '在借图书',
-                            '3',
-                            '1本即将到期',
+                            '待批改',
+                            '12',
+                            '份作业',
                             AppColors.textPrimary,
                           ),
                         ),
@@ -129,9 +133,9 @@ class StudyPage extends ConsumerWidget {
                         ),
                         Expanded(
                           child: _buildLibraryStat(
-                            '自习座位',
-                            '42',
-                            'A区有空位',
+                            '课堂签到',
+                            '待发起',
+                            '点击发起',
                             AppColors.primary,
                           ),
                         ),
@@ -152,7 +156,7 @@ class StudyPage extends ConsumerWidget {
                           ),
                         ),
                         child: Text(
-                          '预约座位 / 搜索图书',
+                          '进入教学工作台',
                           style: AppTextStyles.button.copyWith(
                             color: AppColors.primary,
                           ),
@@ -165,7 +169,7 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 3. 学业进度看板 (Mock Chart)
-              _buildSectionHeader('学业进度', subtitle: 'ACADEMIC PROGRESS'),
+              _buildSectionHeader('教学概况', subtitle: 'TEACHING OVERVIEW'),
               _buildPremiumCard(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -178,14 +182,14 @@ class StudyPage extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '本学期绩点',
+                              '本周平均出勤率',
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '3.8',
+                              '96.5%',
                               style: AppTextStyles.headlineLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w300,
@@ -194,7 +198,7 @@ class StudyPage extends ConsumerWidget {
                           ],
                         ),
                         Text(
-                          '+0.2 较上学期提升',
+                          '+1.2% 较上周提升',
                           style: AppTextStyles.caption.copyWith(
                             color: AppColors.success,
                           ),
@@ -237,15 +241,15 @@ class StudyPage extends ConsumerWidget {
               const SizedBox(height: 40),
 
               // 4. 学习工具
-              _buildSectionHeader('学习工具', subtitle: 'STUDY TOOLS'),
+              _buildSectionHeader('教务快捷入口', subtitle: 'QUICK LINKS'),
               Row(
                 children: [
                   Expanded(
                     child: _buildToolCard(
                       context,
                       icon: Icons.school_outlined,
-                      title: '成绩查询',
-                      subtitle: 'GPA计算器',
+                      title: '成绩录入',
+                      subtitle: '期末统分',
                       color: AppColors.primary,
                       onTap: () => context.push('/grades'),
                     ),
@@ -255,8 +259,8 @@ class StudyPage extends ConsumerWidget {
                     child: _buildToolCard(
                       context,
                       icon: Icons.timer_outlined,
-                      title: '考试倒计时',
-                      subtitle: '备考提醒',
+                      title: '监考安排',
+                      subtitle: '本周无监考',
                       color: AppColors.campusOrange,
                       onTap: () => context.push('/exam-countdown'),
                     ),

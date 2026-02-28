@@ -70,7 +70,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                           child: Icon(
                             Icons.school_outlined,
                             size: 48,
-                            color: AppColors.primary,
+                            color: AppColors.primaryBrand,
                           ),
                         ),
                         const SizedBox(height: 24),
@@ -109,7 +109,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               TextFormField(
                                 controller: _identifierController,
                                 style: AppTextStyles.bodyMedium,
-                                cursorColor: AppColors.primary,
+                                cursorColor: AppColors.primaryBrand,
                                 keyboardType: TextInputType.text,
                                 decoration: InputDecoration(
                                   hintText: '输入手机号或学号',
@@ -117,29 +117,29 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     color: AppColors.textDisabled,
                                   ),
                                   filled: true,
-                                  fillColor: AppColors.surface,
+                                  fillColor: Colors.transparent,
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                     vertical: 16,
                                   ),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
                                       color: AppColors.grey,
                                       width: 1.0,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
                                       color: AppColors.grey,
                                       width: 1.0,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
-                                      color: AppColors.primary,
+                                      color: AppColors.primaryBrand,
                                       width: 1,
                                     ),
                                   ),
@@ -165,14 +165,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 controller: _passwordController,
                                 obscureText: !_isPasswordVisible,
                                 style: AppTextStyles.bodyMedium,
-                                cursorColor: AppColors.primary,
+                                cursorColor: AppColors.primaryBrand,
                                 decoration: InputDecoration(
                                   hintText: '输入您的密码',
                                   hintStyle: AppTextStyles.bodyMedium.copyWith(
                                     color: AppColors.textDisabled,
                                   ),
                                   filled: true,
-                                  fillColor: AppColors.surface,
+                                  fillColor: Colors.transparent,
                                   contentPadding: const EdgeInsets.symmetric(
                                     horizontal: 16,
                                     vertical: 16,
@@ -193,23 +193,23 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                     },
                                   ),
                                   border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
                                       color: AppColors.greyLight,
                                       width: 0.5,
                                     ),
                                   ),
                                   enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
                                       color: AppColors.greyLight,
                                       width: 0.5,
                                     ),
                                   ),
                                   focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                     borderSide: const BorderSide(
-                                      color: AppColors.primary,
+                                      color: AppColors.primaryBrand,
                                       width: 1,
                                     ),
                                   ),
@@ -252,7 +252,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                   child: Text(
                                     '忘记密码？',
                                     style: AppTextStyles.bodySmall.copyWith(
-                                      color: AppColors.primary,
+                                      color: AppColors.primaryBrand,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -262,14 +262,14 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               ElevatedButton(
                                 onPressed: authState.isLoading ? null : _login,
                                 style: ElevatedButton.styleFrom(
-                                  backgroundColor: AppColors.primary,
+                                  backgroundColor: AppColors.primaryBrand,
                                   foregroundColor: AppColors.surface,
-                                  elevation: 2,
+                                  elevation: 0,
                                   padding: const EdgeInsets.symmetric(
                                     vertical: 16,
                                   ),
                                   shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(12),
+                                    borderRadius: BorderRadius.circular(8),
                                   ),
                                 ),
                                 child: authState.isLoading
@@ -323,7 +323,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                               child: Text(
                                 '立即注册',
                                 style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.primary,
+                                  color: AppColors.primaryBrand,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),

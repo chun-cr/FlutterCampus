@@ -1,7 +1,6 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../../components/components.dart';
 import '../../theme/theme.dart';
 
 class HelpPage extends ConsumerWidget {
@@ -110,7 +109,7 @@ class HelpPage extends ConsumerWidget {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: AppColors.greyLight.withOpacity(0.6),
+                          color: AppColors.greyLight.withValues(alpha: 0.6),
                           width: 0.5,
                         ),
                       ),
@@ -201,7 +200,7 @@ class HelpPage extends ConsumerWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.greyLight.withOpacity(0.6),
+          color: AppColors.greyLight.withValues(alpha: 0.6),
           width: 0.5,
         ),
       ),
@@ -232,7 +231,7 @@ class HelpPage extends ConsumerWidget {
           color: AppColors.surface,
           borderRadius: BorderRadius.circular(24),
           border: Border.all(
-            color: AppColors.greyLight.withOpacity(0.6),
+            color: AppColors.greyLight.withValues(alpha: 0.6),
             width: 0.5,
           ),
         ),
@@ -268,8 +267,8 @@ class HelpPage extends ConsumerWidget {
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: isUrgent
-                  ? AppColors.error.withOpacity(0.05)
-                  : AppColors.primary.withOpacity(0.05),
+                  ? AppColors.error.withValues(alpha: 0.05)
+                  : AppColors.primary.withValues(alpha: 0.05),
               borderRadius: BorderRadius.circular(16),
             ),
             child: Icon(
@@ -329,7 +328,7 @@ class HelpPage extends ConsumerWidget {
             color: AppColors.background,
             shape: BoxShape.circle,
             border: Border.all(
-              color: AppColors.greyLight.withOpacity(0.6),
+              color: AppColors.greyLight.withValues(alpha: 0.6),
               width: 0.5,
             ),
           ),

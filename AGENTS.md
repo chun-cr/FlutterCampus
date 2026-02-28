@@ -12,6 +12,18 @@
 
 
 
+## UI 开发规范
+遵循 ui-ux-pro-max skill 的设计原则，
+但所有代码必须是 Flutter/Dart 实现。
+
+- CSS 样式转换为 Flutter 的 BoxDecoration、TextStyle、EdgeInsets
+- 布局使用 Column、Row、Stack、Padding、SizedBox
+- 动画使用 AnimatedContainer 或 flutter_animate 库
+- 颜色统一定义在 AppTheme 文件里，不允许硬编码
+- 所有间距使用 8 的倍数（8、16、24、32）
+
+
+
 # Flutter 开发规范
 
 ## 组件规范

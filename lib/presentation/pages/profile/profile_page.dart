@@ -44,7 +44,7 @@ class ProfilePage extends ConsumerWidget {
           Icon(
             Icons.person_outline_rounded,
             size: 80,
-            color: AppColors.grey.withOpacity(0.5),
+            color: AppColors.grey.withValues(alpha: 0.5),
           ),
           const SizedBox(height: 24),
           Text(
@@ -110,7 +110,7 @@ class ProfilePage extends ConsumerWidget {
                       shape: BoxShape.circle,
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withOpacity(0.06),
+                          color: Colors.black.withValues(alpha: 0.06),
                           blurRadius: 24,
                           offset: const Offset(0, 12),
                         ),
@@ -130,7 +130,7 @@ class ProfilePage extends ConsumerWidget {
                             ? Icon(
                                 Icons.person_outline_rounded,
                                 size: 48,
-                                color: AppColors.grey.withOpacity(0.5),
+                                color: AppColors.grey.withValues(alpha: 0.5),
                               )
                             : null,
                       ),
@@ -252,7 +252,7 @@ class ProfilePage extends ConsumerWidget {
       child: Text(
         title,
         style: AppTextStyles.bodySmall.copyWith(
-          color: AppColors.textSecondary.withOpacity(0.6),
+          color: AppColors.textSecondary.withValues(alpha: 0.6),
           fontWeight: FontWeight.w700,
           letterSpacing: 1.5,
         ),
@@ -264,10 +264,10 @@ class ProfilePage extends ConsumerWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: Colors.black.withOpacity(0.04)),
+        border: Border.all(color: Colors.black.withValues(alpha: 0.04)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.02),
+            color: Colors.black.withValues(alpha: 0.02),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
@@ -295,12 +295,16 @@ class ProfilePage extends ConsumerWidget {
           padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 20.0),
           child: Row(
             children: [
-              Icon(icon, color: AppColors.grey.withOpacity(0.8), size: 22),
+              Icon(
+                icon,
+                color: AppColors.grey.withValues(alpha: 0.8),
+                size: 22,
+              ),
               const SizedBox(width: 16),
               Text(
                 label,
                 style: AppTextStyles.bodyLarge.copyWith(
-                  color: AppColors.textPrimary.withOpacity(0.8),
+                  color: AppColors.textPrimary.withValues(alpha: 0.8),
                   fontWeight: FontWeight.w500,
                 ),
               ),
@@ -320,7 +324,7 @@ class ProfilePage extends ConsumerWidget {
             height: 1,
             indent: 58,
             endIndent: 20,
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
           ),
       ],
     );
@@ -343,19 +347,23 @@ class ProfilePage extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(icon, color: AppColors.grey.withOpacity(0.8), size: 22),
+                Icon(
+                  icon,
+                  color: AppColors.grey.withValues(alpha: 0.8),
+                  size: 22,
+                ),
                 const SizedBox(width: 16),
                 Text(
                   label,
                   style: AppTextStyles.bodyLarge.copyWith(
-                    color: AppColors.textPrimary.withOpacity(0.8),
+                    color: AppColors.textPrimary.withValues(alpha: 0.8),
                     fontWeight: FontWeight.w500,
                   ),
                 ),
                 const Spacer(),
                 Icon(
                   Icons.chevron_right_rounded,
-                  color: AppColors.grey.withOpacity(0.4),
+                  color: AppColors.grey.withValues(alpha: 0.4),
                   size: 20,
                 ),
               ],
@@ -367,7 +375,7 @@ class ProfilePage extends ConsumerWidget {
             height: 1,
             indent: 58,
             endIndent: 20,
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
           ),
       ],
     );

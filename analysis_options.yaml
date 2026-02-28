@@ -32,7 +32,7 @@ linter:
     prefer_collection_literals: true
     unnecessary_const: true
     camel_case_types: true
-    camel_case_variables: true
+    # camel_case_variables: true  # 已弃用的规则
     camel_case_extensions: true
     constant_identifier_names: true
     non_constant_identifier_names: true
@@ -56,7 +56,7 @@ linter:
     prefer_iterable_whereType: true
     prefer_mixin: true
     prefer_spread_collections: true
-    prefer_string_buffers: true
+    # prefer_string_buffers: true  # 已弃用的规则
     prefer_typing_uninitialized_variables: true
     prefer_void_to_null: true
     recursive_getters: true

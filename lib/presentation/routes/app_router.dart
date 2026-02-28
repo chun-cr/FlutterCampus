@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../pages/auth/splash_screen.dart';
 import '../pages/auth/login_page.dart';

@@ -3,26 +3,26 @@ import 'package:google_fonts/google_fonts.dart';
 import 'app_colors.dart';
 
 class AppTextStyles {
-  // 标题样式
+  // 标题样式 - 更紧凑、清晰
   static TextStyle get headlineLarge => GoogleFonts.inter(
     fontSize: 32,
-    fontWeight: FontWeight.w600,
+    fontWeight: FontWeight.w700, // Shadcn prefers thicker titles
     color: AppColors.textPrimary,
-    letterSpacing: -0.5,
-    height: 1.2,
+    letterSpacing: -0.8,
+    height: 1.1,
   );
 
   static TextStyle get headlineMedium => GoogleFonts.inter(
-    fontSize: 28,
-    fontWeight: FontWeight.w600,
+    fontSize: 24,
+    fontWeight: FontWeight.w700,
     color: AppColors.textPrimary,
     letterSpacing: -0.5,
     height: 1.2,
   );
 
   static TextStyle get headlineSmall => GoogleFonts.inter(
-    fontSize: 24,
-    fontWeight: FontWeight.w500,
+    fontSize: 20,
+    fontWeight: FontWeight.w600,
     color: AppColors.textPrimary,
     letterSpacing: -0.5,
     height: 1.3,
@@ -53,25 +53,25 @@ class AppTextStyles {
     height: 1.4,
   );
 
-  // 正文样式
+  // 正文样式 - 提供更好的灰度对比
   static TextStyle get bodyLarge => GoogleFonts.inter(
     fontSize: 16,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
-    height: 1.5,
+    height: 1.6,
   );
 
   static TextStyle get bodyMedium => GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w400,
     color: AppColors.textPrimary,
-    height: 1.5,
+    height: 1.6,
   );
 
   static TextStyle get bodySmall => GoogleFonts.inter(
     fontSize: 13,
     fontWeight: FontWeight.w400,
-    color: AppColors.textPrimary,
+    color: AppColors.textSecondary, // Shadcn secondary text uses Slate 500
     height: 1.5,
   );
 
@@ -80,7 +80,7 @@ class AppTextStyles {
     fontSize: 14,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
-    letterSpacing: 0.1,
+    letterSpacing: 0,
     height: 1.4,
   );
 
@@ -88,24 +88,24 @@ class AppTextStyles {
     fontSize: 12,
     fontWeight: FontWeight.w500,
     color: AppColors.textPrimary,
-    letterSpacing: 0.1,
+    letterSpacing: 0,
     height: 1.4,
   );
 
   static TextStyle get labelSmall => GoogleFonts.inter(
     fontSize: 11,
     fontWeight: FontWeight.w500,
-    color: AppColors.textPrimary,
-    letterSpacing: 0.2,
+    color: AppColors.textSecondary,
+    letterSpacing: 0,
     height: 1.4,
   );
 
   // 特殊样式
   static TextStyle get button => GoogleFonts.inter(
     fontSize: 14,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w500, // Medium weight for buttons
     color: AppColors.white,
-    letterSpacing: 0.2,
+    letterSpacing: 0, // No letter spacing, more compact
     height: 1.2,
   );
 
@@ -118,7 +118,7 @@ class AppTextStyles {
 
   static TextStyle get overline => GoogleFonts.inter(
     fontSize: 10,
-    fontWeight: FontWeight.w500,
+    fontWeight: FontWeight.w600,
     color: AppColors.textSecondary,
     letterSpacing: 0.5,
     textBaseline: TextBaseline.alphabetic,
@@ -128,7 +128,7 @@ class AppTextStyles {
   static TextStyle get highlight => GoogleFonts.inter(
     fontSize: 14,
     fontWeight: FontWeight.w500,
-    color: AppColors.primary,
+    color: AppColors.primaryBrand,
   );
 
   static TextStyle get error => GoogleFonts.inter(

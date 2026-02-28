@@ -1,6 +1,5 @@
-﻿import 'package:flutter/material.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../components/components.dart';
 import '../../theme/theme.dart';
 
 class LifePage extends ConsumerWidget {
@@ -32,7 +31,7 @@ class LifePage extends ConsumerWidget {
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(24),
                         border: Border.all(
-                          color: AppColors.greyLight.withOpacity(0.6),
+                          color: AppColors.greyLight.withValues(alpha: 0.6),
                           width: 0.5,
                         ),
                       ),
@@ -42,7 +41,9 @@ class LifePage extends ConsumerWidget {
                           Expanded(
                             child: Container(
                               decoration: BoxDecoration(
-                                color: AppColors.greyLight.withOpacity(0.3),
+                                color: AppColors.greyLight.withValues(
+                                  alpha: 0.3,
+                                ),
                                 borderRadius: const BorderRadius.vertical(
                                   top: Radius.circular(24),
                                 ),
@@ -114,7 +115,7 @@ class LifePage extends ConsumerWidget {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(16),
                             side: BorderSide(
-                              color: AppColors.primary.withOpacity(0.3),
+                              color: AppColors.primary.withValues(alpha: 0.3),
                               width: 0.5,
                             ),
                           ),
@@ -161,7 +162,7 @@ class LifePage extends ConsumerWidget {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: AppColors.surface.withOpacity(0.9),
+                            color: AppColors.surface.withValues(alpha: 0.9),
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Row(
@@ -189,7 +190,9 @@ class LifePage extends ConsumerWidget {
                               Container(
                                 padding: const EdgeInsets.all(12),
                                 decoration: BoxDecoration(
-                                  color: AppColors.primary.withOpacity(0.08),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.08,
+                                  ),
                                   borderRadius: BorderRadius.circular(16),
                                 ),
                                 child: const Icon(
@@ -257,7 +260,7 @@ class LifePage extends ConsumerWidget {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(24),
         border: Border.all(
-          color: AppColors.greyLight.withOpacity(0.6),
+          color: AppColors.greyLight.withValues(alpha: 0.6),
           width: 0.5,
         ),
       ),

@@ -134,7 +134,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
           decoration: BoxDecoration(
-            color: AppColors.greyLight.withOpacity(0.5),
+            color: AppColors.greyLight.withValues(alpha: 0.5),
             borderRadius: BorderRadius.circular(10),
           ),
           child: Text(
@@ -156,7 +156,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isUrgent ? AppColors.warning : AppColors.greyLight.withOpacity(0.5),
+          color: isUrgent ? AppColors.warning : AppColors.greyLight.withValues(alpha: 0.5),
           width: isUrgent ? 1.5 : 1,
         ),
       ),
@@ -178,7 +178,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                         decoration: BoxDecoration(
-                          color: typeColor.withOpacity(isExpired ? 0.1 : 0.15),
+                          color: typeColor.withValues(alpha: isExpired ? 0.1 : 0.15),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
@@ -347,7 +347,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                         child: Container(
                           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                           decoration: BoxDecoration(
-                            color: isSelected ? _getExamTypeColor(type).withOpacity(0.15) : AppColors.greyLight.withOpacity(0.3),
+                            color: isSelected ? _getExamTypeColor(type).withValues(alpha: 0.15) : AppColors.greyLight.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(8),
                             border: isSelected ? Border.all(color: _getExamTypeColor(type), width: 1) : null,
                           ),

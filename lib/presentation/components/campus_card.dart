@@ -31,7 +31,7 @@ class CampusCard extends StatelessWidget {
       margin: margin ?? EdgeInsets.all(AppSpacing.md),
       child: Material(
         color: backgroundColor ?? AppColors.surface,
-        elevation: elevation ?? 2.0,
+        elevation: elevation ?? 0.0,
         borderRadius: BorderRadius.circular(
           borderRadius ?? AppSpacing.borderRadius,
         ),
@@ -41,7 +41,18 @@ class CampusCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(
               borderRadius ?? AppSpacing.borderRadius,
             ),
-            border: border ?? Border.all(color: AppColors.divider, width: 1),
+            border: border ?? Border.all(color: AppColors.border, width: 1),
+            boxShadow: shadow != null
+                ? [shadow!]
+                : [
+                    BoxShadow(
+                      color: AppColors.black.withValues(
+                        alpha: 0.03,
+                      ), // Super subtle shadow
+                      blurRadius: 10,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
           ),
           child: child,
         ),
@@ -95,14 +106,16 @@ class CampusFeatureCard extends StatelessWidget {
             width: 64,
             height: 64,
             decoration: BoxDecoration(
-              color: (backgroundColor ?? AppColors.primary).withOpacity(0.1),
+              color: (backgroundColor ?? AppColors.primary).withValues(
+                alpha: 0.1,
+              ),
               borderRadius: BorderRadius.circular(32),
             ),
             child: Center(
               child: Icon(
                 icon,
                 size: 28,
-                color: iconColor ?? backgroundColor ?? AppColors.primary,
+                color: iconColor ?? backgroundColor ?? AppColors.primaryBrand,
               ),
             ),
           ),
@@ -230,7 +243,7 @@ class CampusCourseCard extends StatelessWidget {
       onTap: onTap,
       padding: EdgeInsets.all(AppSpacing.lg),
       border: Border(
-        left: BorderSide(color: color ?? AppColors.primary, width: 4),
+        left: BorderSide(color: color ?? AppColors.primaryBrand, width: 3),
         top: BorderSide(color: AppColors.divider),
         right: BorderSide(color: AppColors.divider),
         bottom: BorderSide(color: AppColors.divider),

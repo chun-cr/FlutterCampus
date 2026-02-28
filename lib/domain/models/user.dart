@@ -10,11 +10,16 @@ enum UserType {
     return 'UserType.$name';
   }
 
-  static UserType fromString(String value) {
-    return values.firstWhere(
-      (e) => e.toString() == value,
-      orElse: () => UserType.student,
-    );
+  static UserType fromString(String? value) {
+    if (value == null) return UserType.student;
+    
+    // Check if the value is purely 'teacher' or 'UserType.teacher'
+    // Convert to lowercase to be safe against 'Teacher', 'TEACHER', etc.
+    final valLower = value.toLowerCase();
+    
+    if (valLower.contains('teacher')) return UserType.teacher;
+    if (valLower.contains('staff')) return UserType.staff;
+    return UserType.student;
   }
 }
 
@@ -86,10 +91,7 @@ class User {
       name: json['name'],
       email: json['email'],
       phone: json['phone'],
-      type: UserType.values.firstWhere(
-        (e) => e.toString() == json['type'],
-        orElse: () => UserType.student,
-      ),
+      type: UserType.fromString(json['type']?.toString() ?? 'student'),
       studentId: json['studentId'],
       department: json['department'],
       avatar: json['avatar'],

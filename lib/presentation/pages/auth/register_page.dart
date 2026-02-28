@@ -119,7 +119,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
       obscureText: obscureText,
       keyboardType: keyboardType,
       style: AppTextStyles.bodyMedium,
-      cursorColor: AppColors.primary,
+      cursorColor: AppColors.primaryBrand,
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTextStyles.bodyMedium.copyWith(
@@ -133,16 +133,16 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
         ),
         suffixIcon: suffixIcon,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.grey, width: 1.0),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: AppColors.primary, width: 1),
+          borderRadius: BorderRadius.circular(8),
+          borderSide: const BorderSide(color: AppColors.primaryBrand, width: 1),
         ),
       ),
       validator: validator,
@@ -233,8 +233,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                     margin: const EdgeInsets.only(bottom: 32),
                     padding: const EdgeInsets.all(4),
                     decoration: BoxDecoration(
-                      color: AppColors.greyLight.withOpacity(0.4),
-                      borderRadius: BorderRadius.circular(12),
+                      color: AppColors.secondary,
+                      borderRadius: BorderRadius.circular(8),
                     ),
                     child: Row(
                       children: [
@@ -256,9 +256,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 boxShadow: _userType == UserType.student
                                     ? [
                                         BoxShadow(
-                                          color: AppColors.black.withOpacity(
-                                            0.05,
-                                          ),
+                                          color: AppColors.textPrimary
+                                              .withValues(alpha: 0.05),
                                           blurRadius: 4,
                                           offset: const Offset(0, 2),
                                         ),
@@ -299,9 +298,8 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                                 boxShadow: _userType == UserType.teacher
                                     ? [
                                         BoxShadow(
-                                          color: AppColors.black.withOpacity(
-                                            0.05,
-                                          ),
+                                          color: AppColors.textPrimary
+                                              .withValues(alpha: 0.05),
                                           blurRadius: 4,
                                           offset: const Offset(0, 2),
                                         ),
@@ -488,12 +486,12 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                         ElevatedButton(
                           onPressed: authState.isLoading ? null : _register,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.black,
+                            backgroundColor: AppColors.textPrimary,
                             foregroundColor: AppColors.white,
                             elevation: 0,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
+                            padding: const EdgeInsets.symmetric(vertical: 16),
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
+                              borderRadius: BorderRadius.circular(8),
                             ),
                           ),
                           child: authState.isLoading
@@ -543,7 +541,7 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                               child: Text(
                                 '立即登录',
                                 style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.black,
+                                  color: AppColors.textPrimary,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
