@@ -19,7 +19,6 @@ class AppTheme {
       hoverColor: AppColors.primaryLight.withValues(alpha: 0.1),
       highlightColor: AppColors.primaryLight.withValues(alpha: 0.1),
       splashColor: AppColors.primaryLight.withValues(alpha: 0.1),
-      indicatorColor: AppColors.primaryBrand,
       // 文本样式
       textTheme: TextTheme(
         displayLarge: AppTextStyles.headlineLarge,
@@ -45,7 +44,7 @@ class AppTheme {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
         ),
-        padding: EdgeInsets.symmetric(
+        padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.buttonPadding,
         ),
@@ -56,7 +55,7 @@ class AppTheme {
           backgroundColor: AppColors.primaryBrand,
           foregroundColor: AppColors.surface,
           textStyle: AppTextStyles.button,
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.buttonPadding,
           ),
@@ -72,14 +71,14 @@ class AppTheme {
           backgroundColor: Colors.transparent,
           foregroundColor: AppColors.primaryBrand,
           textStyle: AppTextStyles.button.copyWith(color: AppColors.primary),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.lg,
             vertical: AppSpacing.buttonPadding,
           ),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           ),
-          side: BorderSide(color: AppColors.border, width: 1.0),
+          side: const BorderSide(color: AppColors.border, width: 1.0),
           elevation: 0,
         ),
       ),
@@ -88,7 +87,7 @@ class AppTheme {
         style: TextButton.styleFrom(
           foregroundColor: AppColors.primary,
           textStyle: AppTextStyles.button.copyWith(color: AppColors.primary),
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
           ),
@@ -98,7 +97,7 @@ class AppTheme {
       cardTheme: CardThemeData(
         color: AppColors.surface,
         elevation: 0,
-        margin: EdgeInsets.all(AppSpacing.sm),
+        margin: const EdgeInsets.all(AppSpacing.sm),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           side: BorderSide.none,
@@ -122,23 +121,26 @@ class AppTheme {
         suffixStyle: AppTextStyles.bodyMedium,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.border, width: 1.0),
+          borderSide: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.border, width: 1.0),
+          borderSide: const BorderSide(color: AppColors.border, width: 1.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.primaryBrand, width: 1.5),
+          borderSide: const BorderSide(
+            color: AppColors.primaryBrand,
+            width: 1.5,
+          ),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.error, width: 1),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(color: AppColors.error, width: 1.5),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
         disabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -147,7 +149,7 @@ class AppTheme {
             width: 1,
           ),
         ),
-        contentPadding: EdgeInsets.symmetric(
+        contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.lg,
           vertical: AppSpacing.md,
         ),
@@ -164,7 +166,7 @@ class AppTheme {
           fontWeight: FontWeight.w700,
         ),
         toolbarHeight: AppSpacing.appBarHeight,
-        iconTheme: IconThemeData(color: AppColors.textPrimary),
+        iconTheme: const IconThemeData(color: AppColors.textPrimary),
       ),
       // 底部导航栏样式
       bottomNavigationBarTheme: BottomNavigationBarThemeData(
@@ -195,7 +197,7 @@ class AppTheme {
         backgroundColor: AppColors.surface,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.largeBorderRadius),
-          side: BorderSide(color: AppColors.border, width: 1),
+          side: const BorderSide(color: AppColors.border, width: 1),
         ),
         titleTextStyle: AppTextStyles.titleLarge,
         contentTextStyle: AppTextStyles.bodyMedium,
@@ -228,11 +230,11 @@ class AppTheme {
         ),
       ),
       // 进度条样式
-      progressIndicatorTheme: ProgressIndicatorThemeData(
+      progressIndicatorTheme: const ProgressIndicatorThemeData(
         color: AppColors.primary,
       ),
       // 扩展面板样式
-      expansionTileTheme: ExpansionTileThemeData(
+      expansionTileTheme: const ExpansionTileThemeData(
         textColor: AppColors.textPrimary,
         iconColor: AppColors.primary,
         collapsedTextColor: AppColors.textPrimary,
@@ -260,7 +262,6 @@ class AppTheme {
       hoverColor: AppColors.primaryLight.withValues(alpha: 0.1),
       highlightColor: AppColors.primaryLight.withValues(alpha: 0.1),
       splashColor: AppColors.primaryLight.withValues(alpha: 0.1),
-      indicatorColor: AppColors.primaryBrand,
       textTheme: TextTheme(
         displayLarge: AppTextStyles.headlineLarge.copyWith(
           color: AppColors.white,
@@ -299,17 +300,18 @@ class AppTheme {
           color: AppColors.white,
         ),
         toolbarHeight: AppSpacing.appBarHeight,
-        iconTheme: IconThemeData(color: AppColors.white),
+        iconTheme: const IconThemeData(color: AppColors.white),
       ),
       cardTheme: CardThemeData(
         color: AppColors.black,
         elevation: 2,
-        margin: EdgeInsets.all(AppSpacing.sm),
+        margin: const EdgeInsets.all(AppSpacing.sm),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
           side: BorderSide.none,
         ),
       ),
+      tabBarTheme: TabBarThemeData(indicatorColor: AppColors.primaryBrand),
       // 其他样式配置可以类似扩展...
     );
   }

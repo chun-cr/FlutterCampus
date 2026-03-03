@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../../core/services/campus_news_service.dart';
 import '../../theme/theme.dart';
 
 class LifePage extends ConsumerWidget {
@@ -7,6 +8,8 @@ class LifePage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final newsState = ref.watch(campusNewsStateProvider);
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -17,76 +20,7 @@ class LifePage extends ConsumerWidget {
             children: [
               // 1. 校园头条 (Premium Feed)
               _buildSectionHeader('校园资讯'),
-              SizedBox(
-                height: 240,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: 3,
-                  clipBehavior: Clip.none,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 320,
-                      margin: const EdgeInsets.only(right: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: AppColors.greyLight.withValues(alpha: 0.6),
-                          width: 0.5,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.greyLight.withValues(
-                                  alpha: 0.3,
-                                ),
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(24),
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    'https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&q=80&w=800&h=400',
-                                  ),
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(20),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  'EDITION ${index + 1}',
-                                  style: AppTextStyles.overline.copyWith(
-                                    letterSpacing: 2,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                                const SizedBox(height: 8),
-                                Text(
-                                  index == 0 ? '2026年春季开学典礼' : '年度校园音乐节',
-                                  style: AppTextStyles.titleMedium.copyWith(
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.3,
-                                  ),
-                                  maxLines: 2,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    );
-                  },
-                ),
-              ),
+              SizedBox(height: 240, child: _buildNewsSection(ref, newsState)),
               const SizedBox(height: 48),
 
               // 2. 食堂与后勤 (Daily Menu - Minimalist)
@@ -142,12 +76,12 @@ class LifePage extends ConsumerWidget {
                     Container(
                       height: 160,
                       width: double.infinity,
-                      decoration: BoxDecoration(
+                      decoration: const BoxDecoration(
                         color: AppColors.background,
-                        borderRadius: const BorderRadius.vertical(
+                        borderRadius: BorderRadius.vertical(
                           top: Radius.circular(24),
                         ),
-                        image: const DecorationImage(
+                        image: DecorationImage(
                           image: NetworkImage(
                             'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800&h=400',
                           ),
@@ -247,6 +181,113 @@ class LifePage extends ConsumerWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildNewsSection(WidgetRef ref, CampusNewsState state) {
+    if (state.isLoading) {
+      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+    }
+
+    if (state.error != null) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(state.error!, style: AppTextStyles.bodySmall),
+            const SizedBox(height: 16),
+            TextButton(
+              onPressed: () => ref.read(campusNewsStateProvider.notifier).loadNews(),
+              child: const Text('重试'),
+            ),
+          ],
+        ),
+      );
+    }
+
+    if (state.items.isEmpty) {
+      return Center(
+        child: Text(
+          '暂无校园资讯',
+          style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: state.items.length,
+      clipBehavior: Clip.none,
+      itemBuilder: (context, index) {
+        final item = state.items[index];
+        return Container(
+          width: 320,
+          margin: const EdgeInsets.only(right: 20),
+          decoration: BoxDecoration(
+            color: AppColors.surface,
+            borderRadius: BorderRadius.circular(24),
+            border: Border.all(
+              color: AppColors.greyLight.withValues(alpha: 0.6),
+              width: 0.5,
+            ),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.greyLight.withValues(alpha: 0.3),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(24),
+                    ),
+                    image: item.imageUrl != null && item.imageUrl!.isNotEmpty
+                        ? DecorationImage(
+                            image: NetworkImage(item.imageUrl!),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
+                  ),
+                  child: item.imageUrl == null || item.imageUrl!.isEmpty
+                      ? const Center(
+                          child: Icon(
+                            Icons.article_outlined,
+                            color: AppColors.textSecondary,
+                            size: 36,
+                          ),
+                        )
+                      : null,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      item.source,
+                      style: AppTextStyles.overline.copyWith(
+                        letterSpacing: 2,
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      item.title,
+                      style: AppTextStyles.titleMedium.copyWith(
+                        fontWeight: FontWeight.w500,
+                        height: 1.3,
+                      ),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 

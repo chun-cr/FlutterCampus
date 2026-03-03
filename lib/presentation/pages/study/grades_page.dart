@@ -31,10 +31,10 @@ class _GradesPageState extends ConsumerState<GradesPage> {
       body: gradesState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : gradesState.error != null
-              ? _buildErrorState(gradesState.error!)
-              : gradesState.grades.isEmpty
-                  ? _buildEmptyState()
-                  : _buildContent(gradesState),
+          ? _buildErrorState(gradesState.error!)
+          : gradesState.grades.isEmpty
+          ? _buildEmptyState()
+          : _buildContent(gradesState),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddEditDialog(context),
         backgroundColor: AppColors.primary,
@@ -48,11 +48,16 @@ class _GradesPageState extends ConsumerState<GradesPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 64, color: AppColors.error),
+          const Icon(Icons.error_outline, size: 64, color: AppColors.error),
           const SizedBox(height: 16),
           Text('加载失败', style: AppTextStyles.titleMedium),
           const SizedBox(height: 8),
-          Text(error, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(
+            error,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 24),
           ElevatedButton(
             onPressed: () => ref.read(gradeStateProvider.notifier).loadGrades(),
@@ -68,11 +73,20 @@ class _GradesPageState extends ConsumerState<GradesPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.school_outlined, size: 64, color: AppColors.greyLight),
+          const Icon(
+            Icons.school_outlined,
+            size: 64,
+            color: AppColors.greyLight,
+          ),
           const SizedBox(height: 16),
           Text('暂无成绩记录', style: AppTextStyles.titleMedium),
           const SizedBox(height: 8),
-          Text('点击右下角按钮添加成绩', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(
+            '点击右下角按钮添加成绩',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );
@@ -88,7 +102,7 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           _buildGpaSummaryCard(gradesState),
           const SizedBox(height: 24),
           // 学期成绩列表
-          ...gradesState.semesterSummaries.map((summary) => _buildSemesterSection(summary)),
+          ...gradesState.semesterSummaries.map(_buildSemesterSection),
         ],
       ),
     );
@@ -108,7 +122,12 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('总绩点', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+              Text(
+                '总绩点',
+                style: AppTextStyles.labelMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
               // 切换按钮
               Container(
                 padding: const EdgeInsets.all(4),
@@ -119,8 +138,16 @@ class _GradesPageState extends ConsumerState<GradesPage> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildScaleToggle('4分制', _use4PointScale, () => setState(() => _use4PointScale = true)),
-                    _buildScaleToggle('百分制', !_use4PointScale, () => setState(() => _use4PointScale = false)),
+                    _buildScaleToggle(
+                      '4分制',
+                      _use4PointScale,
+                      () => setState(() => _use4PointScale = true),
+                    ),
+                    _buildScaleToggle(
+                      '百分制',
+                      !_use4PointScale,
+                      () => setState(() => _use4PointScale = false),
+                    ),
                   ],
                 ),
               ),
@@ -128,9 +155,11 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           ),
           const SizedBox(height: 16),
           Text(
-            _use4PointScale 
+            _use4PointScale
                 ? gradesState.totalGpa.toStringAsFixed(2)
-                : _calculatePercentageGpa(gradesState.grades).toStringAsFixed(1),
+                : _calculatePercentageGpa(
+                    gradesState.grades,
+                  ).toStringAsFixed(1),
             style: AppTextStyles.headlineLarge.copyWith(
               color: AppColors.primary,
               fontWeight: FontWeight.w300,
@@ -140,7 +169,9 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           const SizedBox(height: 8),
           Text(
             '总学分: ${gradesState.totalCredits.toStringAsFixed(1)}',
-            style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ],
       ),
@@ -197,24 +228,31 @@ class _GradesPageState extends ConsumerState<GradesPage> {
                 child: Text(summary.semester, style: AppTextStyles.titleMedium),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: AppColors.primary.withOpacity(0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
                   'GPA ${summary.gpa.toStringAsFixed(2)}',
-                  style: AppTextStyles.labelSmall.copyWith(color: AppColors.primary),
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
               const SizedBox(width: 8),
               Text(
                 '${summary.totalCredits.toStringAsFixed(1)}学分',
-                style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
             ],
           ),
-          children: summary.grades.map((grade) => _buildGradeItem(grade)).toList(),
+          children: summary.grades.map(_buildGradeItem).toList(),
         ),
       ),
     );
@@ -231,16 +269,22 @@ class _GradesPageState extends ConsumerState<GradesPage> {
         child: const Icon(Icons.delete, color: AppColors.white),
       ),
       confirmDismiss: (direction) async {
-        return await showDialog<bool>(
+        return showDialog<bool>(
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('确认删除'),
             content: Text('确定要删除 ${grade.courseName} 的成绩吗？'),
             actions: [
-              TextButton(onPressed: () => Navigator.pop(context, false), child: const Text('取消')),
+              TextButton(
+                onPressed: () => Navigator.pop(context, false),
+                child: const Text('取消'),
+              ),
               TextButton(
                 onPressed: () => Navigator.pop(context, true),
-                child: Text('删除', style: TextStyle(color: AppColors.error)),
+                child: const Text(
+                  '删除',
+                  style: TextStyle(color: AppColors.error),
+                ),
               ),
             ],
           ),
@@ -263,7 +307,9 @@ class _GradesPageState extends ConsumerState<GradesPage> {
                 width: 50,
                 child: Text(
                   '${grade.credit}学分',
-                  style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -271,7 +317,9 @@ class _GradesPageState extends ConsumerState<GradesPage> {
                 width: 50,
                 child: Text(
                   grade.score.toStringAsFixed(0),
-                  style: AppTextStyles.bodyMedium.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTextStyles.bodyMedium.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                   textAlign: TextAlign.center,
                 ),
               ),
@@ -303,10 +351,18 @@ class _GradesPageState extends ConsumerState<GradesPage> {
 
   void _showAddEditDialog(BuildContext context, {Grade? grade}) {
     final isEditing = grade != null;
-    final courseController = TextEditingController(text: grade?.courseName ?? '');
-    final creditController = TextEditingController(text: grade?.credit.toString() ?? '');
-    final scoreController = TextEditingController(text: grade?.score.toString() ?? '');
-    final semesterController = TextEditingController(text: grade?.semester ?? _getDefaultSemester());
+    final courseController = TextEditingController(
+      text: grade?.courseName ?? '',
+    );
+    final creditController = TextEditingController(
+      text: grade?.credit.toString() ?? '',
+    );
+    final scoreController = TextEditingController(
+      text: grade?.score.toString() ?? '',
+    );
+    final semesterController = TextEditingController(
+      text: grade?.semester ?? _getDefaultSemester(),
+    );
     final formKey = GlobalKey<FormState>();
 
     showDialog(
@@ -344,14 +400,17 @@ class _GradesPageState extends ConsumerState<GradesPage> {
                   validator: (v) {
                     if (v?.isEmpty ?? true) return '请输入成绩';
                     final score = double.tryParse(v!);
-                    if (score == null || score < 0 || score > 100) return '请输入0-100的成绩';
+                    if (score == null || score < 0 || score > 100)
+                      return '请输入0-100的成绩';
                     return null;
                   },
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
                   controller: semesterController,
-                  decoration: const InputDecoration(labelText: '学期 (如: 2024-2025-1)'),
+                  decoration: const InputDecoration(
+                    labelText: '学期 (如: 2024-2025-1)',
+                  ),
                   validator: (v) => v?.isEmpty ?? true ? '请输入学期' : null,
                 ),
               ],

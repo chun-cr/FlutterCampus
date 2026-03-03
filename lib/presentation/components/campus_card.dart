@@ -2,16 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 class CampusCard extends StatelessWidget {
-  final Widget child;
-  final EdgeInsets? padding;
-  final EdgeInsets? margin;
-  final double? borderRadius;
-  final double? elevation;
-  final Color? backgroundColor;
-  final BoxShadow? shadow;
-  final Function()? onTap;
-  final Border? border;
-
   const CampusCard({
     super.key,
     required this.child,
@@ -24,11 +14,20 @@ class CampusCard extends StatelessWidget {
     this.onTap,
     this.border,
   });
+  final Widget child;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final double? borderRadius;
+  final double? elevation;
+  final Color? backgroundColor;
+  final BoxShadow? shadow;
+  final Function()? onTap;
+  final Border? border;
 
   @override
   Widget build(BuildContext context) {
     Widget cardContent = Container(
-      margin: margin ?? EdgeInsets.all(AppSpacing.md),
+      margin: margin ?? const EdgeInsets.all(AppSpacing.md),
       child: Material(
         color: backgroundColor ?? AppColors.surface,
         elevation: elevation ?? 0.0,
@@ -36,7 +35,7 @@ class CampusCard extends StatelessWidget {
           borderRadius ?? AppSpacing.borderRadius,
         ),
         child: Container(
-          padding: padding ?? EdgeInsets.all(AppSpacing.lg),
+          padding: padding ?? const EdgeInsets.all(AppSpacing.lg),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(
               borderRadius ?? AppSpacing.borderRadius,
@@ -77,13 +76,6 @@ class CampusCard extends StatelessWidget {
 
 // 带图标和标题的卡片
 class CampusFeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final Color? iconColor;
-  final Color? backgroundColor;
-  final Function()? onTap;
-
   const CampusFeatureCard({
     super.key,
     required this.icon,
@@ -93,12 +85,18 @@ class CampusFeatureCard extends StatelessWidget {
     this.backgroundColor,
     this.onTap,
   });
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final Color? iconColor;
+  final Color? backgroundColor;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CampusCard(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -127,7 +125,7 @@ class CampusFeatureCard extends StatelessWidget {
           ),
           if (subtitle != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.sm),
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
               child: Text(
                 subtitle!,
                 style: AppTextStyles.bodySmall.copyWith(
@@ -144,13 +142,6 @@ class CampusFeatureCard extends StatelessWidget {
 
 // 资讯卡片
 class CampusNewsCard extends StatelessWidget {
-  final String title;
-  final String? content;
-  final String? imageUrl;
-  final String? date;
-  final String? source;
-  final Function()? onTap;
-
   const CampusNewsCard({
     super.key,
     required this.title,
@@ -160,12 +151,18 @@ class CampusNewsCard extends StatelessWidget {
     this.source,
     this.onTap,
   });
+  final String title;
+  final String? content;
+  final String? imageUrl;
+  final String? date;
+  final String? source;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CampusCard(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -173,7 +170,7 @@ class CampusNewsCard extends StatelessWidget {
             Container(
               width: double.infinity,
               height: 160,
-              margin: EdgeInsets.only(bottom: AppSpacing.md),
+              margin: const EdgeInsets.only(bottom: AppSpacing.md),
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: NetworkImage(imageUrl!),
@@ -190,7 +187,7 @@ class CampusNewsCard extends StatelessWidget {
           ),
           if (content != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.sm),
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
               child: Text(
                 content!,
                 style: AppTextStyles.bodySmall.copyWith(
@@ -202,7 +199,7 @@ class CampusNewsCard extends StatelessWidget {
             ),
           if (date != null || source != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.sm),
+              padding: const EdgeInsets.only(top: AppSpacing.sm),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -220,13 +217,6 @@ class CampusNewsCard extends StatelessWidget {
 
 // 课程卡片
 class CampusCourseCard extends StatelessWidget {
-  final String courseName;
-  final String teacher;
-  final String time;
-  final String location;
-  final Color? color;
-  final Function()? onTap;
-
   const CampusCourseCard({
     super.key,
     required this.courseName,
@@ -236,17 +226,23 @@ class CampusCourseCard extends StatelessWidget {
     this.color,
     this.onTap,
   });
+  final String courseName;
+  final String teacher;
+  final String time;
+  final String location;
+  final Color? color;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     return CampusCard(
       onTap: onTap,
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       border: Border(
         left: BorderSide(color: color ?? AppColors.primaryBrand, width: 3),
-        top: BorderSide(color: AppColors.divider),
-        right: BorderSide(color: AppColors.divider),
-        bottom: BorderSide(color: AppColors.divider),
+        top: const BorderSide(color: AppColors.divider),
+        right: const BorderSide(color: AppColors.divider),
+        bottom: const BorderSide(color: AppColors.divider),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -258,7 +254,7 @@ class CampusCourseCard extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
           ),
           Padding(
-            padding: EdgeInsets.only(top: AppSpacing.xs),
+            padding: const EdgeInsets.only(top: AppSpacing.xs),
             child: Text(
               teacher,
               style: AppTextStyles.bodySmall.copyWith(
@@ -267,14 +263,14 @@ class CampusCourseCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: EdgeInsets.only(top: AppSpacing.sm),
+            padding: const EdgeInsets.only(top: AppSpacing.sm),
             child: Row(
               children: [
-                Icon(Icons.access_time, size: 14, color: AppColors.grey),
+                const Icon(Icons.access_time, size: 14, color: AppColors.grey),
                 const SizedBox(width: AppSpacing.xs),
                 Text(time, style: AppTextStyles.caption),
                 const SizedBox(width: AppSpacing.md),
-                Icon(Icons.location_on, size: 14, color: AppColors.grey),
+                const Icon(Icons.location_on, size: 14, color: AppColors.grey),
                 const SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: Text(

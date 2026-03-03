@@ -4,22 +4,6 @@ import '../theme/theme.dart';
 enum CampusButtonType { primary, secondary, outline, text }
 
 class CampusButton extends StatelessWidget {
-  final String text;
-  final Function() onPressed;
-  final bool isLoading;
-  final bool isDisabled;
-  final double? width;
-  final double? height;
-  final EdgeInsets? padding;
-  final BorderRadius? borderRadius;
-  final Color? backgroundColor;
-  final Color? textColor;
-  final TextStyle? textStyle;
-  final double? elevation;
-  final IconData? icon;
-  final MainAxisSize mainAxisSize;
-  final CampusButtonType type;
-
   const CampusButton({
     super.key,
     required this.text,
@@ -38,6 +22,21 @@ class CampusButton extends StatelessWidget {
     this.mainAxisSize = MainAxisSize.min,
     this.type = CampusButtonType.primary,
   });
+  final String text;
+  final Function() onPressed;
+  final bool isLoading;
+  final bool isDisabled;
+  final double? width;
+  final double? height;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
+  final Color? backgroundColor;
+  final Color? textColor;
+  final TextStyle? textStyle;
+  final double? elevation;
+  final IconData? icon;
+  final MainAxisSize mainAxisSize;
+  final CampusButtonType type;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +78,7 @@ class CampusButton extends StatelessWidget {
             minimumSize: Size(width ?? double.infinity, height ?? 48),
             padding:
                 padding ??
-                EdgeInsets.symmetric(
+                const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
@@ -106,7 +105,7 @@ class CampusButton extends StatelessWidget {
             minimumSize: Size(width ?? double.infinity, height ?? 48),
             padding:
                 padding ??
-                EdgeInsets.symmetric(
+                const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
@@ -136,7 +135,7 @@ class CampusButton extends StatelessWidget {
             minimumSize: Size(width ?? double.infinity, height ?? 48),
             padding:
                 padding ??
-                EdgeInsets.symmetric(
+                const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
@@ -158,7 +157,7 @@ class CampusButton extends StatelessWidget {
             minimumSize: Size(width ?? double.infinity, height ?? 48),
             padding:
                 padding ??
-                EdgeInsets.symmetric(
+                const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg,
                   vertical: AppSpacing.buttonPadding,
                 ),
@@ -182,20 +181,6 @@ class CampusButton extends StatelessWidget {
 }
 
 class CampusOutlineButton extends StatelessWidget {
-  final String text;
-  final Function() onPressed;
-  final bool isLoading;
-  final bool isDisabled;
-  final double? width;
-  final double? height;
-  final EdgeInsets? padding;
-  final BorderRadius? borderRadius;
-  final Color? borderColor;
-  final Color? textColor;
-  final TextStyle? textStyle;
-  final IconData? icon;
-  final MainAxisSize mainAxisSize;
-
   const CampusOutlineButton({
     super.key,
     required this.text,
@@ -212,6 +197,19 @@ class CampusOutlineButton extends StatelessWidget {
     this.icon,
     this.mainAxisSize = MainAxisSize.min,
   });
+  final String text;
+  final Function() onPressed;
+  final bool isLoading;
+  final bool isDisabled;
+  final double? width;
+  final double? height;
+  final EdgeInsets? padding;
+  final BorderRadius? borderRadius;
+  final Color? borderColor;
+  final Color? textColor;
+  final TextStyle? textStyle;
+  final IconData? icon;
+  final MainAxisSize mainAxisSize;
 
   @override
   Widget build(BuildContext context) {
@@ -257,7 +255,7 @@ class CampusOutlineButton extends StatelessWidget {
         minimumSize: Size(width ?? double.infinity, height ?? 48),
         padding:
             padding ??
-            EdgeInsets.symmetric(
+            const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,
               vertical: AppSpacing.buttonPadding,
             ),
@@ -274,16 +272,6 @@ class CampusOutlineButton extends StatelessWidget {
 }
 
 class CampusTextButton extends StatelessWidget {
-  final String text;
-  final Function() onPressed;
-  final bool isLoading;
-  final bool isDisabled;
-  final Color? textColor;
-  final TextStyle? textStyle;
-  final IconData? icon;
-  final MainAxisSize mainAxisSize;
-  final EdgeInsets? padding;
-
   const CampusTextButton({
     super.key,
     required this.text,
@@ -296,6 +284,15 @@ class CampusTextButton extends StatelessWidget {
     this.mainAxisSize = MainAxisSize.min,
     this.padding,
   });
+  final String text;
+  final Function() onPressed;
+  final bool isLoading;
+  final bool isDisabled;
+  final Color? textColor;
+  final TextStyle? textStyle;
+  final IconData? icon;
+  final MainAxisSize mainAxisSize;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +332,7 @@ class CampusTextButton extends StatelessWidget {
         foregroundColor: textColor ?? AppColors.primary,
         padding:
             padding ??
-            EdgeInsets.symmetric(
+            const EdgeInsets.symmetric(
               horizontal: AppSpacing.sm,
               vertical: AppSpacing.sm,
             ),
@@ -348,15 +345,6 @@ class CampusTextButton extends StatelessWidget {
 
 // 图标按钮
 class CampusIconButton extends StatelessWidget {
-  final IconData icon;
-  final Function() onPressed;
-  final bool isDisabled;
-  final Color? backgroundColor;
-  final Color? iconColor;
-  final double? size;
-  final BorderRadius? borderRadius;
-  final double? elevation;
-
   const CampusIconButton({
     super.key,
     required this.icon,
@@ -368,6 +356,14 @@ class CampusIconButton extends StatelessWidget {
     this.borderRadius,
     this.elevation,
   });
+  final IconData icon;
+  final Function() onPressed;
+  final bool isDisabled;
+  final Color? backgroundColor;
+  final Color? iconColor;
+  final double? size;
+  final BorderRadius? borderRadius;
+  final double? elevation;
 
   @override
   Widget build(BuildContext context) {

@@ -3,8 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/exam_countdown.dart';
 
 class ExamCountdownService {
-  final SupabaseClient _supabaseClient;
   ExamCountdownService(this._supabaseClient);
+  final SupabaseClient _supabaseClient;
 
   Future<List<ExamCountdown>> fetchExams(String userId) async {
     final response = await _supabaseClient
@@ -12,7 +12,7 @@ class ExamCountdownService {
         .select()
         .eq('user_id', userId)
         .order('exam_date', ascending: true);
-    
+
     return (response as List)
         .map((json) => ExamCountdown.fromJson(json as Map<String, dynamic>))
         .toList();
@@ -24,7 +24,7 @@ class ExamCountdownService {
         .insert(exam.toJson())
         .select()
         .single();
-    
+
     return ExamCountdown.fromJson(response);
   }
 
@@ -35,15 +35,12 @@ class ExamCountdownService {
         .eq('id', exam.id)
         .select()
         .single();
-    
+
     return ExamCountdown.fromJson(response);
   }
 
   Future<void> deleteExam(String id) async {
-    await _supabaseClient
-        .from('exam_countdowns')
-        .delete()
-        .eq('id', id);
+    await _supabaseClient.from('exam_countdowns').delete().eq('id', id);
   }
 }
 
@@ -52,15 +49,14 @@ final examCountdownServiceProvider = Provider<ExamCountdownService>((ref) {
 });
 
 class ExamCountdownState {
-  final List<ExamCountdown> exams;
-  final bool isLoading;
-  final String? error;
-
   ExamCountdownState({
     this.exams = const [],
     this.isLoading = false,
     this.error,
   });
+  final List<ExamCountdown> exams;
+  final bool isLoading;
+  final String? error;
 
   ExamCountdownState copyWith({
     List<ExamCountdown>? exams,
@@ -93,18 +89,18 @@ class ExamCountdownState {
 }
 
 class ExamCountdownNotifier extends StateNotifier<ExamCountdownState> {
-  final ExamCountdownService _examService;
-  final String? _userId;
-
-  ExamCountdownNotifier(this._examService, this._userId) : super(ExamCountdownState()) {
+  ExamCountdownNotifier(this._examService, this._userId)
+    : super(ExamCountdownState()) {
     if (_userId != null) {
       loadExams();
     }
   }
+  final ExamCountdownService _examService;
+  final String? _userId;
 
   Future<void> loadExams() async {
     if (_userId == null) return;
-    
+
     state = state.copyWith(isLoading: true, error: null);
     try {
       final exams = await _examService.fetchExams(_userId);
@@ -156,8 +152,9 @@ class ExamCountdownNotifier extends StateNotifier<ExamCountdownState> {
   }
 }
 
-final examCountdownStateProvider = StateNotifierProvider<ExamCountdownNotifier, ExamCountdownState>((ref) {
-  final examService = ref.watch(examCountdownServiceProvider);
-  final userId = Supabase.instance.client.auth.currentUser?.id;
-  return ExamCountdownNotifier(examService, userId);
-});
+final examCountdownStateProvider =
+    StateNotifierProvider<ExamCountdownNotifier, ExamCountdownState>((ref) {
+      final examService = ref.watch(examCountdownServiceProvider);
+      final userId = Supabase.instance.client.auth.currentUser?.id;
+      return ExamCountdownNotifier(examService, userId);
+    });

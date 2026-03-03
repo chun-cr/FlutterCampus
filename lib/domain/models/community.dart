@@ -1,15 +1,6 @@
 /// 失物招领实体
 class LostAndFound {
-  final String id;
-  final String title;
-  final String description;
-  final String location; // 地点
-  final LostFoundType type;
-  final String? imageUrl;
-  final String publisherId;
-  final String? contactInfo;
-  final DateTime createdAt;
-  final bool isResolved; // 是否已解决
+  // 是否已解决
 
   LostAndFound({
     required this.id,
@@ -23,6 +14,34 @@ class LostAndFound {
     required this.createdAt,
     this.isResolved = false,
   });
+
+  factory LostAndFound.fromJson(Map<String, dynamic> json) {
+    return LostAndFound(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String,
+      location: json['location'] as String,
+      type: LostFoundType.values.firstWhere(
+        (e) => e.name == json['type'],
+        orElse: () => LostFoundType.found,
+      ),
+      imageUrl: json['imageUrl'] as String?,
+      publisherId: json['publisherId'] as String,
+      contactInfo: json['contactInfo'] as String?,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      isResolved: json['isResolved'] as bool? ?? false,
+    );
+  }
+  final String id;
+  final String title;
+  final String description;
+  final String location; // 地点
+  final LostFoundType type;
+  final String? imageUrl;
+  final String publisherId;
+  final String? contactInfo;
+  final DateTime createdAt;
+  final bool isResolved;
 
   /// 相对时间
   String get relativeTime {
@@ -75,24 +94,6 @@ class LostAndFound {
     };
   }
 
-  factory LostAndFound.fromJson(Map<String, dynamic> json) {
-    return LostAndFound(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String,
-      location: json['location'] as String,
-      type: LostFoundType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => LostFoundType.found,
-      ),
-      imageUrl: json['imageUrl'] as String?,
-      publisherId: json['publisherId'] as String,
-      contactInfo: json['contactInfo'] as String?,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      isResolved: json['isResolved'] as bool? ?? false,
-    );
-  }
-
   @override
   String toString() => 'LostAndFound($title, ${type.label})';
 
@@ -124,17 +125,6 @@ enum LostFoundType {
 
 /// 闲置物品实体
 class SecondHandItem {
-  final String id;
-  final String title;
-  final String? description;
-  final double price;
-  final double? originalPrice;
-  final String? imageUrl;
-  final String sellerId;
-  final ItemCondition condition;
-  final DateTime createdAt;
-  final bool isSold;
-
   SecondHandItem({
     required this.id,
     required this.title,
@@ -147,6 +137,34 @@ class SecondHandItem {
     required this.createdAt,
     this.isSold = false,
   });
+
+  factory SecondHandItem.fromJson(Map<String, dynamic> json) {
+    return SecondHandItem(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      price: (json['price'] as num).toDouble(),
+      originalPrice: (json['originalPrice'] as num?)?.toDouble(),
+      imageUrl: json['imageUrl'] as String?,
+      sellerId: json['sellerId'] as String,
+      condition: ItemCondition.values.firstWhere(
+        (e) => e.name == json['condition'],
+        orElse: () => ItemCondition.good,
+      ),
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      isSold: json['isSold'] as bool? ?? false,
+    );
+  }
+  final String id;
+  final String title;
+  final String? description;
+  final double price;
+  final double? originalPrice;
+  final String? imageUrl;
+  final String sellerId;
+  final ItemCondition condition;
+  final DateTime createdAt;
+  final bool isSold;
 
   /// 折扣率展示，如 '3折'
   String? get discountDisplay {
@@ -196,24 +214,6 @@ class SecondHandItem {
     };
   }
 
-  factory SecondHandItem.fromJson(Map<String, dynamic> json) {
-    return SecondHandItem(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String?,
-      price: (json['price'] as num).toDouble(),
-      originalPrice: (json['originalPrice'] as num?)?.toDouble(),
-      imageUrl: json['imageUrl'] as String?,
-      sellerId: json['sellerId'] as String,
-      condition: ItemCondition.values.firstWhere(
-        (e) => e.name == json['condition'],
-        orElse: () => ItemCondition.good,
-      ),
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      isSold: json['isSold'] as bool? ?? false,
-    );
-  }
-
   @override
   String toString() => 'SecondHandItem($title, ¥$price)';
 
@@ -251,17 +251,6 @@ enum ItemCondition {
 
 /// 互助任务/找搭子 实体
 class HelpTask {
-  final String id;
-  final String title;
-  final String? description;
-  final HelpTaskType type;
-  final String publisherId;
-  final double? reward; // 悬赏金额（跑腿等）
-  final int? requiredCount; // 需要人数
-  final int currentCount; // 已参与人数
-  final DateTime createdAt;
-  final bool isCompleted;
-
   HelpTask({
     required this.id,
     required this.title,
@@ -275,6 +264,34 @@ class HelpTask {
     this.isCompleted = false,
   });
 
+  factory HelpTask.fromJson(Map<String, dynamic> json) {
+    return HelpTask(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      type: HelpTaskType.values.firstWhere(
+        (e) => e.name == json['type'],
+        orElse: () => HelpTaskType.errand,
+      ),
+      publisherId: json['publisherId'] as String,
+      reward: (json['reward'] as num?)?.toDouble(),
+      requiredCount: json['requiredCount'] as int?,
+      currentCount: json['currentCount'] as int? ?? 0,
+      createdAt: DateTime.parse(json['createdAt'] as String),
+      isCompleted: json['isCompleted'] as bool? ?? false,
+    );
+  }
+  final String id;
+  final String title;
+  final String? description;
+  final HelpTaskType type;
+  final String publisherId;
+  final double? reward; // 悬赏金额（跑腿等）
+  final int? requiredCount; // 需要人数
+  final int currentCount; // 已参与人数
+  final DateTime createdAt;
+  final bool isCompleted;
+
   /// 标签展示，如 '跑腿 · 悬赏 ¥2' 或 '运动 · 缺2人'
   String get tagDisplay {
     final parts = <String>[type.label];
@@ -283,7 +300,7 @@ class HelpTask {
     }
     if (requiredCount != null) {
       final needed = requiredCount! - currentCount;
-      if (needed > 0) parts.add('缺${needed}人');
+      if (needed > 0) parts.add('缺$needed人');
     }
     return parts.join(' · ');
   }
@@ -339,33 +356,13 @@ class HelpTask {
     };
   }
 
-  factory HelpTask.fromJson(Map<String, dynamic> json) {
-    return HelpTask(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      description: json['description'] as String?,
-      type: HelpTaskType.values.firstWhere(
-        (e) => e.name == json['type'],
-        orElse: () => HelpTaskType.errand,
-      ),
-      publisherId: json['publisherId'] as String,
-      reward: (json['reward'] as num?)?.toDouble(),
-      requiredCount: json['requiredCount'] as int?,
-      currentCount: json['currentCount'] as int? ?? 0,
-      createdAt: DateTime.parse(json['createdAt'] as String),
-      isCompleted: json['isCompleted'] as bool? ?? false,
-    );
-  }
-
   @override
   String toString() => 'HelpTask($title, ${type.label})';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is HelpTask &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      other is HelpTask && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

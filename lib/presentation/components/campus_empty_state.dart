@@ -2,14 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 class CampusEmptyState extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String? subtitle;
-  final String? buttonText;
-  final Function()? onButtonTap;
-  final Color? iconColor;
-  final Color? backgroundColor;
-
   const CampusEmptyState({
     super.key,
     required this.icon,
@@ -20,6 +12,13 @@ class CampusEmptyState extends StatelessWidget {
     this.iconColor,
     this.backgroundColor,
   });
+  final IconData icon;
+  final String title;
+  final String? subtitle;
+  final String? buttonText;
+  final Function()? onButtonTap;
+  final Color? iconColor;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -56,7 +55,10 @@ class CampusEmptyState extends StatelessWidget {
           // 副标题
           if (subtitle != null)
             Padding(
-              padding: EdgeInsets.symmetric(horizontal: AppSpacing.xl, vertical: AppSpacing.md),
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.xl,
+                vertical: AppSpacing.md,
+              ),
               child: Text(
                 subtitle!,
                 style: AppTextStyles.bodyMedium.copyWith(
@@ -68,16 +70,18 @@ class CampusEmptyState extends StatelessWidget {
           // 按钮
           if (buttonText != null && onButtonTap != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.md),
+              padding: const EdgeInsets.only(top: AppSpacing.md),
               child: ElevatedButton(
                 onPressed: onButtonTap,
                 style: ElevatedButton.styleFrom(
-                  padding: EdgeInsets.symmetric(
+                  padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.lg,
                     vertical: AppSpacing.buttonPadding,
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
+                    borderRadius: BorderRadius.circular(
+                      AppSpacing.borderRadius,
+                    ),
                   ),
                 ),
                 child: Text(buttonText!),
@@ -91,9 +95,8 @@ class CampusEmptyState extends StatelessWidget {
 
 // 无网络状态
 class CampusNoNetworkState extends StatelessWidget {
-  final Function()? onRetry;
-
   const CampusNoNetworkState({super.key, this.onRetry});
+  final Function()? onRetry;
 
   @override
   Widget build(BuildContext context) {
@@ -110,10 +113,13 @@ class CampusNoNetworkState extends StatelessWidget {
 
 // 无搜索结果状态
 class CampusNoSearchResultState extends StatelessWidget {
+  const CampusNoSearchResultState({
+    super.key,
+    this.keyword,
+    this.onClearSearch,
+  });
   final String? keyword;
   final Function()? onClearSearch;
-
-  const CampusNoSearchResultState({super.key, this.keyword, this.onClearSearch});
 
   @override
   Widget build(BuildContext context) {
@@ -130,11 +136,6 @@ class CampusNoSearchResultState extends StatelessWidget {
 
 // 无数据状态
 class CampusNoDataState extends StatelessWidget {
-  final String title;
-  final String? subtitle;
-  final Function()? onAction;
-  final String? actionText;
-
   const CampusNoDataState({
     super.key,
     this.title = '暂无数据',
@@ -142,6 +143,10 @@ class CampusNoDataState extends StatelessWidget {
     this.onAction,
     this.actionText,
   });
+  final String title;
+  final String? subtitle;
+  final Function()? onAction;
+  final String? actionText;
 
   @override
   Widget build(BuildContext context) {
@@ -158,10 +163,9 @@ class CampusNoDataState extends StatelessWidget {
 
 // 错误状态
 class CampusErrorState extends StatelessWidget {
+  const CampusErrorState({super.key, this.message, this.onRetry});
   final String? message;
   final Function()? onRetry;
-
-  const CampusErrorState({super.key, this.message, this.onRetry});
 
   @override
   Widget build(BuildContext context) {

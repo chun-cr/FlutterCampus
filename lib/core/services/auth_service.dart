@@ -4,8 +4,8 @@ import 'package:supabase_flutter/supabase_flutter.dart' hide User;
 import 'package:supabase_flutter/supabase_flutter.dart' as sup;
 
 class AuthService {
-  final SupabaseClient _supabaseClient;
   AuthService(this._supabaseClient);
+  final SupabaseClient _supabaseClient;
 
   /// Login with email directly
   Future<models.User?> loginWithEmail(String email, String password) async {
@@ -57,7 +57,7 @@ class AuthService {
       print('Failed to fetch user profile: $e');
     }
     // Fallback if public table record not found (shouldn't happen with trigger)
-    return await _getUserFromPublicTable(supabaseUser);
+    return _getUserFromPublicTable(supabaseUser);
   }
 
   /// Find user email by phone number or student ID
@@ -146,7 +146,7 @@ class AuthService {
   Future<models.User?> getCurrentUser() async {
     final supabaseUser = _supabaseClient.auth.currentUser;
     if (supabaseUser != null) {
-      return await _getUserFromPublicTable(supabaseUser);
+      return _getUserFromPublicTable(supabaseUser);
     }
     return null;
   }
@@ -181,27 +181,31 @@ final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
 });
 
 class AuthState {
+  AuthState({this.user, this.isLoading = false, this.error});
   final models.User? user;
   final bool isLoading;
   final String? error;
 
-  AuthState({this.user, this.isLoading = false, this.error});
-
-  AuthState copyWith({models.User? user, bool? isLoading, String? error}) {
+  AuthState copyWith({
+    models.User? user,
+    bool? isLoading,
+    String? error,
+    bool clearError = false,
+    bool clearUser = false,
+  }) {
     return AuthState(
-      user: user ?? this.user,
+      user: clearUser ? null : (user ?? this.user),
       isLoading: isLoading ?? this.isLoading,
-      error: error ?? this.error,
+      error: clearError ? null : (error ?? this.error),
     );
   }
 }
 
 class AuthNotifier extends StateNotifier<AuthState> {
-  final AuthService _authService;
-
   AuthNotifier(this._authService) : super(AuthState()) {
     _loadCurrentUser();
   }
+  final AuthService _authService;
 
   Future<void> _loadCurrentUser() async {
     state = state.copyWith(isLoading: true);
@@ -214,7 +218,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> login(String identifier, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       models.User? user;
       // Try login with phone or student ID first
@@ -242,17 +246,17 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> logout() async {
-    state = state.copyWith(isLoading: true);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       await _authService.logout();
-      state = state.copyWith(user: null, isLoading: false);
+      state = state.copyWith(clearUser: true, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: e.toString(), isLoading: false);
     }
   }
 
   Future<void> register(models.User user, String password) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       final newUser = await _authService.register(user, password);
       state = state.copyWith(user: newUser, isLoading: false);
@@ -262,7 +266,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   Future<void> updateUser(models.User user) async {
-    state = state.copyWith(isLoading: true, error: null);
+    state = state.copyWith(isLoading: true, clearError: true);
     try {
       await _authService.updateUser(user);
       state = state.copyWith(user: user, isLoading: false);
@@ -272,6 +276,6 @@ class AuthNotifier extends StateNotifier<AuthState> {
   }
 
   void clearError() {
-    state = state.copyWith(error: null);
+    state = state.copyWith(clearError: true);
   }
 }

@@ -9,12 +9,9 @@ class MyLoansPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CampusAppBar(
-        title: '我的借阅',
-        showBackButton: true,
-      ),
+      appBar: const CampusAppBar(title: '我的借阅', showBackButton: true),
       body: ListView(
-        padding: EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.md),
         children: [
           _buildLoanCard(
             title: '深入浅出Flutter',
@@ -51,7 +48,7 @@ class MyLoansPage extends StatelessWidget {
   }) {
     return CampusCard(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         children: [
           Row(
@@ -71,14 +68,30 @@ class MyLoansPage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(title, style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      title,
+                      style: AppTextStyles.bodyLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Text('作者: $author', style: AppTextStyles.caption),
                     const SizedBox(height: 8),
                     Row(
                       children: [
-                        Icon(Icons.event, size: 14, color: isOverdue ? AppColors.error : AppColors.grey),
+                        Icon(
+                          Icons.event,
+                          size: 14,
+                          color: isOverdue ? AppColors.error : AppColors.grey,
+                        ),
                         const SizedBox(width: 4),
-                        Text('应还日期: $dueDate', style: AppTextStyles.caption.copyWith(color: isOverdue ? AppColors.error : AppColors.textPrimary)),
+                        Text(
+                          '应还日期: $dueDate',
+                          style: AppTextStyles.caption.copyWith(
+                            color: isOverdue
+                                ? AppColors.error
+                                : AppColors.textPrimary,
+                          ),
+                        ),
                       ],
                     ),
                   ],
@@ -86,9 +99,21 @@ class MyLoansPage extends StatelessWidget {
               ),
               if (isOverdue)
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                  decoration: BoxDecoration(color: AppColors.error, borderRadius: BorderRadius.circular(4)),
-                  child: Text('已逾期', style: AppTextStyles.overline.copyWith(color: Colors.white, fontWeight: FontWeight.bold)),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.error,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    '已逾期',
+                    style: AppTextStyles.overline.copyWith(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
             ],
           ),
@@ -98,7 +123,12 @@ class MyLoansPage extends StatelessWidget {
             children: [
               Text(
                 isOverdue ? '逾期欠费: ¥2.00' : '剩余天数: $daysLeft天',
-                style: AppTextStyles.bodySmall.copyWith(color: isOverdue ? AppColors.error : (daysLeft < 3 ? Colors.orange : AppColors.primary), fontWeight: FontWeight.bold),
+                style: AppTextStyles.bodySmall.copyWith(
+                  color: isOverdue
+                      ? AppColors.error
+                      : (daysLeft < 3 ? Colors.orange : AppColors.primary),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Row(
                 children: [

@@ -4,6 +4,8 @@
 /// ```dart
 /// import 'package:campus_life_app/domain/models/models.dart';
 /// ```
+library;
+
 export 'user.dart';
 export 'course.dart';
 export 'grade.dart';

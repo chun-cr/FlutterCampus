@@ -4,12 +4,6 @@ import '../theme/theme.dart';
 
 // 骨架屏组件
 class CampusSkeleton extends StatelessWidget {
-  final double width;
-  final double height;
-  final double borderRadius;
-  final Color? baseColor;
-  final Color? highlightColor;
-
   const CampusSkeleton({
     super.key,
     required this.width,
@@ -18,6 +12,11 @@ class CampusSkeleton extends StatelessWidget {
     this.baseColor,
     this.highlightColor,
   });
+  final double width;
+  final double height;
+  final double borderRadius;
+  final Color? baseColor;
+  final Color? highlightColor;
 
   @override
   Widget build(BuildContext context) {
@@ -44,58 +43,43 @@ class CampusNewsCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(AppSpacing.sm),
-      padding: EdgeInsets.all(AppSpacing.md),
+      margin: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.1),
-            offset: Offset(AppSpacing.shadowOffset, AppSpacing.shadowOffset),
+            offset: const Offset(
+              AppSpacing.shadowOffset,
+              AppSpacing.shadowOffset,
+            ),
             blurRadius: AppSpacing.shadowBlur,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // 图片骨架
-          CampusSkeleton(
-            width: double.infinity,
-            height: 160,
-          ),
-          const SizedBox(height: AppSpacing.md),
+          CampusSkeleton(width: double.infinity, height: 160),
+          SizedBox(height: AppSpacing.md),
           // 标题骨架
-          CampusSkeleton(
-            width: double.infinity,
-            height: 20,
-          ),
-          const SizedBox(height: AppSpacing.sm),
+          CampusSkeleton(width: double.infinity, height: 20),
+          SizedBox(height: AppSpacing.sm),
           // 内容骨架
-          CampusSkeleton(
-            width: double.infinity,
-            height: 16,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          CampusSkeleton(
-            width: 300,
-            height: 16,
-          ),
-          const SizedBox(height: AppSpacing.sm),
+          CampusSkeleton(width: double.infinity, height: 16),
+          SizedBox(height: AppSpacing.xs),
+          CampusSkeleton(width: 300, height: 16),
+          SizedBox(height: AppSpacing.sm),
           // 日期骨架
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              CampusSkeleton(
-                width: 80,
-                height: 14,
-              ),
-              CampusSkeleton(
-                width: 60,
-                height: 14,
-              ),
+              CampusSkeleton(width: 80, height: 14),
+              CampusSkeleton(width: 60, height: 14),
             ],
           ),
         ],
@@ -111,38 +95,34 @@ class CampusCourseCardSkeleton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.all(AppSpacing.sm),
-      padding: EdgeInsets.all(AppSpacing.md),
+      margin: const EdgeInsets.all(AppSpacing.sm),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
-        border: Border(left: BorderSide(color: AppColors.greyLight, width: 4)),
+        border: const Border(
+          left: BorderSide(color: AppColors.greyLight, width: 4),
+        ),
         boxShadow: [
           BoxShadow(
             color: AppColors.black.withOpacity(0.1),
-            offset: Offset(AppSpacing.shadowOffset, AppSpacing.shadowOffset),
+            offset: const Offset(
+              AppSpacing.shadowOffset,
+              AppSpacing.shadowOffset,
+            ),
             blurRadius: AppSpacing.shadowBlur,
             spreadRadius: 0,
           ),
         ],
       ),
-      child: Column(
+      child: const Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          CampusSkeleton(
-            width: 200,
-            height: 20,
-          ),
-          const SizedBox(height: AppSpacing.xs),
-          CampusSkeleton(
-            width: 150,
-            height: 16,
-          ),
-          const SizedBox(height: AppSpacing.sm),
-          CampusSkeleton(
-            width: double.infinity,
-            height: 16,
-          ),
+          CampusSkeleton(width: 200, height: 20),
+          SizedBox(height: AppSpacing.xs),
+          CampusSkeleton(width: 150, height: 16),
+          SizedBox(height: AppSpacing.sm),
+          CampusSkeleton(width: double.infinity, height: 16),
         ],
       ),
     );
@@ -151,51 +131,39 @@ class CampusCourseCardSkeleton extends StatelessWidget {
 
 // 列表骨架屏
 class CampusListSkeleton extends StatelessWidget {
-  final int itemCount;
-  final bool withAvatar;
-
   const CampusListSkeleton({
     super.key,
     this.itemCount = 5,
     this.withAvatar = true,
   });
+  final int itemCount;
+  final bool withAvatar;
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: itemCount,
       itemBuilder: (context, index) {
         return Container(
-          padding: EdgeInsets.all(AppSpacing.md),
+          padding: const EdgeInsets.all(AppSpacing.md),
           child: Row(
             children: [
               if (withAvatar)
-                Column(
+                const Column(
                   children: [
-                    CampusSkeleton(
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                    ),
+                    CampusSkeleton(width: 48, height: 48, borderRadius: 24),
                   ],
                 ),
-              if (withAvatar)
-                const SizedBox(width: AppSpacing.md),
-              Expanded(
+              if (withAvatar) const SizedBox(width: AppSpacing.md),
+              const Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CampusSkeleton(
-                      width: 200,
-                      height: 18,
-                    ),
-                    const SizedBox(height: AppSpacing.xs),
-                    CampusSkeleton(
-                      width: double.infinity,
-                      height: 14,
-                    ),
+                    CampusSkeleton(width: 200, height: 18),
+                    SizedBox(height: AppSpacing.xs),
+                    CampusSkeleton(width: double.infinity, height: 14),
                   ],
                 ),
               ),
@@ -209,9 +177,8 @@ class CampusListSkeleton extends StatelessWidget {
 
 // 全屏加载组件
 class CampusLoading extends StatelessWidget {
-  final String? message;
-
   const CampusLoading({super.key, this.message});
+  final String? message;
 
   @override
   Widget build(BuildContext context) {
@@ -222,16 +189,11 @@ class CampusLoading extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          CircularProgressIndicator(
-            color: AppColors.primary,
-          ),
+          const CircularProgressIndicator(color: AppColors.primary),
           if (message != null)
             Padding(
-              padding: EdgeInsets.only(top: AppSpacing.md),
-              child: Text(
-                message!,
-                style: AppTextStyles.bodyMedium,
-              ),
+              padding: const EdgeInsets.only(top: AppSpacing.md),
+              child: Text(message!, style: AppTextStyles.bodyMedium),
             ),
         ],
       ),
@@ -241,22 +203,21 @@ class CampusLoading extends StatelessWidget {
 
 // 加载更多组件
 class CampusLoadMore extends StatelessWidget {
-  final bool isLoading;
-  final String? noMoreText;
-
   const CampusLoadMore({
     super.key,
     required this.isLoading,
     this.noMoreText = '没有更多数据了',
   });
+  final bool isLoading;
+  final String? noMoreText;
 
   @override
   Widget build(BuildContext context) {
     if (isLoading) {
       return Container(
-        padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+        padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
         alignment: Alignment.center,
-        child: CircularProgressIndicator(
+        child: const CircularProgressIndicator(
           color: AppColors.primary,
           strokeWidth: 2,
         ),
@@ -264,12 +225,9 @@ class CampusLoadMore extends StatelessWidget {
     }
 
     return Container(
-      padding: EdgeInsets.symmetric(vertical: AppSpacing.md),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
       alignment: Alignment.center,
-      child: Text(
-        noMoreText!,
-        style: AppTextStyles.caption,
-      ),
+      child: Text(noMoreText!, style: AppTextStyles.caption),
     );
   }
 }

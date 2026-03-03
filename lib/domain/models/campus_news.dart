@@ -1,13 +1,6 @@
 /// 校园资讯/新闻实体
 class CampusNews {
-  final String id;
-  final String title;
-  final String? summary;
-  final String? imageUrl;
-  final String source; // 来源，如 '教务处'
-  final NewsCategory category;
-  final DateTime publishedAt;
-  final bool isTop; // 置顶
+  // 置顶
 
   CampusNews({
     required this.id,
@@ -19,6 +12,30 @@ class CampusNews {
     required this.publishedAt,
     this.isTop = false,
   });
+
+  factory CampusNews.fromJson(Map<String, dynamic> json) {
+    return CampusNews(
+      id: json['id'] as String,
+      title: json['title'] as String,
+      summary: json['summary'] as String?,
+      imageUrl: json['imageUrl'] as String?,
+      source: json['source'] as String,
+      category: NewsCategory.values.firstWhere(
+        (e) => e.name == json['category'],
+        orElse: () => NewsCategory.notice,
+      ),
+      publishedAt: DateTime.parse(json['publishedAt'] as String),
+      isTop: json['isTop'] as bool? ?? false,
+    );
+  }
+  final String id;
+  final String title;
+  final String? summary;
+  final String? imageUrl;
+  final String source; // 来源，如 '教务处'
+  final NewsCategory category;
+  final DateTime publishedAt;
+  final bool isTop;
 
   /// 相对发布时间，如 '1小时前'
   String get relativeTime {
@@ -65,31 +82,13 @@ class CampusNews {
     };
   }
 
-  factory CampusNews.fromJson(Map<String, dynamic> json) {
-    return CampusNews(
-      id: json['id'] as String,
-      title: json['title'] as String,
-      summary: json['summary'] as String?,
-      imageUrl: json['imageUrl'] as String?,
-      source: json['source'] as String,
-      category: NewsCategory.values.firstWhere(
-        (e) => e.name == json['category'],
-        orElse: () => NewsCategory.notice,
-      ),
-      publishedAt: DateTime.parse(json['publishedAt'] as String),
-      isTop: json['isTop'] as bool? ?? false,
-    );
-  }
-
   @override
   String toString() => 'CampusNews($title)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is CampusNews &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      other is CampusNews && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

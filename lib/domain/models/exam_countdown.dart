@@ -1,11 +1,11 @@
 /// 考试类型
 enum ExamType {
-  midterm,    // 期中考试
-  final_,     // 期末考试
-  cet4,       // 四级
-  cet6,       // 六级
+  midterm, // 期中考试
+  final_, // 期末考试
+  cet4, // 四级
+  cet6, // 六级
   postgraduate, // 考研
-  custom;     // 自定义
+  custom; // 自定义
 
   String get label {
     switch (this) {
@@ -44,14 +44,6 @@ enum ExamType {
 
 /// 考试倒计时实体
 class ExamCountdown {
-  final String id;
-  final String userId;
-  final String examName;
-  final DateTime examDate;
-  final ExamType examType;
-  final String? note;
-  final DateTime createdAt;
-
   ExamCountdown({
     required this.id,
     required this.userId,
@@ -61,6 +53,25 @@ class ExamCountdown {
     this.note,
     required this.createdAt,
   });
+
+  factory ExamCountdown.fromJson(Map<String, dynamic> json) {
+    return ExamCountdown(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      examName: json['exam_name'] as String,
+      examDate: DateTime.parse(json['exam_date'] as String),
+      examType: ExamType.fromString(json['exam_type'] as String),
+      note: json['note'] as String?,
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
+  }
+  final String id;
+  final String userId;
+  final String examName;
+  final DateTime examDate;
+  final ExamType examType;
+  final String? note;
+  final DateTime createdAt;
 
   /// 距离考试剩余天数（负数表示已过期）
   int get daysRemaining {
@@ -108,25 +119,15 @@ class ExamCountdown {
     };
   }
 
-  factory ExamCountdown.fromJson(Map<String, dynamic> json) {
-    return ExamCountdown(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      examName: json['exam_name'] as String,
-      examDate: DateTime.parse(json['exam_date'] as String),
-      examType: ExamType.fromString(json['exam_type'] as String),
-      note: json['note'] as String?,
-      createdAt: DateTime.parse(json['created_at'] as String),
-    );
-  }
-
   @override
   String toString() => 'ExamCountdown($examName: $daysRemaining days)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is ExamCountdown && runtimeType == other.runtimeType && id == other.id;
+      other is ExamCountdown &&
+          runtimeType == other.runtimeType &&
+          id == other.id;
 
   @override
   int get hashCode => id.hashCode;

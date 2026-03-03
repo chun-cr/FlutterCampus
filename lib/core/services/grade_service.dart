@@ -3,8 +3,8 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/grade.dart';
 
 class GradeService {
-  final SupabaseClient _supabaseClient;
   GradeService(this._supabaseClient);
+  final SupabaseClient _supabaseClient;
 
   Future<List<Grade>> fetchGrades(String userId) async {
     final response = await _supabaseClient
@@ -12,7 +12,7 @@ class GradeService {
         .select()
         .eq('user_id', userId)
         .order('created_at', ascending: false);
-    
+
     return (response as List)
         .map((json) => Grade.fromJson(json as Map<String, dynamic>))
         .toList();
@@ -24,7 +24,7 @@ class GradeService {
         .insert(grade.toJson())
         .select()
         .single();
-    
+
     return Grade.fromJson(response);
   }
 
@@ -35,15 +35,12 @@ class GradeService {
         .eq('id', grade.id)
         .select()
         .single();
-    
+
     return Grade.fromJson(response);
   }
 
   Future<void> deleteGrade(String id) async {
-    await _supabaseClient
-        .from('grades')
-        .delete()
-        .eq('id', id);
+    await _supabaseClient.from('grades').delete().eq('id', id);
   }
 }
 
@@ -52,21 +49,12 @@ final gradeServiceProvider = Provider<GradeService>((ref) {
 });
 
 class GradesState {
+  GradesState({this.grades = const [], this.isLoading = false, this.error});
   final List<Grade> grades;
   final bool isLoading;
   final String? error;
 
-  GradesState({
-    this.grades = const [],
-    this.isLoading = false,
-    this.error,
-  });
-
-  GradesState copyWith({
-    List<Grade>? grades,
-    bool? isLoading,
-    String? error,
-  }) {
+  GradesState copyWith({List<Grade>? grades, bool? isLoading, String? error}) {
     return GradesState(
       grades: grades ?? this.grades,
       isLoading: isLoading ?? this.isLoading,
@@ -111,18 +99,17 @@ class GradesState {
 }
 
 class GradesNotifier extends StateNotifier<GradesState> {
-  final GradeService _gradeService;
-  final String? _userId;
-
   GradesNotifier(this._gradeService, this._userId) : super(GradesState()) {
     if (_userId != null) {
       loadGrades();
     }
   }
+  final GradeService _gradeService;
+  final String? _userId;
 
   Future<void> loadGrades() async {
     if (_userId == null) return;
-    
+
     state = state.copyWith(isLoading: true, error: null);
     try {
       final grades = await _gradeService.fetchGrades(_userId);
@@ -174,7 +161,9 @@ class GradesNotifier extends StateNotifier<GradesState> {
   }
 }
 
-final gradeStateProvider = StateNotifierProvider<GradesNotifier, GradesState>((ref) {
+final gradeStateProvider = StateNotifierProvider<GradesNotifier, GradesState>((
+  ref,
+) {
   final gradeService = ref.watch(gradeServiceProvider);
   final userId = Supabase.instance.client.auth.currentUser?.id;
   return GradesNotifier(gradeService, userId);

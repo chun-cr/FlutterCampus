@@ -12,8 +12,8 @@ class BookSearchPage extends StatefulWidget {
 class _BookSearchPageState extends State<BookSearchPage> {
   final _searchController = TextEditingController();
   bool _isSearching = false;
-  List<String> _history = ['三体', 'Flutter核心技术', '明朝那些事儿', '数据挖掘导论'];
-  List<String> _hot = ['平凡的世界', '机器学习', '算法导论', '活着', '小王子'];
+  final List<String> _history = ['三体', 'Flutter核心技术', '明朝那些事儿', '数据挖掘导论'];
+  final List<String> _hot = ['平凡的世界', '机器学习', '算法导论', '活着', '小王子'];
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
 
   Widget _buildSearchHistory() {
     return Padding(
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -42,13 +42,16 @@ class _BookSearchPageState extends State<BookSearchPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text('搜索历史', style: AppTextStyles.titleSmall),
-              IconButton(onPressed: () {}, icon: const Icon(Icons.delete_outline, size: 20)),
+              IconButton(
+                onPressed: () {},
+                icon: const Icon(Icons.delete_outline, size: 20),
+              ),
             ],
           ),
           Wrap(
             spacing: 8,
             runSpacing: 8,
-            children: _history.map((e) => _buildChip(e)).toList(),
+            children: _history.map(_buildChip).toList(),
           ),
           const SizedBox(height: 24),
           Text('热门搜索', style: AppTextStyles.titleSmall),
@@ -69,15 +72,24 @@ class _BookSearchPageState extends State<BookSearchPage> {
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(color: isHot ? AppColors.primary.withOpacity(0.3) : AppColors.greyLight),
+        border: Border.all(
+          color: isHot
+              ? AppColors.primary.withOpacity(0.3)
+              : AppColors.greyLight,
+        ),
       ),
-      child: Text(label, style: AppTextStyles.bodySmall.copyWith(color: isHot ? AppColors.primary : AppColors.textPrimary)),
+      child: Text(
+        label,
+        style: AppTextStyles.bodySmall.copyWith(
+          color: isHot ? AppColors.primary : AppColors.textPrimary,
+        ),
+      ),
     );
   }
 
   Widget _buildSearchResults() {
     return ListView.builder(
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       itemCount: 5,
       itemBuilder: (context, index) {
         return _buildBookResultCard(index);
@@ -88,7 +100,7 @@ class _BookSearchPageState extends State<BookSearchPage> {
   Widget _buildBookResultCard(int index) {
     return CampusCard(
       margin: const EdgeInsets.only(bottom: AppSpacing.md),
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -109,7 +121,12 @@ class _BookSearchPageState extends State<BookSearchPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('高等数学 (同济第七版)', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+                Text(
+                  '高等数学 (同济第七版)',
+                  style: AppTextStyles.bodyLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 const SizedBox(height: 4),
                 Text('作者: 同济大学数学系', style: AppTextStyles.caption),
                 const SizedBox(height: 4),
@@ -118,8 +135,18 @@ class _BookSearchPageState extends State<BookSearchPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text('状态: 可借 (5/10)', style: AppTextStyles.caption.copyWith(color: AppColors.success)),
-                    Text('三楼 B区 302', style: AppTextStyles.caption.copyWith(color: AppColors.primary)),
+                    Text(
+                      '状态: 可借 (5/10)',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.success,
+                      ),
+                    ),
+                    Text(
+                      '三楼 B区 302',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
                   ],
                 ),
               ],

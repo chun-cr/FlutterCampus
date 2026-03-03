@@ -24,7 +24,7 @@ class LibraryHomePage extends ConsumerWidget {
         ],
       ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           children: [
             // 1. 搜索框入口
@@ -134,7 +134,10 @@ class LibraryHomePage extends ConsumerWidget {
     return GestureDetector(
       onTap: () => context.push('/library/search'),
       child: Container(
-        padding: EdgeInsets.symmetric(horizontal: AppSpacing.md, vertical: 12),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: 12,
+        ),
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
@@ -148,7 +151,7 @@ class LibraryHomePage extends ConsumerWidget {
         ),
         child: Row(
           children: [
-            Icon(Icons.search, color: AppColors.grey),
+            const Icon(Icons.search, color: AppColors.grey),
             const SizedBox(width: 8),
             Text(
               '书名/作者/ISBN',
@@ -156,7 +159,7 @@ class LibraryHomePage extends ConsumerWidget {
             ),
             const Spacer(),
             const VerticalDivider(width: 20),
-            Icon(Icons.history, color: AppColors.grey, size: 20),
+            const Icon(Icons.history, color: AppColors.grey, size: 20),
           ],
         ),
       ),
@@ -189,13 +192,6 @@ class LibraryHomePage extends ConsumerWidget {
 }
 
 class _QuickFeatureCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final String count;
-  final String badge;
-  final Color color;
-  final String route;
-
   const _QuickFeatureCard({
     required this.icon,
     required this.title,
@@ -204,6 +200,12 @@ class _QuickFeatureCard extends StatelessWidget {
     required this.color,
     required this.route,
   });
+  final IconData icon;
+  final String title;
+  final String count;
+  final String badge;
+  final Color color;
+  final String route;
 
   @override
   Widget build(BuildContext context) {
@@ -275,15 +277,14 @@ class _QuickFeatureCard extends StatelessWidget {
 }
 
 class _LibraryAnnouncementCard extends StatelessWidget {
-  final String title;
-  final String date;
-  final String type;
-
   const _LibraryAnnouncementCard({
     required this.title,
     required this.date,
     required this.type,
   });
+  final String title;
+  final String date;
+  final String type;
 
   @override
   Widget build(BuildContext context) {
@@ -334,15 +335,14 @@ class _LibraryAnnouncementCard extends StatelessWidget {
 }
 
 class _RecommendedBookCard extends StatelessWidget {
-  final String title;
-  final String author;
-  final String cover;
-
   const _RecommendedBookCard({
     required this.title,
     required this.author,
     required this.cover,
   });
+  final String title;
+  final String author;
+  final String cover;
 
   @override
   Widget build(BuildContext context) {

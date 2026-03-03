@@ -9,12 +9,9 @@ class LibraryStatsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CampusAppBar(
-        title: '阅读报告',
-        showBackButton: true,
-      ),
+      appBar: const CampusAppBar(title: '阅读报告', showBackButton: true),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           children: [
             _buildSummaryCard(),
@@ -32,7 +29,7 @@ class LibraryStatsPage extends StatelessWidget {
 
   Widget _buildSummaryCard() {
     return CampusCard(
-      padding: EdgeInsets.all(AppSpacing.lg),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: Column(
         children: [
           Row(
@@ -59,13 +56,23 @@ class LibraryStatsPage extends StatelessWidget {
         RichText(
           text: TextSpan(
             children: [
-              TextSpan(text: value, style: AppTextStyles.headlineMedium.copyWith(color: AppColors.primary)),
+              TextSpan(
+                text: value,
+                style: AppTextStyles.headlineMedium.copyWith(
+                  color: AppColors.primary,
+                ),
+              ),
               TextSpan(text: ' $unit', style: AppTextStyles.caption),
             ],
           ),
         ),
         const SizedBox(height: 4),
-        Text(label, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+        Text(
+          label,
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+          ),
+        ),
       ],
     );
   }
@@ -76,15 +83,16 @@ class LibraryStatsPage extends StatelessWidget {
       children: [
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 12),
-          child: Text(title, style: AppTextStyles.titleSmall.copyWith(fontWeight: FontWeight.bold)),
+          child: Text(
+            title,
+            style: AppTextStyles.titleSmall.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ),
         CampusCard(
-          padding: EdgeInsets.all(AppSpacing.md),
-          child: SizedBox(
-            height: 200,
-            width: double.infinity,
-            child: chart,
-          ),
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: SizedBox(height: 200, width: double.infinity, child: chart),
         ),
       ],
     );
@@ -92,14 +100,19 @@ class LibraryStatsPage extends StatelessWidget {
 
   Widget _buildReadingRank() {
     return CampusCard(
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         children: [
           Row(
             children: [
-              Icon(Icons.emoji_events, color: Colors.orange),
+              const Icon(Icons.emoji_events, color: Colors.orange),
               const SizedBox(width: 8),
-              Text('本月读书达人榜', style: AppTextStyles.bodyLarge.copyWith(fontWeight: FontWeight.bold)),
+              Text(
+                '本月读书达人榜',
+                style: AppTextStyles.bodyLarge.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 12),
@@ -120,15 +133,27 @@ class LibraryStatsPage extends StatelessWidget {
             width: 24,
             height: 24,
             decoration: BoxDecoration(
-              color: rank == 1 ? Colors.orange : (rank == 2 ? Colors.grey : (rank == 3 ? Colors.brown : AppColors.greyLight)),
+              color: rank == 1
+                  ? Colors.orange
+                  : (rank == 2
+                        ? Colors.grey
+                        : (rank == 3 ? Colors.brown : AppColors.greyLight)),
               shape: BoxShape.circle,
             ),
-            child: Center(child: Text('$rank', style: const TextStyle(color: Colors.white, fontSize: 12))),
+            child: Center(
+              child: Text(
+                '$rank',
+                style: const TextStyle(color: Colors.white, fontSize: 12),
+              ),
+            ),
           ),
           const SizedBox(width: 12),
           Text(name, style: AppTextStyles.bodyMedium),
           const Spacer(),
-          Text('$count 本', style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey)),
+          Text(
+            '$count 本',
+            style: AppTextStyles.bodySmall.copyWith(color: AppColors.grey),
+          ),
         ],
       ),
     );
@@ -140,9 +165,7 @@ class _LibraryBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _BarChartPainter(),
-    );
+    return CustomPaint(painter: _BarChartPainter());
   }
 }
 
@@ -151,9 +174,7 @@ class _LibraryPieChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: _PieChartPainter(),
-    );
+    return CustomPaint(painter: _PieChartPainter());
   }
 }
 
@@ -170,7 +191,10 @@ class _BarChartPainter extends CustomPainter {
       final x = barWidth * (i * 2 + 0.5);
       final y = size.height - barHeight;
       canvas.drawRRect(
-        RRect.fromRectAndRadius(Rect.fromLTWH(x, y, barWidth, barHeight), const Radius.circular(4)),
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(x, y, barWidth, barHeight),
+          const Radius.circular(4),
+        ),
         paint,
       );
     }
@@ -188,13 +212,24 @@ class _PieChartPainter extends CustomPainter {
     final paint = Paint()..style = PaintingStyle.fill;
 
     final data = [0.4, 0.3, 0.2, 0.1];
-    final colors = [AppColors.primary, Colors.orange, Colors.green, Colors.blue];
+    final colors = [
+      AppColors.primary,
+      Colors.orange,
+      Colors.green,
+      Colors.blue,
+    ];
 
     double startAngle = 0;
     for (var i = 0; i < data.length; i++) {
       paint.color = colors[i];
       final sweepAngle = data[i] * 2 * 3.14159;
-      canvas.drawArc(Rect.fromCircle(center: center, radius: radius), startAngle, sweepAngle, true, paint);
+      canvas.drawArc(
+        Rect.fromCircle(center: center, radius: radius),
+        startAngle,
+        sweepAngle,
+        true,
+        paint,
+      );
       startAngle += sweepAngle;
     }
   }

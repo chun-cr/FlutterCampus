@@ -33,7 +33,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
     return const ['学习中心', '校园生活', '互助社区'];
   }
-  
+
   List<BottomNavigationBarItem> _getNavItems(bool isTeacher) {
     if (isTeacher) {
       return const [
@@ -113,7 +113,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final authState = ref.watch(authStateProvider);
     final user = authState.user;
-    final isTeacher = user?.type.toString().toLowerCase().contains('teacher') ?? false;
+    final isTeacher =
+        user?.type.toString().toLowerCase().contains('teacher') ?? false;
 
     final scaffold = Scaffold(
       backgroundColor: AppColors.background,
@@ -124,7 +125,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           IconButton(
             icon: const Icon(
               Icons.notifications_none_rounded,
-              color: AppColors.white,
+              color: AppColors.textPrimary,
             ),
             onPressed: () {},
           ),
@@ -136,7 +137,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                 tag: 'profile_avatar',
                 child: CircleAvatar(
                   radius: 16,
-                  backgroundColor: AppColors.white.withValues(alpha: 0.2),
+                  backgroundColor: AppColors.secondary,
                   backgroundImage:
                       user?.avatar != null && user!.avatar!.isNotEmpty
                       ? NetworkImage(user.avatar!)
@@ -145,7 +146,7 @@ class _HomePageState extends ConsumerState<HomePage> {
                       ? const Icon(
                           Icons.person_outline_rounded,
                           size: 20,
-                          color: AppColors.white,
+                          color: AppColors.textPrimary,
                         )
                       : null,
                 ),

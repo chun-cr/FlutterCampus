@@ -392,8 +392,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) return '请确认密码';
-                            if (value != _passwordController.text)
+                            if (value != _passwordController.text) {
                               return '两次输入的密码不一致';
+                            }
                             return null;
                           },
                         ),
@@ -419,8 +420,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                             if (value == null || value.isEmpty) return '请输入邮箱';
                             if (!RegExp(
                               r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                            ).hasMatch(value))
+                            ).hasMatch(value)) {
                               return '请输入有效的邮箱地址';
+                            }
                             return null;
                           },
                         ),
@@ -434,8 +436,9 @@ class _RegisterPageState extends ConsumerState<RegisterPage> {
                           keyboardType: TextInputType.phone,
                           validator: (value) {
                             if (value == null || value.isEmpty) return '请输入手机号';
-                            if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value))
+                            if (!RegExp(r'^1[3-9]\d{9}$').hasMatch(value)) {
                               return '请输入有效的手机号';
+                            }
                             return null;
                           },
                         ),

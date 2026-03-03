@@ -3,14 +3,6 @@ import 'package:go_router/go_router.dart';
 import '../theme/theme.dart';
 
 class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final String title;
-  final bool showBackButton;
-  final List<Widget>? actions;
-  final Color? backgroundColor;
-  final TextStyle? titleStyle;
-  final bool centerTitle;
-  final double? elevation;
-
   const CampusAppBar({
     super.key,
     required this.title,
@@ -21,9 +13,16 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle = true,
     this.elevation,
   });
+  final String title;
+  final bool showBackButton;
+  final List<Widget>? actions;
+  final Color? backgroundColor;
+  final TextStyle? titleStyle;
+  final bool centerTitle;
+  final double? elevation;
 
   @override
-  Size get preferredSize => Size.fromHeight(AppSpacing.appBarHeight);
+  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight);
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +35,7 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
+              icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
               onPressed: () {
                 context.pop();
               },
@@ -55,13 +54,6 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
 // 带搜索功能的AppBar
 class CampusSearchAppBar extends StatelessWidget
     implements PreferredSizeWidget {
-  final String title;
-  final TextEditingController searchController;
-  final Function(String)? onSearch;
-  final Function()? onSearchSubmitted;
-  final bool showBackButton;
-  final List<Widget>? actions;
-
   const CampusSearchAppBar({
     super.key,
     required this.title,
@@ -71,9 +63,15 @@ class CampusSearchAppBar extends StatelessWidget
     this.showBackButton = true,
     this.actions,
   });
+  final String title;
+  final TextEditingController searchController;
+  final Function(String)? onSearch;
+  final Function()? onSearchSubmitted;
+  final bool showBackButton;
+  final List<Widget>? actions;
 
   @override
-  Size get preferredSize => Size.fromHeight(AppSpacing.appBarHeight + 56);
+  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight + 56);
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +82,7 @@ class CampusSearchAppBar extends StatelessWidget
       ),
       leading: showBackButton
           ? IconButton(
-              icon: Icon(Icons.arrow_back, color: AppColors.textPrimary),
+              icon: const Icon(Icons.arrow_back, color: AppColors.textPrimary),
               onPressed: () {
                 context.pop();
               },
@@ -99,7 +97,7 @@ class CampusSearchAppBar extends StatelessWidget
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(56),
         child: Container(
-          padding: EdgeInsets.symmetric(
+          padding: const EdgeInsets.symmetric(
             horizontal: AppSpacing.md,
             vertical: AppSpacing.sm,
           ),
@@ -111,10 +109,16 @@ class CampusSearchAppBar extends StatelessWidget
               hintStyle: AppTextStyles.bodyMedium.copyWith(
                 color: AppColors.textSecondary,
               ),
-              prefixIcon: Icon(Icons.search, color: AppColors.textSecondary),
+              prefixIcon: const Icon(
+                Icons.search,
+                color: AppColors.textSecondary,
+              ),
               suffixIcon: searchController.text.isNotEmpty
                   ? IconButton(
-                      icon: Icon(Icons.clear, color: AppColors.textSecondary),
+                      icon: const Icon(
+                        Icons.clear,
+                        color: AppColors.textSecondary,
+                      ),
                       onPressed: () {
                         searchController.clear();
                         onSearch?.call('');
@@ -127,7 +131,7 @@ class CampusSearchAppBar extends StatelessWidget
                 borderRadius: BorderRadius.circular(AppSpacing.borderRadius),
                 borderSide: BorderSide.none,
               ),
-              contentPadding: EdgeInsets.symmetric(
+              contentPadding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.md,
                 vertical: AppSpacing.sm,
               ),

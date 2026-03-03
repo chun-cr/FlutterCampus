@@ -2,31 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/theme.dart';
 
 class CampusFormField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String? hintText;
-  final String? errorText;
-  final bool isRequired;
-  final bool isObscure;
-  final bool isDisabled;
-  final bool isLoading;
-  final IconData? prefixIcon;
-  final IconData? suffixIcon;
-  final Function()? onSuffixTap;
-  final TextInputType keyboardType;
-  final TextInputAction textInputAction;
-  final Function(String)? onChanged;
-  final Function(String)? onSubmitted;
-  final String? Function(String?)? validator;
-  final int? maxLines;
-  final int? minLines;
-  final int? maxLength;
-  final bool expands;
-  final EdgeInsets? contentPadding;
-  final BorderRadius? borderRadius;
-  final Color? borderColor;
-  final Color? backgroundColor;
-
   const CampusFormField({
     super.key,
     required this.controller,
@@ -54,6 +29,30 @@ class CampusFormField extends StatefulWidget {
     this.borderColor,
     this.backgroundColor,
   });
+  final TextEditingController controller;
+  final String labelText;
+  final String? hintText;
+  final String? errorText;
+  final bool isRequired;
+  final bool isObscure;
+  final bool isDisabled;
+  final bool isLoading;
+  final IconData? prefixIcon;
+  final IconData? suffixIcon;
+  final Function()? onSuffixTap;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final Function(String)? onChanged;
+  final Function(String)? onSubmitted;
+  final String? Function(String?)? validator;
+  final int? maxLines;
+  final int? minLines;
+  final int? maxLength;
+  final bool expands;
+  final EdgeInsets? contentPadding;
+  final BorderRadius? borderRadius;
+  final Color? borderColor;
+  final Color? backgroundColor;
 
   @override
   _CampusFormFieldState createState() => _CampusFormFieldState();
@@ -70,14 +69,16 @@ class _CampusFormFieldState extends State<CampusFormField> {
     return TextFormField(
       controller: widget.controller,
       decoration: InputDecoration(
-        labelText: widget.isRequired ? '${widget.labelText} *' : widget.labelText,
+        labelText: widget.isRequired
+            ? '${widget.labelText} *'
+            : widget.labelText,
         hintText: widget.hintText,
         errorText: widget.errorText,
         prefixIcon: widget.prefixIcon != null
             ? Icon(widget.prefixIcon, color: AppColors.grey)
             : null,
         suffixIcon: widget.isLoading
-            ? SizedBox(
+            ? const SizedBox(
                 width: 20,
                 height: 20,
                 child: CircularProgressIndicator(
@@ -86,25 +87,27 @@ class _CampusFormFieldState extends State<CampusFormField> {
                 ),
               )
             : showPasswordToggle
-                ? IconButton(
-                    icon: Icon(
-                      _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
-                      color: AppColors.grey,
-                    ),
-                    onPressed: () {
-                      setState(() {
-                        _isPasswordVisible = !_isPasswordVisible;
-                      });
-                    },
-                  )
-                : widget.suffixIcon != null
-                    ? IconButton(
-                        icon: Icon(widget.suffixIcon, color: AppColors.grey),
-                        onPressed: widget.onSuffixTap,
-                      )
-                    : null,
+            ? IconButton(
+                icon: Icon(
+                  _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+                  color: AppColors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _isPasswordVisible = !_isPasswordVisible;
+                  });
+                },
+              )
+            : widget.suffixIcon != null
+            ? IconButton(
+                icon: Icon(widget.suffixIcon, color: AppColors.grey),
+                onPressed: widget.onSuffixTap,
+              )
+            : null,
         border: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
             color: hasError
                 ? AppColors.error
@@ -113,7 +116,9 @@ class _CampusFormFieldState extends State<CampusFormField> {
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
             color: hasError
                 ? AppColors.error
@@ -122,38 +127,38 @@ class _CampusFormFieldState extends State<CampusFormField> {
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
           borderSide: BorderSide(
             color: hasError ? AppColors.error : AppColors.primary,
             width: 1.5,
           ),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.error,
-            width: 1,
-          ),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
+          borderSide: const BorderSide(color: AppColors.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.error,
-            width: 1.5,
-          ),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
+          borderSide: const BorderSide(color: AppColors.error, width: 1.5),
         ),
         disabledBorder: OutlineInputBorder(
-          borderRadius: widget.borderRadius ?? BorderRadius.circular(AppSpacing.borderRadius),
-          borderSide: BorderSide(
-            color: AppColors.greyLight,
-            width: 1,
-          ),
+          borderRadius:
+              widget.borderRadius ??
+              BorderRadius.circular(AppSpacing.borderRadius),
+          borderSide: const BorderSide(color: AppColors.greyLight, width: 1),
         ),
         filled: true,
         fillColor: widget.isDisabled
             ? AppColors.greyLight.withOpacity(0.5)
             : widget.backgroundColor ?? AppColors.surface,
-        contentPadding: widget.contentPadding ??
+        contentPadding:
+            widget.contentPadding ??
             EdgeInsets.symmetric(
               horizontal: AppSpacing.md,
               vertical: widget.maxLines == 1 ? AppSpacing.sm : AppSpacing.md,
@@ -179,16 +184,6 @@ class _CampusFormFieldState extends State<CampusFormField> {
 
 // 带验证的表单组件
 class CampusValidatedFormField extends StatefulWidget {
-  final TextEditingController controller;
-  final String labelText;
-  final String? hintText;
-  final bool isRequired;
-  final bool isObscure;
-  final TextInputType keyboardType;
-  final String? Function(String?)? customValidator;
-  final int? maxLength;
-  final IconData? prefixIcon;
-
   const CampusValidatedFormField({
     super.key,
     required this.controller,
@@ -201,9 +196,19 @@ class CampusValidatedFormField extends StatefulWidget {
     this.maxLength,
     this.prefixIcon,
   });
+  final TextEditingController controller;
+  final String labelText;
+  final String? hintText;
+  final bool isRequired;
+  final bool isObscure;
+  final TextInputType keyboardType;
+  final String? Function(String?)? customValidator;
+  final int? maxLength;
+  final IconData? prefixIcon;
 
   @override
-  _CampusValidatedFormFieldState createState() => _CampusValidatedFormFieldState();
+  _CampusValidatedFormFieldState createState() =>
+      _CampusValidatedFormFieldState();
 }
 
 class _CampusValidatedFormFieldState extends State<CampusValidatedFormField> {

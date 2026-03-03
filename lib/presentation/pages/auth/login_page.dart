@@ -66,7 +66,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
-                        Center(
+                        const Center(
                           child: Icon(
                             Icons.school_outlined,
                             size: 48,
@@ -111,6 +111,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 style: AppTextStyles.bodyMedium,
                                 cursorColor: AppColors.primaryBrand,
                                 keyboardType: TextInputType.text,
+                                onChanged: (_) {
+                                  if (authState.error != null) {
+                                    ref
+                                        .read(authStateProvider.notifier)
+                                        .clearError();
+                                  }
+                                },
                                 decoration: InputDecoration(
                                   hintText: '输入手机号或学号',
                                   hintStyle: AppTextStyles.bodyMedium.copyWith(
@@ -166,6 +173,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 obscureText: !_isPasswordVisible,
                                 style: AppTextStyles.bodyMedium,
                                 cursorColor: AppColors.primaryBrand,
+                                onChanged: (_) {
+                                  if (authState.error != null) {
+                                    ref
+                                        .read(authStateProvider.notifier)
+                                        .clearError();
+                                  }
+                                },
                                 decoration: InputDecoration(
                                   hintText: '输入您的密码',
                                   hintStyle: AppTextStyles.bodyMedium.copyWith(
@@ -240,6 +254,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () {
+                                    ref
+                                        .read(authStateProvider.notifier)
+                                        .clearError();
                                     context.push('/forgot_password');
                                   },
                                   style: TextButton.styleFrom(

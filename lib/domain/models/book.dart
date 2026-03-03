@@ -1,15 +1,4 @@
 class Book {
-  final String id;
-  final String title;
-  final String author;
-  final String isbn;
-  final String? category;
-  final String? summary;
-  final String location;
-  final int totalCopies;
-  final int availableCopies;
-  final String? coverUrl;
-
   Book({
     required this.id,
     required this.title,
@@ -22,6 +11,29 @@ class Book {
     required this.availableCopies,
     this.coverUrl,
   });
+
+  factory Book.fromJson(Map<String, dynamic> json) => Book(
+    id: json['id'],
+    title: json['title'],
+    author: json['author'],
+    isbn: json['isbn'],
+    category: json['category'],
+    summary: json['summary'],
+    location: json['location'],
+    totalCopies: json['totalCopies'],
+    availableCopies: json['availableCopies'],
+    coverUrl: json['coverUrl'],
+  );
+  final String id;
+  final String title;
+  final String author;
+  final String isbn;
+  final String? category;
+  final String? summary;
+  final String location;
+  final int totalCopies;
+  final int availableCopies;
+  final String? coverUrl;
 
   bool get isAvailable => availableCopies > 0;
 
@@ -37,29 +49,9 @@ class Book {
     'availableCopies': availableCopies,
     'coverUrl': coverUrl,
   };
-
-  factory Book.fromJson(Map<String, dynamic> json) => Book(
-    id: json['id'],
-    title: json['title'],
-    author: json['author'],
-    isbn: json['isbn'],
-    category: json['category'],
-    summary: json['summary'],
-    location: json['location'],
-    totalCopies: json['totalCopies'],
-    availableCopies: json['availableCopies'],
-    coverUrl: json['coverUrl'],
-  );
 }
 
 class BookLoan {
-  final String id;
-  final Book book;
-  final DateTime borrowDate;
-  final DateTime dueDate;
-  final DateTime? returnDate;
-  final bool isRenewed;
-
   BookLoan({
     required this.id,
     required this.book,
@@ -68,6 +60,12 @@ class BookLoan {
     this.returnDate,
     this.isRenewed = false,
   });
+  final String id;
+  final Book book;
+  final DateTime borrowDate;
+  final DateTime dueDate;
+  final DateTime? returnDate;
+  final bool isRenewed;
 
   bool get isOverdue => returnDate == null && DateTime.now().isAfter(dueDate);
 

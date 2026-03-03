@@ -4,12 +4,9 @@ import 'package:hive/hive.dart';
 
 import '../../domain/models/user.dart' as app_user;
 
-
 class DataMigrationService {
-  final SupabaseClient _supabaseClient;
-
   DataMigrationService(this._supabaseClient);
-
+  final SupabaseClient _supabaseClient;
 
   Future<void> migrateHiveUsersToSupabase() async {
     print('开始从 Hive 迁移用户到 Supabase...');
@@ -17,10 +14,10 @@ class DataMigrationService {
       if (!Hive.isBoxOpen('users')) {
         await Hive.openBox('users');
       }
-      
+
       final userBox = Hive.box('users');
       final List<dynamic> hiveData = userBox.values.toList();
-      
+
       if (hiveData.isEmpty) {
         print('Hive "users" Box 中没有发现用户数据，跳过迁移。');
         return;
@@ -65,7 +62,8 @@ class DataMigrationService {
             print('迁移用户 ${user.email} 失败：Supabase 未返回用户。');
           }
         } on AuthException catch (e) {
-          if (e.message.contains('already registered') || e.message.contains('unique constraint')) {
+          if (e.message.contains('already registered') ||
+              e.message.contains('unique constraint')) {
             print('用户 ${user.email} 已存在于 Supabase 中，跳过注册。');
           } else {
             print('迁移用户 ${user.email} 时发生认证错误：${e.message}');

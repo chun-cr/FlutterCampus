@@ -21,10 +21,7 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CampusAppBar(
-        title: '座位预约',
-        showBackButton: true,
-      ),
+      appBar: const CampusAppBar(title: '座位预约', showBackButton: true),
       body: Column(
         children: [
           _buildFilters(),
@@ -40,23 +37,31 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
 
   Widget _buildFilters() {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       color: AppColors.white,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
           _buildDropdown(_selectedFloor, _floors, (val) {
-            setState(() { _selectedFloor = val!; });
+            setState(() {
+              _selectedFloor = val!;
+            });
           }),
           _buildDropdown(_selectedZone, _zones, (val) {
-            setState(() { _selectedZone = val!; });
+            setState(() {
+              _selectedZone = val!;
+            });
           }),
         ],
       ),
     );
   }
 
-  Widget _buildDropdown(String current, List<String> options, ValueChanged<String?> onChanged) {
+  Widget _buildDropdown(
+    String current,
+    List<String> options,
+    ValueChanged<String?> onChanged,
+  ) {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
@@ -66,7 +71,14 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: current,
-          items: options.map((e) => DropdownMenuItem(value: e, child: Text(e, style: AppTextStyles.bodySmall))).toList(),
+          items: options
+              .map(
+                (e) => DropdownMenuItem(
+                  value: e,
+                  child: Text(e, style: AppTextStyles.bodySmall),
+                ),
+              )
+              .toList(),
           onChanged: onChanged,
         ),
       ),
@@ -89,7 +101,11 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
   Widget _buildLegendItem(Color color, String label) {
     return Row(
       children: [
-        Container(width: 12, height: 12, decoration: BoxDecoration(color: color, shape: BoxShape.circle)),
+        Container(
+          width: 12,
+          height: 12,
+          decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+        ),
         const SizedBox(width: 6),
         Text(label, style: AppTextStyles.caption),
       ],
@@ -98,7 +114,7 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
 
   Widget _buildSeatGrid() {
     return GridView.builder(
-      padding: EdgeInsets.symmetric(horizontal: AppSpacing.md),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 6,
         mainAxisSpacing: 12,
@@ -110,19 +126,39 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
         bool isSelected = _selectedSeat == index;
 
         return GestureDetector(
-          onTap: isOccupied ? null : () {
-            setState(() {
-              _selectedSeat = isSelected ? null : index;
-            });
-          },
+          onTap: isOccupied
+              ? null
+              : () {
+                  setState(() {
+                    _selectedSeat = isSelected ? null : index;
+                  });
+                },
           child: Container(
             decoration: BoxDecoration(
-              color: isSelected ? AppColors.primary : (isOccupied ? Colors.red.withOpacity(0.3) : Colors.green.withOpacity(0.1)),
+              color: isSelected
+                  ? AppColors.primary
+                  : (isOccupied
+                        ? Colors.red.withOpacity(0.3)
+                        : Colors.green.withOpacity(0.1)),
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: isSelected ? AppColors.primary : (isOccupied ? Colors.red : Colors.green), width: 1),
+              border: Border.all(
+                color: isSelected
+                    ? AppColors.primary
+                    : (isOccupied ? Colors.red : Colors.green),
+                width: 1,
+              ),
             ),
             child: Center(
-              child: Text('${index + 1}', style: AppTextStyles.bodyMedium.copyWith(color: isSelected ? Colors.white : (isOccupied ? Colors.red : Colors.green), fontWeight: FontWeight.bold, fontSize: 12)),
+              child: Text(
+                '${index + 1}',
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: isSelected
+                      ? Colors.white
+                      : (isOccupied ? Colors.red : Colors.green),
+                  fontWeight: FontWeight.bold,
+                  fontSize: 12,
+                ),
+              ),
             ),
           ),
         );
@@ -132,11 +168,15 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
 
   Widget _buildBottomPanel() {
     return Container(
-      padding: EdgeInsets.all(AppSpacing.md),
+      padding: const EdgeInsets.all(AppSpacing.md),
       decoration: BoxDecoration(
         color: AppColors.white,
         boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4)),
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, -4),
+          ),
         ],
       ),
       child: Column(
@@ -147,9 +187,12 @@ class _SeatReservationPageState extends State<SeatReservationPage> {
               padding: const EdgeInsets.only(bottom: 12),
               child: Row(
                 children: [
-                  Icon(Icons.chair, color: AppColors.primary),
+                  const Icon(Icons.chair, color: AppColors.primary),
                   const SizedBox(width: 8),
-                  Text('已选: $_selectedFloor $_selectedZone ${_selectedSeat! + 1}号座', style: AppTextStyles.bodyMedium),
+                  Text(
+                    '已选: $_selectedFloor $_selectedZone ${_selectedSeat! + 1}号座',
+                    style: AppTextStyles.bodyMedium,
+                  ),
                 ],
               ),
             ),

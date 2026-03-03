@@ -1,11 +1,6 @@
 /// 食堂/菜品实体
 class Canteen {
-  final String id;
-  final String name;
-  final String todayMenu; // 今日推荐菜品
-  final double rating;
-  final bool isOpen;
-  final String? openTime; // e.g. '06:30 - 21:00'
+  // e.g. '06:30 - 21:00'
 
   Canteen({
     required this.id,
@@ -15,6 +10,23 @@ class Canteen {
     this.isOpen = true,
     this.openTime,
   });
+
+  factory Canteen.fromJson(Map<String, dynamic> json) {
+    return Canteen(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      todayMenu: json['todayMenu'] as String,
+      rating: (json['rating'] as num).toDouble(),
+      isOpen: json['isOpen'] as bool? ?? true,
+      openTime: json['openTime'] as String?,
+    );
+  }
+  final String id;
+  final String name;
+  final String todayMenu; // 今日推荐菜品
+  final double rating;
+  final bool isOpen;
+  final String? openTime;
 
   Canteen copyWith({
     String? id,
@@ -45,26 +57,13 @@ class Canteen {
     };
   }
 
-  factory Canteen.fromJson(Map<String, dynamic> json) {
-    return Canteen(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      todayMenu: json['todayMenu'] as String,
-      rating: (json['rating'] as num).toDouble(),
-      isOpen: json['isOpen'] as bool? ?? true,
-      openTime: json['openTime'] as String?,
-    );
-  }
-
   @override
   String toString() => 'Canteen($name, rating: $rating)';
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Canteen &&
-          runtimeType == other.runtimeType &&
-          id == other.id;
+      other is Canteen && runtimeType == other.runtimeType && id == other.id;
 
   @override
   int get hashCode => id.hashCode;

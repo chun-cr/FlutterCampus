@@ -1,15 +1,6 @@
 /// 课程实体
 class Course {
-  final String id;
-  final String name;
-  final String teacher;
-  final String location;
-  final int weekday; // 1=周一 ... 7=周日
-  final String startTime; // e.g. '08:00'
-  final String endTime; // e.g. '09:40'
-  final int startWeek;
-  final int endWeek;
-  final String? color; // Hex color for timetable display
+  // Hex color for timetable display
 
   Course({
     required this.id,
@@ -23,6 +14,31 @@ class Course {
     required this.endWeek,
     this.color,
   });
+
+  factory Course.fromJson(Map<String, dynamic> json) {
+    return Course(
+      id: json['id'] as String,
+      name: json['name'] as String,
+      teacher: json['teacher'] as String,
+      location: json['location'] as String,
+      weekday: json['weekday'] as int,
+      startTime: json['startTime'] as String,
+      endTime: json['endTime'] as String,
+      startWeek: json['startWeek'] as int,
+      endWeek: json['endWeek'] as int,
+      color: json['color'] as String?,
+    );
+  }
+  final String id;
+  final String name;
+  final String teacher;
+  final String location;
+  final int weekday; // 1=周一 ... 7=周日
+  final String startTime; // e.g. '08:00'
+  final String endTime; // e.g. '09:40'
+  final int startWeek;
+  final int endWeek;
+  final String? color;
 
   /// 格式化时间段，如 '08:00 - 09:40'
   String get timeSlotDisplay => '$startTime - $endTime';
@@ -69,21 +85,6 @@ class Course {
       'endWeek': endWeek,
       'color': color,
     };
-  }
-
-  factory Course.fromJson(Map<String, dynamic> json) {
-    return Course(
-      id: json['id'] as String,
-      name: json['name'] as String,
-      teacher: json['teacher'] as String,
-      location: json['location'] as String,
-      weekday: json['weekday'] as int,
-      startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String,
-      startWeek: json['startWeek'] as int,
-      endWeek: json['endWeek'] as int,
-      color: json['color'] as String?,
-    );
   }
 
   @override

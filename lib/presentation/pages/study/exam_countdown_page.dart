@@ -31,10 +31,10 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
       body: examState.isLoading
           ? const Center(child: CircularProgressIndicator())
           : examState.error != null
-              ? _buildErrorState(examState.error!)
-              : examState.exams.isEmpty
-                  ? _buildEmptyState()
-                  : _buildContent(examState),
+          ? _buildErrorState(examState.error!)
+          : examState.exams.isEmpty
+          ? _buildEmptyState()
+          : _buildContent(examState),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _showAddEditDialog(context),
         backgroundColor: AppColors.campusOrange,
@@ -48,14 +48,20 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.error_outline, size: 64, color: AppColors.error),
+          const Icon(Icons.error_outline, size: 64, color: AppColors.error),
           const SizedBox(height: 16),
           Text('加载失败', style: AppTextStyles.titleMedium),
           const SizedBox(height: 8),
-          Text(error, style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(
+            error,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
           const SizedBox(height: 24),
           ElevatedButton(
-            onPressed: () => ref.read(examCountdownStateProvider.notifier).loadExams(),
+            onPressed: () =>
+                ref.read(examCountdownStateProvider.notifier).loadExams(),
             child: const Text('重试'),
           ),
         ],
@@ -68,11 +74,20 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(Icons.timer_outlined, size: 64, color: AppColors.greyLight),
+          const Icon(
+            Icons.timer_outlined,
+            size: 64,
+            color: AppColors.greyLight,
+          ),
           const SizedBox(height: 16),
           Text('暂无考试安排', style: AppTextStyles.titleMedium),
           const SizedBox(height: 8),
-          Text('点击右下角按钮添加考试', style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary)),
+          Text(
+            '点击右下角按钮添加考试',
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
         ],
       ),
     );
@@ -88,9 +103,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
           if (examState.upcomingExams.isNotEmpty) ...[
             _buildSectionHeader('即将到来', examState.upcomingExams.length),
             const SizedBox(height: 12),
-            ...examState.upcomingExams.map((exam) => _buildExamCard(exam)),
+            ...examState.upcomingExams.map(_buildExamCard),
           ],
-          
+
           // 已结束的考试
           if (examState.expiredExams.isNotEmpty) ...[
             const SizedBox(height: 24),
@@ -109,10 +124,12 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
             ),
             if (_showExpired) ...[
               const SizedBox(height: 12),
-              ...examState.expiredExams.map((exam) => _buildExamCard(exam, isExpired: true)),
+              ...examState.expiredExams.map(
+                (exam) => _buildExamCard(exam, isExpired: true),
+              ),
             ],
           ],
-          
+
           const SizedBox(height: 80),
         ],
       ),
@@ -139,7 +156,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
           ),
           child: Text(
             count.toString(),
-            style: AppTextStyles.labelSmall.copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
       ],
@@ -156,7 +175,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-          color: isUrgent ? AppColors.warning : AppColors.greyLight.withValues(alpha: 0.5),
+          color: isUrgent
+              ? AppColors.warning
+              : AppColors.greyLight.withValues(alpha: 0.5),
           width: isUrgent ? 1.5 : 1,
         ),
       ),
@@ -176,15 +197,22 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                     children: [
                       // 类型标签
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
-                          color: typeColor.withValues(alpha: isExpired ? 0.1 : 0.15),
+                          color: typeColor.withValues(
+                            alpha: isExpired ? 0.1 : 0.15,
+                          ),
                           borderRadius: BorderRadius.circular(6),
                         ),
                         child: Text(
                           exam.examType.label,
                           style: AppTextStyles.labelSmall.copyWith(
-                            color: isExpired ? AppColors.textSecondary : typeColor,
+                            color: isExpired
+                                ? AppColors.textSecondary
+                                : typeColor,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -194,14 +222,16 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                       Text(
                         exam.examName,
                         style: AppTextStyles.titleMedium.copyWith(
-                          color: isExpired ? AppColors.textSecondary : AppColors.textPrimary,
+                          color: isExpired
+                              ? AppColors.textSecondary
+                              : AppColors.textPrimary,
                         ),
                       ),
                       const SizedBox(height: 6),
                       // 考试日期
                       Row(
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.calendar_today_outlined,
                             size: 14,
                             color: AppColors.textSecondary,
@@ -209,7 +239,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                           const SizedBox(width: 6),
                           Text(
                             _formatDate(exam.examDate),
-                            style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+                            style: AppTextStyles.bodySmall.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
                           ),
                         ],
                       ),
@@ -218,7 +250,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                         const SizedBox(height: 6),
                         Text(
                           exam.note!,
-                          style: AppTextStyles.caption.copyWith(color: AppColors.textDisabled),
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textDisabled,
+                          ),
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                         ),
@@ -233,11 +267,15 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                   child: Column(
                     children: [
                       Text(
-                        isExpired ? '${-exam.daysRemaining}' : '${exam.daysRemaining}',
+                        isExpired
+                            ? '${-exam.daysRemaining}'
+                            : '${exam.daysRemaining}',
                         style: AppTextStyles.headlineLarge.copyWith(
-                          color: isExpired 
-                              ? AppColors.textSecondary 
-                              : (isUrgent ? AppColors.warning : AppColors.primary),
+                          color: isExpired
+                              ? AppColors.textSecondary
+                              : (isUrgent
+                                    ? AppColors.warning
+                                    : AppColors.primary),
                           fontWeight: FontWeight.w300,
                           fontSize: 36,
                         ),
@@ -245,7 +283,9 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                       Text(
                         isExpired ? '天前' : '天',
                         style: AppTextStyles.labelMedium.copyWith(
-                          color: isExpired ? AppColors.textSecondary : AppColors.textSecondary,
+                          color: isExpired
+                              ? AppColors.textSecondary
+                              : AppColors.textSecondary,
                         ),
                       ),
                     ],
@@ -253,7 +293,11 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                 ),
                 // 删除按钮
                 IconButton(
-                  icon: Icon(Icons.delete_outline, color: AppColors.textSecondary, size: 20),
+                  icon: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.textSecondary,
+                    size: 20,
+                  ),
                   onPressed: () => _confirmDelete(exam),
                 ),
               ],
@@ -301,7 +345,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
               ref.read(examCountdownStateProvider.notifier).deleteExam(exam.id);
               Navigator.pop(context);
             },
-            child: Text('删除', style: TextStyle(color: AppColors.error)),
+            child: const Text('删除', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -313,7 +357,8 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
     final nameController = TextEditingController(text: exam?.examName ?? '');
     final noteController = TextEditingController(text: exam?.note ?? '');
     ExamType selectedType = exam?.examType ?? ExamType.midterm;
-    DateTime selectedDate = exam?.examDate ?? DateTime.now().add(const Duration(days: 7));
+    DateTime selectedDate =
+        exam?.examDate ?? DateTime.now().add(const Duration(days: 7));
     final formKey = GlobalKey<FormState>();
 
     showDialog(
@@ -335,7 +380,12 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                   ),
                   const SizedBox(height: 16),
                   // 考试类型
-                  Text('考试类型', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                  Text(
+                    '考试类型',
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   Wrap(
                     spacing: 8,
@@ -345,17 +395,33 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                       return GestureDetector(
                         onTap: () => setDialogState(() => selectedType = type),
                         child: Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 12,
+                            vertical: 8,
+                          ),
                           decoration: BoxDecoration(
-                            color: isSelected ? _getExamTypeColor(type).withValues(alpha: 0.15) : AppColors.greyLight.withValues(alpha: 0.3),
+                            color: isSelected
+                                ? _getExamTypeColor(
+                                    type,
+                                  ).withValues(alpha: 0.15)
+                                : AppColors.greyLight.withValues(alpha: 0.3),
                             borderRadius: BorderRadius.circular(8),
-                            border: isSelected ? Border.all(color: _getExamTypeColor(type), width: 1) : null,
+                            border: isSelected
+                                ? Border.all(
+                                    color: _getExamTypeColor(type),
+                                    width: 1,
+                                  )
+                                : null,
                           ),
                           child: Text(
                             type.label,
                             style: AppTextStyles.labelSmall.copyWith(
-                              color: isSelected ? _getExamTypeColor(type) : AppColors.textSecondary,
-                              fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
+                              color: isSelected
+                                  ? _getExamTypeColor(type)
+                                  : AppColors.textSecondary,
+                              fontWeight: isSelected
+                                  ? FontWeight.w600
+                                  : FontWeight.w400,
                             ),
                           ),
                         ),
@@ -364,31 +430,50 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                   ),
                   const SizedBox(height: 16),
                   // 考试日期
-                  Text('考试日期', style: AppTextStyles.labelMedium.copyWith(color: AppColors.textSecondary)),
+                  Text(
+                    '考试日期',
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
                   const SizedBox(height: 8),
                   InkWell(
                     onTap: () async {
                       final picked = await showDatePicker(
                         context: context,
                         initialDate: selectedDate,
-                        firstDate: DateTime.now().subtract(const Duration(days: 365)),
-                        lastDate: DateTime.now().add(const Duration(days: 365 * 2)),
+                        firstDate: DateTime.now().subtract(
+                          const Duration(days: 365),
+                        ),
+                        lastDate: DateTime.now().add(
+                          const Duration(days: 365 * 2),
+                        ),
                       );
                       if (picked != null) {
                         setDialogState(() => selectedDate = picked);
                       }
                     },
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 14),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         border: Border.all(color: AppColors.greyLight),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         children: [
-                          Icon(Icons.calendar_today_outlined, size: 18, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 18,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 10),
-                          Text(_formatDate(selectedDate), style: AppTextStyles.bodyMedium),
+                          Text(
+                            _formatDate(selectedDate),
+                            style: AppTextStyles.bodyMedium,
+                          ),
                         ],
                       ),
                     ),
@@ -417,14 +502,20 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                     examName: nameController.text.trim(),
                     examDate: selectedDate,
                     examType: selectedType,
-                    note: noteController.text.trim().isEmpty ? null : noteController.text.trim(),
+                    note: noteController.text.trim().isEmpty
+                        ? null
+                        : noteController.text.trim(),
                     createdAt: exam?.createdAt ?? DateTime.now(),
                   );
 
                   if (isEditing) {
-                    ref.read(examCountdownStateProvider.notifier).updateExam(newExam);
+                    ref
+                        .read(examCountdownStateProvider.notifier)
+                        .updateExam(newExam);
                   } else {
-                    ref.read(examCountdownStateProvider.notifier).addExam(newExam);
+                    ref
+                        .read(examCountdownStateProvider.notifier)
+                        .addExam(newExam);
                   }
                   Navigator.pop(context);
                 }

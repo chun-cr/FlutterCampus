@@ -6,9 +6,8 @@ import '../../theme/theme.dart';
 enum PostType { lostAndFound, secondHand, helpTask }
 
 class PostEditPage extends StatefulWidget {
-  final PostType type;
-
   const PostEditPage({super.key, required this.type});
+  final PostType type;
 
   @override
   State<PostEditPage> createState() => _PostEditPageState();
@@ -46,9 +45,9 @@ class _PostEditPageState extends State<PostEditPage> {
   void _submit() {
     if (_formKey.currentState?.validate() ?? false) {
       // TODO: Implement actual submission logic
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('发布成功！')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('发布成功！')));
       context.pop();
     }
   }
@@ -57,12 +56,9 @@ class _PostEditPageState extends State<PostEditPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      appBar: CampusAppBar(
-        title: _title,
-        showBackButton: true,
-      ),
+      appBar: CampusAppBar(title: _title, showBackButton: true),
       body: SingleChildScrollView(
-        padding: EdgeInsets.all(AppSpacing.md),
+        padding: const EdgeInsets.all(AppSpacing.md),
         child: Form(
           key: _formKey,
           child: Column(
@@ -118,10 +114,7 @@ class _PostEditPageState extends State<PostEditPage> {
               ),
               const SizedBox(height: 32),
 
-              CampusButton(
-                text: '确认发布',
-                onPressed: _submit,
-              ),
+              CampusButton(text: '确认发布', onPressed: _submit),
               const SizedBox(height: 32),
             ],
           ),
@@ -144,17 +137,17 @@ class _PostEditPageState extends State<PostEditPage> {
       fillColor: AppColors.white,
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.grey),
+        borderSide: const BorderSide(color: AppColors.grey),
       ),
       enabledBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.grey),
+        borderSide: const BorderSide(color: AppColors.grey),
       ),
       focusedBorder: OutlineInputBorder(
         borderRadius: BorderRadius.circular(8),
-        borderSide: BorderSide(color: AppColors.primary),
+        borderSide: const BorderSide(color: AppColors.primary),
       ),
-      contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
     );
   }
 
@@ -169,12 +162,19 @@ class _PostEditPageState extends State<PostEditPage> {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.greyLight, style: BorderStyle.solid),
+          border: Border.all(
+            color: AppColors.greyLight,
+            style: BorderStyle.solid,
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.add_a_photo_outlined, color: AppColors.grey, size: 32),
+            const Icon(
+              Icons.add_a_photo_outlined,
+              color: AppColors.grey,
+              size: 32,
+            ),
             const SizedBox(height: 8),
             Text('上传图片', style: AppTextStyles.caption),
           ],

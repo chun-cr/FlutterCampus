@@ -45,7 +45,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: AppColors.textPrimary, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new,
+            color: AppColors.textPrimary,
+            size: 20,
+          ),
           onPressed: () => context.pop(),
         ),
       ),
@@ -55,7 +59,10 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           child: ConstrainedBox(
             constraints: const BoxConstraints(maxWidth: 400),
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 32.0, vertical: 48.0),
+              padding: const EdgeInsets.symmetric(
+                horizontal: 32.0,
+                vertical: 48.0,
+              ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
@@ -68,9 +75,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         shape: BoxShape.circle,
-                        border: Border.all(color: AppColors.greyLight, width: 0.5),
+                        border: Border.all(
+                          color: AppColors.greyLight,
+                          width: 0.5,
+                        ),
                       ),
-                      child: Center(
+                      child: const Center(
                         child: Icon(
                           Icons.lock_outline,
                           size: 28,
@@ -121,28 +131,44 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             cursorColor: AppColors.primary,
                             decoration: InputDecoration(
                               hintText: '输入您的邮箱',
-                              hintStyle: AppTextStyles.bodyMedium.copyWith(color: AppColors.textDisabled),
+                              hintStyle: AppTextStyles.bodyMedium.copyWith(
+                                color: AppColors.textDisabled,
+                              ),
                               filled: true,
                               fillColor: AppColors.surface,
-                              contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+                              contentPadding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 16,
+                              ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                borderSide: const BorderSide(
+                                  color: AppColors.greyLight,
+                                  width: 0.5,
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.greyLight, width: 0.5),
+                                borderSide: const BorderSide(
+                                  color: AppColors.greyLight,
+                                  width: 0.5,
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(color: AppColors.primary, width: 1),
+                                borderSide: const BorderSide(
+                                  color: AppColors.primary,
+                                  width: 1,
+                                ),
                               ),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return '请输入邮箱';
                               }
-                              if (!RegExp(r'^[^\s@]+@[^\s@]+\.[^\s@]+$').hasMatch(value)) {
+                              if (!RegExp(
+                                r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                              ).hasMatch(value)) {
                                 return '请输入有效的邮箱地址';
                               }
                               return null;
@@ -167,7 +193,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                                     height: 20,
                                     child: CircularProgressIndicator(
                                       strokeWidth: 1.5,
-                                      valueColor: AlwaysStoppedAnimation<Color>(AppColors.white),
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        AppColors.white,
+                                      ),
                                     ),
                                   )
                                 : Text(
@@ -188,15 +216,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       children: [
                         // 成功提示
                         Container(
-                          padding: const EdgeInsets.symmetric(vertical: 24, horizontal: 16),
+                          padding: const EdgeInsets.symmetric(
+                            vertical: 24,
+                            horizontal: 16,
+                          ),
                           decoration: BoxDecoration(
                             color: AppColors.surface,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: AppColors.greyLight, width: 0.5),
+                            border: Border.all(
+                              color: AppColors.greyLight,
+                              width: 0.5,
+                            ),
                           ),
                           child: Column(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.check_circle_outline,
                                 size: 48,
                                 color: AppColors.success,

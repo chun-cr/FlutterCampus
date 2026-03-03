@@ -1,15 +1,5 @@
 /// 成绩实体
 class Grade {
-  final String id;
-  final String userId;
-  final String courseName;
-  final String semester; // e.g. '2025-2026-1'
-  final double score; // 百分制成绩
-  final double gradePoint; // 绩点
-  final double credit; // 学分
-  final GradeStatus status;
-  final DateTime createdAt;
-
   Grade({
     required this.id,
     required this.userId,
@@ -21,6 +11,33 @@ class Grade {
     this.status = GradeStatus.passed,
     required this.createdAt,
   });
+
+  /// 从 Supabase JSON 解析 (snake_case)
+  factory Grade.fromJson(Map<String, dynamic> json) {
+    return Grade(
+      id: json['id'] as String,
+      userId: json['user_id'] as String,
+      courseName: json['course_name'] as String,
+      semester: json['semester'] as String,
+      score: (json['score'] as num).toDouble(),
+      gradePoint: (json['grade_point'] as num).toDouble(),
+      credit: (json['credit'] as num).toDouble(),
+      status: GradeStatus.values.firstWhere(
+        (e) => e.name == json['status'],
+        orElse: () => GradeStatus.passed,
+      ),
+      createdAt: DateTime.parse(json['created_at'] as String),
+    );
+  }
+  final String id;
+  final String userId;
+  final String courseName;
+  final String semester; // e.g. '2025-2026-1'
+  final double score; // 百分制成绩
+  final double gradePoint; // 绩点
+  final double credit; // 学分
+  final GradeStatus status;
+  final DateTime createdAt;
 
   /// 等级制显示，如 A / B+ / C
   String get letterGrade {
@@ -89,24 +106,6 @@ class Grade {
     };
   }
 
-  /// 从 Supabase JSON 解析 (snake_case)
-  factory Grade.fromJson(Map<String, dynamic> json) {
-    return Grade(
-      id: json['id'] as String,
-      userId: json['user_id'] as String,
-      courseName: json['course_name'] as String,
-      semester: json['semester'] as String,
-      score: (json['score'] as num).toDouble(),
-      gradePoint: (json['grade_point'] as num).toDouble(),
-      credit: (json['credit'] as num).toDouble(),
-      status: GradeStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => GradeStatus.passed,
-      ),
-      createdAt: DateTime.parse(json['created_at'] as String),
-    );
-  }
-
   @override
   String toString() => 'Grade($courseName: $score / $gradePoint)';
 
@@ -142,12 +141,6 @@ enum GradeStatus {
 
 /// 学期成绩汇总
 class SemesterGradeSummary {
-  final String semester;
-  final double gpa; // 学期绩点
-  final double totalCredits; // 学期总学分
-  final int courseCount; // 课程数量
-  final List<Grade> grades;
-
   SemesterGradeSummary({
     required this.semester,
     required this.gpa,
@@ -184,16 +177,6 @@ class SemesterGradeSummary {
     );
   }
 
-  Map<String, dynamic> toJson() {
-    return {
-      'semester': semester,
-      'gpa': gpa,
-      'totalCredits': totalCredits,
-      'courseCount': courseCount,
-      'grades': grades.map((g) => g.toJson()).toList(),
-    };
-  }
-
   factory SemesterGradeSummary.fromJson(Map<String, dynamic> json) {
     return SemesterGradeSummary(
       semester: json['semester'] as String,
@@ -204,5 +187,20 @@ class SemesterGradeSummary {
           .map((g) => Grade.fromJson(g as Map<String, dynamic>))
           .toList(),
     );
+  }
+  final String semester;
+  final double gpa; // 学期绩点
+  final double totalCredits; // 学期总学分
+  final int courseCount; // 课程数量
+  final List<Grade> grades;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'semester': semester,
+      'gpa': gpa,
+      'totalCredits': totalCredits,
+      'courseCount': courseCount,
+      'grades': grades.map((g) => g.toJson()).toList(),
+    };
   }
 }

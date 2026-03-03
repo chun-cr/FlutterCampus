@@ -216,7 +216,7 @@ class StudyPage extends ConsumerWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.auto_graph_rounded,
                             size: 16,
                             color: AppColors.textSecondary,

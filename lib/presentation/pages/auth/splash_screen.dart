@@ -41,7 +41,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // 应用图标
-            Icon(
+            const Icon(
               Icons.school_outlined,
               size: 56,
               color: AppColors.primary,
@@ -66,7 +66,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
             ),
             const SizedBox(height: 64),
             // 加载指示器
-            SizedBox(
+            const SizedBox(
               width: 24,
               height: 24,
               child: CircularProgressIndicator(
