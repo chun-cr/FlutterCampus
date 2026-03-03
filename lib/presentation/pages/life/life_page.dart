@@ -1,13 +1,52 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/campus_news_service.dart';
 import '../../theme/theme.dart';
 
-class LifePage extends ConsumerWidget {
+class LifePage extends ConsumerStatefulWidget {
   const LifePage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<LifePage> createState() => _LifePageState();
+}
+
+class _LifePageState extends ConsumerState<LifePage> {
+  late PageController _pageController;
+  Timer? _timer;
+  int _currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.88);
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 4), (timer) {
+      if (!mounted) return;
+      final newsState = ref.read(campusNewsStateProvider);
+      if (newsState.items.length > 1 && _pageController.hasClients) {
+        final nextPage = (_currentPage + 1) % newsState.items.length;
+        _pageController.animateToPage(
+          nextPage,
+          duration: const Duration(milliseconds: 800),
+          curve: Curves.fastOutSlowIn,
+        );
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    _pageController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final newsState = ref.watch(campusNewsStateProvider);
 
     return Center(
@@ -186,7 +225,9 @@ class LifePage extends ConsumerWidget {
 
   Widget _buildNewsSection(WidgetRef ref, CampusNewsState state) {
     if (state.isLoading) {
-      return const Center(child: CircularProgressIndicator(color: AppColors.primary));
+      return const Center(
+        child: CircularProgressIndicator(color: AppColors.primary),
+      );
     }
 
     if (state.error != null) {
@@ -197,7 +238,8 @@ class LifePage extends ConsumerWidget {
             Text(state.error!, style: AppTextStyles.bodySmall),
             const SizedBox(height: 16),
             TextButton(
-              onPressed: () => ref.read(campusNewsStateProvider.notifier).loadNews(),
+              onPressed: () =>
+                  ref.read(campusNewsStateProvider.notifier).loadNews(),
               child: const Text('重试'),
             ),
           ],
@@ -209,85 +251,125 @@ class LifePage extends ConsumerWidget {
       return Center(
         child: Text(
           '暂无校园资讯',
-          style: AppTextStyles.bodySmall.copyWith(color: AppColors.textSecondary),
+          style: AppTextStyles.bodySmall.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
       );
     }
 
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: state.items.length,
-      clipBehavior: Clip.none,
-      itemBuilder: (context, index) {
-        final item = state.items[index];
-        return Container(
-          width: 320,
-          margin: const EdgeInsets.only(right: 20),
-          decoration: BoxDecoration(
-            color: AppColors.surface,
-            borderRadius: BorderRadius.circular(24),
-            border: Border.all(
-              color: AppColors.greyLight.withValues(alpha: 0.6),
-              width: 0.5,
+    return Stack(
+      alignment: Alignment.bottomCenter,
+      children: [
+        PageView.builder(
+          controller: _pageController,
+          onPageChanged: (index) {
+            setState(() {
+              _currentPage = index;
+            });
+          },
+          itemCount: state.items.length,
+          itemBuilder: (context, index) {
+            final item = state.items[index];
+            return Container(
+              margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.surface,
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: AppColors.greyLight.withValues(alpha: 0.6),
+                  width: 0.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.greyLight.withValues(alpha: 0.2),
+                    blurRadius: 8,
+                    offset: const Offset(0, 4),
+                  ),
+                ],
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: AppColors.greyLight.withValues(alpha: 0.3),
+                        borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(24),
+                        ),
+                        image:
+                            item.imageUrl != null && item.imageUrl!.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(item.imageUrl!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
+                      ),
+                      child: item.imageUrl == null || item.imageUrl!.isEmpty
+                          ? const Center(
+                              child: Icon(
+                                Icons.article_outlined,
+                                color: AppColors.textSecondary,
+                                size: 36,
+                              ),
+                            )
+                          : null,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          item.source,
+                          style: AppTextStyles.overline.copyWith(
+                            letterSpacing: 2,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          item.title,
+                          style: AppTextStyles.titleMedium.copyWith(
+                            fontWeight: FontWeight.w500,
+                            height: 1.3,
+                          ),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
+        // Dots indicator
+        Positioned(
+          bottom: 16,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(
+              state.items.length,
+              (i) => AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                margin: const EdgeInsets.symmetric(horizontal: 4),
+                width: _currentPage == i ? 16 : 6,
+                height: 6,
+                decoration: BoxDecoration(
+                  color: _currentPage == i
+                      ? AppColors.primary
+                      : AppColors.greyLight.withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(3),
+                ),
+              ),
             ),
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    color: AppColors.greyLight.withValues(alpha: 0.3),
-                    borderRadius: const BorderRadius.vertical(
-                      top: Radius.circular(24),
-                    ),
-                    image: item.imageUrl != null && item.imageUrl!.isNotEmpty
-                        ? DecorationImage(
-                            image: NetworkImage(item.imageUrl!),
-                            fit: BoxFit.cover,
-                          )
-                        : null,
-                  ),
-                  child: item.imageUrl == null || item.imageUrl!.isEmpty
-                      ? const Center(
-                          child: Icon(
-                            Icons.article_outlined,
-                            color: AppColors.textSecondary,
-                            size: 36,
-                          ),
-                        )
-                      : null,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.source,
-                      style: AppTextStyles.overline.copyWith(
-                        letterSpacing: 2,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      item.title,
-                      style: AppTextStyles.titleMedium.copyWith(
-                        fontWeight: FontWeight.w500,
-                        height: 1.3,
-                      ),
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        );
-      },
+        ),
+      ],
     );
   }
 

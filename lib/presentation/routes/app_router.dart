@@ -13,20 +13,15 @@ import '../pages/study/library_stats_page.dart';
 import '../pages/study/grades_page.dart';
 import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
+import '../pages/help/second_hand_list_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
   routes: [
     // 启动页
-    GoRoute(
-      path: '/splash',
-      builder: (context, state) => const SplashScreen(),
-    ),
+    GoRoute(path: '/splash', builder: (context, state) => const SplashScreen()),
     // 登录页
-    GoRoute(
-      path: '/login',
-      builder: (context, state) => const LoginPage(),
-    ),
+    GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
     // 注册页
     GoRoute(
       path: '/register',
@@ -38,15 +33,9 @@ final GoRouter appRouter = GoRouter(
       builder: (context, state) => const ForgotPasswordPage(),
     ),
     // 首页
-    GoRoute(
-      path: '/home',
-      builder: (context, state) => const HomePage(),
-    ),
+    GoRoute(path: '/home', builder: (context, state) => const HomePage()),
     // 个人中心
-    GoRoute(
-      path: '/profile',
-      builder: (context, state) => const ProfilePage(),
-    ),
+    GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
     // 互助模块 - 编辑发布页
     GoRoute(
       path: '/help/post',
@@ -65,6 +54,11 @@ final GoRouter appRouter = GoRouter(
         }
         return PostEditPage(type: type);
       },
+    ),
+    // 互助模块 - 闲置市场列表页
+    GoRoute(
+      path: '/help/second_hand',
+      builder: (context, state) => const SecondHandListPage(),
     ),
     // 图书馆模块
     GoRoute(
@@ -90,10 +84,7 @@ final GoRouter appRouter = GoRouter(
       ],
     ),
     // 成绩查询/GPA计算器
-    GoRoute(
-      path: '/grades',
-      builder: (context, state) => const GradesPage(),
-    ),
+    GoRoute(path: '/grades', builder: (context, state) => const GradesPage()),
     // 考试倒计时
     GoRoute(
       path: '/exam-countdown',

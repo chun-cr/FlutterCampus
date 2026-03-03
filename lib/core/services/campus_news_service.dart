@@ -1,60 +1,54 @@
-import 'package:dio/dio.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../domain/models/campus_news.dart';
 
-const String _defaultApiBaseUrl = 'http://10.0.2.2:3000/api';
-
 class CampusNewsService {
-  CampusNewsService(this._dio);
-
-  final Dio _dio;
+  final SupabaseClient _supabase = Supabase.instance.client;
 
   Future<List<CampusNews>> fetchNews({NewsCategory? category}) async {
-    final response = await _dio.get<Map<String, dynamic>>(
-      '/news',
-      queryParameters: {
-        if (category != null) 'category': category.name,
-        'limit': 20,
-        'offset': 0,
-      },
-    );
+    try {
+      var query = _supabase.from('campus_news').select();
 
-    final data = response.data;
-    if (data == null || data['items'] is! List) {
-      throw Exception('资讯接口返回格式错误');
+      if (category != null) {
+        query = query.eq('category', category.name);
+      }
+
+      // limit to 8 items as requested
+      final response = await query
+          .order('published_at', ascending: false)
+          .limit(8);
+
+      return response.map((json) {
+        // Map database fields to the model's expected camelCase format
+        final mappedJson = {
+          'id': json['id']?.toString() ?? '',
+          'title': json['title'] ?? '',
+          'summary': json['summary'],
+          'imageUrl': json['image_url'] ?? json['imageUrl'],
+          'source': json['source'] ?? '学校',
+          'category': json['category'] ?? 'notice',
+          'publishedAt':
+              json['published_at'] ??
+              json['publishedAt'] ??
+              DateTime.now().toIso8601String(),
+          'isTop': json['is_top'] ?? json['isTop'] ?? false,
+        };
+
+        return CampusNews.fromJson(mappedJson);
+      }).toList();
+    } catch (e) {
+      print('CampusNewsService fetch error: $e');
+      throw Exception('获取资讯失败');
     }
-
-    final List<dynamic> items = data['items'] as List<dynamic>;
-    return items
-        .map((item) => CampusNews.fromJson(item as Map<String, dynamic>))
-        .toList();
   }
 }
 
-final dioProvider = Provider<Dio>((ref) {
-  return Dio(
-    BaseOptions(
-      baseUrl: const String.fromEnvironment(
-        'API_BASE_URL',
-        defaultValue: _defaultApiBaseUrl,
-      ),
-      connectTimeout: const Duration(seconds: 8),
-      receiveTimeout: const Duration(seconds: 8),
-      sendTimeout: const Duration(seconds: 8),
-    ),
-  );
-});
-
 final campusNewsServiceProvider = Provider<CampusNewsService>((ref) {
-  return CampusNewsService(ref.watch(dioProvider));
+  return CampusNewsService();
 });
 
 class CampusNewsState {
-  CampusNewsState({
-    this.items = const [],
-    this.isLoading = false,
-    this.error,
-  });
+  CampusNewsState({this.items = const [], this.isLoading = false, this.error});
 
   final List<CampusNews> items;
   final bool isLoading;

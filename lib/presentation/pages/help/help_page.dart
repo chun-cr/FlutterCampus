@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../../core/services/second_hand_service.dart';
 import '../../theme/theme.dart';
 
 class HelpPage extends ConsumerWidget {
@@ -8,6 +9,8 @@ class HelpPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final secondHandState = ref.watch(helpSecondHandStateProvider);
+
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -84,84 +87,134 @@ class HelpPage extends ConsumerWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   _buildSectionHeader('闲置市场'),
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 16, right: 4),
-                    child: Text(
-                      '查看全部',
-                      style: AppTextStyles.labelMedium.copyWith(
-                        color: AppColors.primary,
+                  GestureDetector(
+                    onTap: () => context.push('/help/second_hand'),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16, right: 4),
+                      child: Text(
+                        '查看全部',
+                        style: AppTextStyles.labelMedium.copyWith(
+                          color: AppColors.primary,
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
-              SizedBox(
-                height: 200,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  clipBehavior: Clip.none,
-                  itemCount: 4,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      width: 160,
-                      margin: const EdgeInsets.only(right: 20),
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        borderRadius: BorderRadius.circular(24),
-                        border: Border.all(
-                          color: AppColors.greyLight.withValues(alpha: 0.6),
-                          width: 0.5,
-                        ),
+              if (secondHandState.isLoading)
+                const SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: CircularProgressIndicator(color: AppColors.primary),
+                  ),
+                )
+              else if (secondHandState.error != null)
+                SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      secondHandState.error!,
+                      style: AppTextStyles.bodyMedium,
+                    ),
+                  ),
+                )
+              else if (secondHandState.items.isEmpty)
+                SizedBox(
+                  height: 200,
+                  child: Center(
+                    child: Text(
+                      '暂无闲置物品',
+                      style: AppTextStyles.bodyMedium.copyWith(
+                        color: AppColors.textSecondary,
                       ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: AppColors.background,
-                                borderRadius: const BorderRadius.vertical(
-                                  top: Radius.circular(24),
-                                ),
-                                image: DecorationImage(
-                                  image: NetworkImage(
-                                    index % 2 == 0
-                                        ? 'https://images.unsplash.com/photo-1544947950-fa07a98d237f?auto=format&fit=crop&q=80&w=400'
-                                        : 'https://images.unsplash.com/photo-1527864550417-7fd91fc51a46?auto=format&fit=crop&q=80&w=400',
+                    ),
+                  ),
+                )
+              else
+                SizedBox(
+                  height: 200,
+                  child: ListView.builder(
+                    scrollDirection: Axis.horizontal,
+                    clipBehavior: Clip.none,
+                    itemCount: secondHandState.items.length,
+                    itemBuilder: (context, index) {
+                      final item = secondHandState.items[index];
+                      return GestureDetector(
+                        onTap: () {}, // Optional details page
+                        child: Container(
+                          width: 160,
+                          margin: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            color: AppColors.surface,
+                            borderRadius: BorderRadius.circular(24),
+                            border: Border.all(
+                              color: AppColors.greyLight.withValues(alpha: 0.6),
+                              width: 0.5,
+                            ),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Expanded(
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    color: AppColors.background,
+                                    borderRadius: const BorderRadius.vertical(
+                                      top: Radius.circular(24),
+                                    ),
+                                    image:
+                                        item.imageUrl != null &&
+                                            item.imageUrl!.isNotEmpty
+                                        ? DecorationImage(
+                                            image: NetworkImage(item.imageUrl!),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : null,
                                   ),
-                                  fit: BoxFit.cover,
+                                  child:
+                                      item.imageUrl == null ||
+                                          item.imageUrl!.isEmpty
+                                      ? const Center(
+                                          child: Icon(
+                                            Icons.image_not_supported_outlined,
+                                            color: AppColors.textSecondary,
+                                            size: 28,
+                                          ),
+                                        )
+                                      : null,
                                 ),
                               ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  index % 2 == 0 ? '设计类图书' : '无线鼠标',
-                                  style: AppTextStyles.labelMedium.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                  maxLines: 1,
+                              Padding(
+                                padding: const EdgeInsets.all(16),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      item.title,
+                                      style: AppTextStyles.labelMedium.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                    const SizedBox(height: 4),
+                                    Text(
+                                      '¥ ${item.price.toStringAsFixed(0)}',
+                                      style: AppTextStyles.caption.copyWith(
+                                        color: AppColors.textSecondary,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                                const SizedBox(height: 4),
-                                Text(
-                                  '¥ ${index % 2 == 0 ? '150' : '280'}',
-                                  style: AppTextStyles.caption.copyWith(
-                                    color: AppColors.textSecondary,
-                                  ),
-                                ),
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    );
-                  },
+                        ),
+                      );
+                    },
+                  ),
                 ),
-              ),
               const SizedBox(height: 48),
 
               // 4. 校园搭子 (Community Requests)

@@ -1,0 +1,142 @@
+-- WARNING: This schema is for context only and is not meant to be run.
+-- Table order and constraints may not be valid for execution.
+
+CREATE TABLE public.books (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  author text NOT NULL,
+  isbn text NOT NULL UNIQUE,
+  category text,
+  summary text,
+  location text NOT NULL,
+  total_copies integer DEFAULT 1,
+  available_copies integer DEFAULT 1,
+  cover_url text,
+  CONSTRAINT books_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.borrowed_books (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  author text NOT NULL,
+  isbn text NOT NULL,
+  borrow_date timestamp with time zone NOT NULL,
+  due_date timestamp with time zone NOT NULL,
+  user_id text NOT NULL,
+  CONSTRAINT borrowed_books_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.campus_news (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  summary text,
+  image_url text,
+  source text NOT NULL,
+  category text DEFAULT 'notice'::text,
+  is_top boolean DEFAULT false,
+  published_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT campus_news_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.courses (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  teacher text NOT NULL,
+  location text NOT NULL,
+  weekday integer NOT NULL,
+  start_time text NOT NULL,
+  end_time text NOT NULL,
+  start_week integer NOT NULL,
+  end_week integer NOT NULL,
+  color text,
+  CONSTRAINT courses_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.exam_countdowns (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL,
+  exam_name text NOT NULL,
+  exam_date date NOT NULL,
+  exam_type text NOT NULL,
+  note text,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT exam_countdowns_pkey PRIMARY KEY (id),
+  CONSTRAINT exam_countdowns_user_id_fkey FOREIGN KEY (user_id) REFERENCES auth.users(id)
+);
+CREATE TABLE public.grades (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  course_id text NOT NULL,
+  course_name text NOT NULL,
+  semester text NOT NULL,
+  score numeric NOT NULL,
+  grade_point numeric NOT NULL,
+  credit numeric NOT NULL,
+  status text DEFAULT 'passed'::text,
+  CONSTRAINT grades_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.help_tasks (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  description text,
+  type text DEFAULT 'errand'::text,
+  publisher_id text NOT NULL,
+  reward numeric,
+  required_count integer,
+  current_count integer DEFAULT 0,
+  is_completed boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT help_tasks_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.library_announcements (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  content text NOT NULL,
+  type text,
+  cover_url text,
+  is_urgent boolean DEFAULT false,
+  published_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT library_announcements_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.lost_and_found (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  description text,
+  location text NOT NULL,
+  type text DEFAULT 'found'::text,
+  image_url text,
+  publisher_id text NOT NULL,
+  contact_info text,
+  is_resolved boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT lost_and_found_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.second_hand_items (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  title text NOT NULL,
+  description text,
+  price numeric NOT NULL,
+  original_price numeric,
+  image_url text,
+  seller_id text NOT NULL,
+  condition text DEFAULT 'good'::text,
+  is_sold boolean DEFAULT false,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT second_hand_items_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.study_rooms (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  name text NOT NULL,
+  total_seats integer NOT NULL,
+  available_seats integer NOT NULL,
+  is_open boolean DEFAULT true,
+  CONSTRAINT study_rooms_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.users (
+  id uuid NOT NULL,
+  username text UNIQUE,
+  name text,
+  email text,
+  phone text,
+  type text DEFAULT 'student'::text,
+  student_id text,
+  department text,
+  created_at timestamp with time zone DEFAULT now(),
+  CONSTRAINT users_pkey PRIMARY KEY (id),
+  CONSTRAINT users_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
+);
