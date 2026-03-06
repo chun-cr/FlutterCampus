@@ -1,7 +1,9 @@
 import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/campus_news_service.dart';
+import '../../../features/life/pages/map_detail_page.dart';
 import '../../theme/theme.dart';
 
 class LifePage extends ConsumerStatefulWidget {
@@ -15,6 +17,15 @@ class _LifePageState extends ConsumerState<LifePage> {
   late PageController _pageController;
   Timer? _timer;
   int _currentPage = 0;
+
+  /// 高德静态地图预览 URL（Web服务 Key）
+  static const String _staticMapUrl =
+      'https://restapi.amap.com/v3/staticmap'
+      '?location=113.954625,35.299916'
+      '&zoom=17'
+      '&size=600*300'
+      '&markers=mid,,A:113.954625,35.299916'
+      '&key=12c1f063640f6b2b9c2efb205e54c325';
 
   @override
   void initState() {
@@ -112,42 +123,85 @@ class _LifePageState extends ConsumerState<LifePage> {
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
-                    Container(
-                      height: 160,
-                      width: double.infinity,
-                      decoration: const BoxDecoration(
-                        color: AppColors.background,
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(24),
-                        ),
-                        image: DecorationImage(
-                          image: NetworkImage(
-                            'https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&q=80&w=800&h=400',
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => const MapDetailPage(),
                           ),
-                          fit: BoxFit.cover,
-                          opacity: 0.6,
-                        ),
-                      ),
-                      child: Center(
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
+                        );
+                      },
+                      child: SizedBox(
+                        height: 160,
+                        width: double.infinity,
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.vertical(
+                            top: Radius.circular(24),
                           ),
-                          decoration: BoxDecoration(
-                            color: AppColors.surface.withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+                          child: Stack(
                             children: [
-                              const Icon(
-                                Icons.location_on_outlined,
-                                size: 16,
-                                color: AppColors.textPrimary,
+                              Positioned.fill(
+                                child: Image.network(
+                                  _staticMapUrl,
+                                  fit: BoxFit.cover,
+                                  loadingBuilder: (context, child, progress) {
+                                    if (progress == null) return child;
+                                    return Container(
+                                      color: AppColors.background,
+                                      alignment: Alignment.center,
+                                      child: const CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    );
+                                  },
+                                  errorBuilder: (context, error, stack) {
+                                    return Container(
+                                      color: AppColors.background,
+                                      alignment: Alignment.center,
+                                      child: const Icon(
+                                        Icons.map_outlined,
+                                        size: 36,
+                                        color: AppColors.textSecondary,
+                                      ),
+                                    );
+                                  },
+                                ),
                               ),
-                              const SizedBox(width: 6),
-                              Text('查看地图', style: AppTextStyles.labelMedium),
+                              // 半透明遮罩 + 提示文字
+                              Positioned.fill(
+                                child: Container(
+                                  color: Colors.transparent,
+                                  alignment: Alignment.center,
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: AppColors.surface.withValues(
+                                        alpha: 0.9,
+                                      ),
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        const Icon(
+                                          Icons.location_on_outlined,
+                                          size: 16,
+                                          color: AppColors.textPrimary,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '查看地图',
+                                          style: AppTextStyles.labelMedium,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -179,7 +233,7 @@ class _LifePageState extends ConsumerState<LifePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    '校园専车 A线',
+                                    '校园专车 A线',
                                     style: AppTextStyles.titleMedium,
                                   ),
                                   const SizedBox(height: 4),

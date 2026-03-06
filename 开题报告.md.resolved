@@ -1,0 +1,241 @@
+# 毕业设计（论文）开题报告
+
+---
+
+## 一、课题名称
+
+**基于 Flutter 的智慧校园移动应用设计与实现**
+
+---
+
+## 二、选题背景及意义
+
+### 2.1 选题背景
+
+随着移动互联网技术的飞速发展和高校信息化建设的不断推进，智慧校园已成为高等教育改革的重要方向。当前，在校大学生在日常学习与生活中面临着诸多信息分散、服务碎片化的问题：课程表查询、成绩查看、图书馆座位预约、考试倒计时、校园新闻资讯、二手物品交易、失物招领、互助任务等功能分散在多个独立平台或需要线下排队办理，极大地降低了师生的使用体验和校园信息的流通效率。
+
+与此同时，跨平台移动开发框架的成熟为一站式校园服务应用的落地提供了技术可能。Google 推出的 Flutter 框架凭借其"一次编写，多端运行"的特性、高性能渲染引擎和丰富的组件生态，已成为移动端跨平台开发的首选方案之一。结合 Supabase 云数据库等 BaaS（Backend as a Service）服务，可以显著降低后端开发成本，快速实现功能完备的移动应用。
+
+### 2.2 研究意义
+
+1. **实用价值**：整合校园学习、生活和互助服务于一体，切实解决师生信息获取分散、操作繁琐的痛点，提升校园信息化服务水平。
+2. **技术探索**：探索 Flutter 跨平台技术在实际项目中的应用实践，研究前后端一体化（Flutter + NestJS + Supabase）的开发模式与最佳实践。
+3. **角色差异化设计**：通过区分学生端与教师端的功能模块和导航结构，探索面向多角色用户的移动应用设计方法。
+4. **工程实践**：通过完整的软件工程流程（需求分析 → 架构设计 → 编码实现 → 测试 → 部署），锻炼综合运用专业知识解决实际问题的能力。
+
+---
+
+## 三、国内外研究现状
+
+### 3.1 智慧校园应用发展现状
+
+国内外高校在智慧校园建设上已有较多探索。国内以"超级课程表""完美校园""今日校园"为代表的商业产品已覆盖课表查看、成绩查询等基础功能，但在个性化服务、二手交易、互助任务等社区化功能上仍有不足。国外如美国的 Ellucian Go、英国的 CampusM 等平台，虽然功能完善，但因文化差异和数据隔离问题，难以直接适用于国内高校。
+
+### 3.2 跨平台开发技术现状
+
+跨平台移动开发技术经历了从 Hybrid（Cordova/Ionic）到 React Native，再到 Flutter 的发展历程。Flutter 采用 Skia 自绘引擎，无需桥接原生组件，在渲染性能和 UI 一致性方面具有显著优势。目前 Flutter 已被包括阿里巴巴、字节跳动、腾讯在内的众多企业在生产环境中采用，生态日趋成熟。
+
+### 3.3 BaaS 后端服务发展现状
+
+Supabase 作为 Firebase 的开源替代方案，提供了 PostgreSQL 数据库、认证（Auth）、实时订阅、存储等开箱即用的云服务。其行级安全策略（RLS）机制为多用户数据隔离提供了原生支持，结合 NestJS 框架的模块化后端开发能力，可以构建安全、可扩展的服务端架构。
+
+---
+
+## 四、研究内容
+
+本课题设计并实现一款名为"校园通"的智慧校园移动应用，主要研究内容包括：
+
+### 4.1 系统需求分析
+
+- 面向学生和教师两类用户角色进行差异化需求分析
+- 功能模块划分：学习中心、校园生活、互助社区、个人中心（学生端）；教学工作台、教务办公、校园社区（教师端）
+- 非功能性需求：跨平台运行、流畅的用户体验、数据安全与隐私保护
+
+### 4.2 系统设计
+
+#### 4.2.1 整体架构设计
+
+采用**前后端分离**的三层架构：
+
+| 层级 | 技术栈 | 说明 |
+|------|--------|------|
+| **前端（Flutter 客户端）** | Flutter 3.x + Dart | 跨平台 UI 层，支持 Android、iOS、Web、Windows、macOS、Linux |
+| **后端（NestJS 服务端）** | NestJS + TypeScript + Prisma ORM | RESTful API 服务层，处理认证、成绩、新闻等业务逻辑 |
+| **数据层（Supabase 云服务）** | PostgreSQL + Supabase Auth + Storage | 云数据库、用户认证、文件存储、行级安全策略（RLS） |
+
+#### 4.2.2 前端架构设计
+
+采用**分层架构**（Clean Architecture 思想）：
+
+```
+lib/
+├── core/             # 核心层：服务接口、工具类
+│   └── services/     # 数据服务（AuthService、CourseService、GradeService 等）
+├── domain/           # 领域层：数据模型定义
+│   └── models/       # 实体模型（User、Course、Grade、Book、CampusNews 等）
+├── presentation/     # 展示层：UI 页面与组件
+│   ├── components/   # 可复用组件（CampusAppBar、CampusButton、CampusCard 等）
+│   ├── pages/        # 页面模块
+│   │   ├── auth/     # 认证模块（登录、注册、忘记密码、启动页）
+│   │   ├── home/     # 首页（含底部导航、角色切换）
+│   │   ├── study/    # 学习模块（图书馆、课表、成绩、考试倒计时）
+│   │   ├── life/     # 生活模块（校园新闻、食堂信息）
+│   │   ├── help/     # 互助模块（失物招领、二手交易、帮忙任务）
+│   │   ├── teacher/  # 教师模块（教学工作台、教务办公）
+│   │   └── profile/  # 个人中心
+│   ├── routes/       # 路由配置（go_router）
+│   └── theme/        # 主题系统（颜色、字体、间距、全局主题）
+```
+
+#### 4.2.3 数据库设计
+
+基于 Supabase（PostgreSQL）的数据库包含以下核心表：
+
+| 表名 | 说明 | 核心字段 |
+|------|------|----------|
+| `users` | 用户信息表 | id, username, name, email, phone, type(student/teacher), student_id, department |
+| `courses` | 课程表 | id, name, teacher, location, weekday, start_time, end_time, start_week, end_week, color |
+| `grades` | 成绩表 | id, course_name, semester, score, grade_point, credit, status |
+| `books` | 图书信息表 | id, title, author, isbn, category, location, total_copies, available_copies, cover_url |
+| `borrowed_books` | 借阅记录表 | id, title, author, isbn, borrow_date, due_date, user_id |
+| `study_rooms` | 自习室/座位表 | id, name, total_seats, available_seats, is_open |
+| `campus_news` | 校园新闻表 | id, title, summary, image_url, source, category, is_top, published_at |
+| `exam_countdowns` | 考试倒计时表 | id, user_id, exam_name, exam_date, exam_type, note |
+| `second_hand_items` | 二手物品表 | id, title, description, price, original_price, image_url, seller_id, condition, is_sold |
+| `lost_and_found` | 失物招领表 | id, title, description, location, type(lost/found), image_url, publisher_id, is_resolved |
+| `help_tasks` | 互助任务表 | id, title, description, type, publisher_id, reward, required_count, current_count |
+| `library_announcements` | 图书馆公告表 | id, title, content, type, cover_url, is_urgent |
+
+### 4.3 功能模块设计与实现
+
+#### 4.3.1 用户认证模块
+- 基于 Supabase Auth 的用户注册与登录
+- 支持**邮箱、手机号、学号**三种登录方式
+- 忘记密码与密码重置功能
+- JWT Token 认证机制（NestJS 后端 Passport + JWT 策略）
+- 用户角色区分（学生/教师），首页根据角色动态切换导航和功能页面
+
+#### 4.3.2 学习中心模块（学生端）
+- **课程表**：从数据库拉取课程数据，以周视图网格形式展示；支持课程详情弹窗
+- **成绩查询与 GPA 计算器**：展示各学期成绩列表，自动计算平均绩点
+- **考试倒计时**：用户自定义倒计时事件，支持增删改查，实时倒计时显示
+- **图书馆服务**：
+  - 图书搜索（按书名、作者、ISBN 检索）
+  - 借阅记录管理
+  - 座位预约系统
+  - 阅读统计与图表展示
+  - 图书馆公告
+
+#### 4.3.3 校园生活模块（学生端）
+- **校园新闻**：从数据库获取新闻列表，支持轮播图和分类浏览，含置顶标记
+- **食堂信息**：展示各食堂的菜品和评分
+
+#### 4.3.4 互助社区模块
+- **失物招领**：发布丢失/拾获物品信息，含图片上传和联系方式
+- **二手交易市场**：浏览/发布二手物品，含价格、新旧程度、图片展示
+- **互助任务**：发布/领取跑腿等互助任务，含赏金和进度管理
+
+#### 4.3.5 教师端模块
+- **教学工作台**：教学相关的快捷入口和统计概览
+- **教务办公**：办公相关功能和工具入口
+
+#### 4.3.6 个人中心模块
+- 用户信息展示与编辑
+- 头像管理（支持网络图片）
+- 退出登录
+
+### 4.4 关键技术研究
+
+1. **Flutter 状态管理方案**：采用 Riverpod 实现响应式状态管理，研究 StateNotifierProvider 在认证状态、数据加载等场景中的应用
+2. **路由管理**：使用 go_router 实现声明式路由，支持路由参数传递和嵌套路由
+3. **前后端数据交互**：Dio 网络请求库 + Supabase Client SDK 双通道数据获取策略
+4. **本地缓存策略**：Hive 轻量级键值存储，结合 cached_network_image 实现图片缓存
+5. **主题系统设计**：统一的设计令牌（Design Tokens）体系，涵盖颜色（AppColors）、字体（AppTextStyles）、间距（AppSpacing）和全局主题（AppTheme），支持亮色/暗色模式切换
+6. **组件化开发**：封装 CampusAppBar、CampusButton、CampusCard、CampusFormField、CampusLoading、CampusEmptyState 等可复用组件，确保 UI 一致性
+
+---
+
+## 五、研究方案及技术路线
+
+### 5.1 技术路线
+
+```
+需求分析 → 架构设计 → 数据库设计 → UI设计 → 前端开发 → 后端开发 → 联调测试 → 优化部署
+```
+
+### 5.2 技术选型依据
+
+| 技术 | 选型 | 理由 |
+|------|------|------|
+| 前端框架 | Flutter 3.x (Dart) | 跨平台、高性能自绘引擎、热重载开发效率高 |
+| 状态管理 | Riverpod 2.5 | 编译安全、可测试性强、无 BuildContext 依赖 |
+| 路由 | go_router 14.x | Flutter 官方推荐、声明式路由、支持深链接 |
+| 网络请求 | Dio 5.x | 功能完善、支持拦截器、请求/响应日志 |
+| 本地存储 | Hive | 轻量、高性能、无需原生桥接 |
+| UI 增强 | google_fonts, cached_network_image, fl_chart, shimmer | 字体美化、图片缓存、图表展示、加载动效 |
+| 后端框架 | NestJS 11.x (TypeScript) | 模块化、依赖注入、企业级架构、TypeScript 类型安全 |
+| ORM | Prisma 6.x | 类型安全的数据库工具、自动生成客户端、支持迁移 |
+| 认证 | @nestjs/passport + @nestjs/jwt | 灵活的认证策略、标准化 JWT 实现 |
+| 数据库 | Supabase (PostgreSQL) | 开源 BaaS、内建 Auth/RLS/Storage、实时订阅 |
+| 密码加密 | bcrypt | 行业标准、自动加盐、防彩虹表攻击 |
+
+### 5.3 开发工具与环境
+
+- **IDE**：VS Code + Flutter Extension + Dart Extension
+- **版本管理**：Git
+- **数据库管理**：Supabase Dashboard + SQL Editor
+- **API 测试**：Postman / Thunder Client
+- **包管理**：Flutter Pub (前端) + npm (后端)
+
+---
+
+## 六、进度安排
+
+| 阶段 | 时间 | 工作内容 |
+|------|------|----------|
+| 第一阶段 | 第1-2周 | 需求调研、文献阅读、撰写开题报告 |
+| 第二阶段 | 第3-4周 | 系统总体架构设计、数据库设计、UI/UX 设计 |
+| 第三阶段 | 第5-7周 | 前端开发：认证模块、首页框架、主题系统、核心组件库 |
+| 第四阶段 | 第8-10周 | 前端开发：学习中心（课表、成绩、图书馆、考试倒计时）、校园生活（新闻、食堂）模块 |
+| 第五阶段 | 第11-12周 | 前端开发：互助社区（失物招领、二手交易、互助任务）、教师端、个人中心模块 |
+| 第六阶段 | 第13-14周 | 后端开发：NestJS API 接口开发（认证、成绩、新闻、倒计时等） |
+| 第七阶段 | 第15-16周 | 系统联调、Bug 修复、性能优化、UI 精细调整 |
+| 第八阶段 | 第17-18周 | 撰写毕业论文、制作答辩 PPT |
+
+---
+
+## 七、预期成果
+
+1. 一套完整的智慧校园移动应用系统，包括 Flutter 客户端和 NestJS 后端服务
+2. 支持 Android、iOS、Web、Windows 等多平台运行
+3. 实现学生端和教师端的差异化功能设计
+4. 涵盖学习管理（课表、成绩、图书馆、考试倒计时）、校园生活（新闻、食堂）、互助社区（失物招领、二手交易、互助任务）等 **12+** 个核心数据表和 **20+** 个功能页面
+5. 毕业设计论文一篇
+
+---
+
+## 八、参考文献
+
+[1] 吴恩达, 等. 移动互联网环境下智慧校园服务平台设计与实现[J]. 计算机工程与设计, 2023.
+
+[2] Google. Flutter Documentation [EB/OL]. https://docs.flutter.dev/.
+
+[3] Supabase. Supabase Documentation [EB/OL]. https://supabase.com/docs.
+
+[4] NestJS. NestJS Documentation [EB/OL]. https://docs.nestjs.com/.
+
+[5] Prisma. Prisma Documentation [EB/OL]. https://www.prisma.io/docs.
+
+[6] 张三, 李四. 基于 Flutter 的跨平台移动应用开发实践[J]. 软件工程, 2024.
+
+[7] Riverpod. Riverpod Documentation [EB/OL]. https://riverpod.dev/.
+
+[8] 王五. 高校智慧校园移动端信息服务系统的设计与实现[D]. XX大学, 2023.
+
+[9] Flutter Team. go_router Package [EB/OL]. https://pub.dev/packages/go_router.
+
+[10] 刘六. 基于 BaaS 的移动应用快速开发模式研究[J]. 计算机应用研究, 2024.
+
+---
+
+> **说明**：本开题报告基于项目"校园通"（campus_life_app）的实际代码结构和已实现功能编写，所有技术选型、数据库表结构、功能模块、架构设计均来源于项目代码的真实情况。参考文献中的 [1][6][8][10] 为示例条目，请替换为实际引用文献。

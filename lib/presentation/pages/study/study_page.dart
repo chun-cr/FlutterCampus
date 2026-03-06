@@ -92,14 +92,21 @@ class StudyPage extends ConsumerWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
                         _buildQuickAction(
+                          context,
                           Icons.calendar_today_outlined,
                           '完整课表',
+                          onTap: () => context.push('/schedule'),
                         ),
                         _buildQuickAction(
+                          context,
                           Icons.notifications_none_outlined,
                           '课程提醒',
                         ),
-                        _buildQuickAction(Icons.meeting_room_outlined, '查找教室'),
+                        _buildQuickAction(
+                          context,
+                          Icons.meeting_room_outlined,
+                          '查找教室',
+                        ),
                       ],
                     ),
                   ],
@@ -316,23 +323,31 @@ class StudyPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickAction(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: AppColors.textPrimary.withValues(alpha: 0.7),
-          size: 28,
-        ),
-        const SizedBox(height: 12),
-        Text(
-          label,
-          style: AppTextStyles.labelMedium.copyWith(
-            color: AppColors.textSecondary,
+  Widget _buildQuickAction(
+    BuildContext context,
+    IconData icon,
+    String label, {
+    VoidCallback? onTap,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Icon(
+            icon,
+            color: AppColors.textPrimary.withValues(alpha: 0.7),
+            size: 28,
           ),
-        ),
-      ],
+          const SizedBox(height: 12),
+          Text(
+            label,
+            style: AppTextStyles.labelMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
+          ),
+        ],
+      ),
     );
   }
 

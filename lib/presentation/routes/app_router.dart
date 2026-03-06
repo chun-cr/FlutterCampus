@@ -14,6 +14,7 @@ import '../pages/study/grades_page.dart';
 import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
 import '../pages/help/second_hand_list_page.dart';
+import '../pages/study/schedule_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -89,6 +90,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/exam-countdown',
       builder: (context, state) => const ExamCountdownPage(),
+    ),
+    // 完整课表
+    GoRoute(
+      path: '/schedule',
+      builder: (context, state) => const SchedulePage(),
     ),
   ],
 );
