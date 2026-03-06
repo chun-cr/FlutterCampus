@@ -42,7 +42,7 @@ class HelpPage extends ConsumerWidget {
                   Expanded(
                     child: _buildActionButton(
                       Icons.people_outline,
-                      '校园搭子',
+                      '互助请求',
                       () => context.push('/help/post?type=helpTask'),
                     ),
                   ),

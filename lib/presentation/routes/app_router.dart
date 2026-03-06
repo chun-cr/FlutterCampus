@@ -1,4 +1,6 @@
 import 'package:go_router/go_router.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter/material.dart';
 import '../pages/auth/splash_screen.dart';
 import '../pages/auth/login_page.dart';
 import '../pages/auth/register_page.dart';
@@ -15,6 +17,9 @@ import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
 import '../pages/help/second_hand_list_page.dart';
 import '../pages/study/schedule_page.dart';
+import '../pages/teacher/teacher_grade_page.dart';
+import '../../features/office/pages/leave_approval_page.dart';
+import '../../features/study/pages/leave_apply_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -84,8 +89,11 @@ final GoRouter appRouter = GoRouter(
         ),
       ],
     ),
-    // 成绩查询/GPA计算器
-    GoRoute(path: '/grades', builder: (context, state) => const GradesPage()),
+    // 成绩查询（根据角色跳转不同页面）
+    GoRoute(
+      path: '/grades',
+      builder: (context, state) => const _GradeRouterPage(),
+    ),
     // 考试倒计时
     GoRoute(
       path: '/exam-countdown',
@@ -96,5 +104,64 @@ final GoRouter appRouter = GoRouter(
       path: '/schedule',
       builder: (context, state) => const SchedulePage(),
     ),
+    // 请假审批
+    GoRoute(
+      path: '/leave-approval',
+      builder: (context, state) => const LeaveApprovalPage(),
+    ),
+    // 学生请假申请
+    GoRoute(
+      path: '/leave-apply',
+      builder: (context, state) => const LeaveApplyPage(),
+    ),
   ],
 );
+
+/// 成绩路由分发页：查询当前用户角色后跳转对应页面
+class _GradeRouterPage extends StatefulWidget {
+  const _GradeRouterPage();
+
+  @override
+  State<_GradeRouterPage> createState() => _GradeRouterPageState();
+}
+
+class _GradeRouterPageState extends State<_GradeRouterPage> {
+  late Future<Widget> _pageFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageFuture = _resolveGradePage();
+  }
+
+  Future<Widget> _resolveGradePage() async {
+    final currentUserId =
+        Supabase.instance.client.auth.currentUser?.id;
+    if (currentUserId == null) return const GradesPage();
+    try {
+      final response = await Supabase.instance.client
+          .from('users')
+          .select('type')
+          .eq('id', currentUserId)
+          .single();
+      final type = response['type'] as String? ?? 'student';
+      if (type == 'teacher') return const TeacherGradePage();
+    } catch (_) {}
+    return const GradesPage();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<Widget>(
+      future: _pageFuture,
+      builder: (context, snapshot) {
+        if (snapshot.connectionState != ConnectionState.done) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
+        return snapshot.data ?? const GradesPage();
+      },
+    );
+  }
+}

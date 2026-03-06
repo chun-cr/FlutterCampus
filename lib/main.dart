@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 
 import 'package:hive_flutter/hive_flutter.dart';
@@ -47,9 +48,16 @@ class MyApp extends StatelessWidget {
       themeMode: ThemeMode.light,
       routerConfig: appRouter,
       debugShowCheckedModeBanner: false,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [Locale('zh', 'CN')],
     );
   }
 }
+
 
 final supabase = Supabase.instance.client;
 final dataMigrationServiceProvider = Provider<DataMigrationService>((ref) {

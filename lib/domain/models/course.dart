@@ -18,14 +18,14 @@ class Course {
   factory Course.fromJson(Map<String, dynamic> json) {
     return Course(
       id: json['id'] as String,
-      name: json['name'] as String,
-      teacher: json['teacher'] as String,
-      location: json['location'] as String,
-      weekday: json['weekday'] as int,
-      startTime: json['startTime'] as String,
-      endTime: json['endTime'] as String,
-      startWeek: json['startWeek'] as int,
-      endWeek: json['endWeek'] as int,
+      name: json['name'] as String? ?? '未命名课程',
+      teacher: json['teacher'] as String? ?? '未知教师',
+      location: json['location'] as String? ?? '未知地点',
+      weekday: json['weekday'] as int? ?? 1,
+      startTime: json['start_time'] as String? ?? '08:00',
+      endTime: json['end_time'] as String? ?? '09:00',
+      startWeek: json['start_week'] as int? ?? 1,
+      endWeek: json['end_week'] as int? ?? 16,
       color: json['color'] as String?,
     );
   }
@@ -79,10 +79,10 @@ class Course {
       'teacher': teacher,
       'location': location,
       'weekday': weekday,
-      'startTime': startTime,
-      'endTime': endTime,
-      'startWeek': startWeek,
-      'endWeek': endWeek,
+      'start_time': startTime,
+      'end_time': endTime,
+      'start_week': startWeek,
+      'end_week': endWeek,
       'color': color,
     };
   }

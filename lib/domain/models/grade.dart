@@ -10,6 +10,7 @@ class Grade {
     required this.credit,
     this.status = GradeStatus.passed,
     required this.createdAt,
+    this.teacherId,
   });
 
   /// 从 Supabase JSON 解析 (snake_case)
@@ -26,7 +27,10 @@ class Grade {
         (e) => e.name == json['status'],
         orElse: () => GradeStatus.passed,
       ),
-      createdAt: DateTime.parse(json['created_at'] as String),
+      createdAt: json['created_at'] != null
+          ? DateTime.parse(json['created_at'] as String)
+          : DateTime.now(),
+      teacherId: json['teacher_id'] as String?,
     );
   }
   final String id;
@@ -38,6 +42,7 @@ class Grade {
   final double credit; // 学分
   final GradeStatus status;
   final DateTime createdAt;
+  final String? teacherId;
 
   /// 等级制显示，如 A / B+ / C
   String get letterGrade {
@@ -77,6 +82,7 @@ class Grade {
     double? credit,
     GradeStatus? status,
     DateTime? createdAt,
+    String? teacherId,
   }) {
     return Grade(
       id: id ?? this.id,
@@ -88,6 +94,7 @@ class Grade {
       credit: credit ?? this.credit,
       status: status ?? this.status,
       createdAt: createdAt ?? this.createdAt,
+      teacherId: teacherId ?? this.teacherId,
     );
   }
 
@@ -102,7 +109,7 @@ class Grade {
       'grade_point': gradePoint,
       'credit': credit,
       'status': status.name,
-      'created_at': createdAt.toIso8601String(),
+      if (teacherId != null) 'teacher_id': teacherId,
     };
   }
 

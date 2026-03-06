@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:uuid/uuid.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../theme/theme.dart';
 import '../../../core/services/grade_service.dart';
 import '../../../domain/models/grade.dart';
@@ -35,11 +33,6 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           : gradesState.grades.isEmpty
           ? _buildEmptyState()
           : _buildContent(gradesState),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _showAddEditDialog(context),
-        backgroundColor: AppColors.primary,
-        child: const Icon(Icons.add, color: AppColors.white),
-      ),
     );
   }
 
@@ -82,7 +75,7 @@ class _GradesPageState extends ConsumerState<GradesPage> {
           Text('暂无成绩记录', style: AppTextStyles.titleMedium),
           const SizedBox(height: 8),
           Text(
-            '点击右下角按钮添加成绩',
+            '老师还未录入您的成绩',
             style: AppTextStyles.bodySmall.copyWith(
               color: AppColors.textSecondary,
             ),
@@ -259,84 +252,46 @@ class _GradesPageState extends ConsumerState<GradesPage> {
   }
 
   Widget _buildGradeItem(Grade grade) {
-    return Dismissible(
-      key: Key(grade.id),
-      direction: DismissDirection.endToStart,
-      background: Container(
-        alignment: Alignment.centerRight,
-        padding: const EdgeInsets.only(right: 20),
-        color: AppColors.error,
-        child: const Icon(Icons.delete, color: AppColors.white),
-      ),
-      confirmDismiss: (direction) async {
-        return showDialog<bool>(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('确认删除'),
-            content: Text('确定要删除 ${grade.courseName} 的成绩吗？'),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('取消'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.pop(context, true),
-                child: const Text(
-                  '删除',
-                  style: TextStyle(color: AppColors.error),
-                ),
-              ),
-            ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 3,
+            child: Text(grade.courseName, style: AppTextStyles.bodyMedium),
           ),
-        );
-      },
-      onDismissed: (direction) {
-        ref.read(gradeStateProvider.notifier).deleteGrade(grade.id);
-      },
-      child: InkWell(
-        onTap: () => _showAddEditDialog(context, grade: grade),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
-          child: Row(
-            children: [
-              Expanded(
-                flex: 3,
-                child: Text(grade.courseName, style: AppTextStyles.bodyMedium),
+          SizedBox(
+            width: 50,
+            child: Text(
+              '${grade.credit}学分',
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.textSecondary,
               ),
-              SizedBox(
-                width: 50,
-                child: Text(
-                  '${grade.credit}学分',
-                  style: AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                width: 50,
-                child: Text(
-                  grade.score.toStringAsFixed(0),
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              SizedBox(
-                width: 40,
-                child: Text(
-                  grade.letterGrade,
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: _getGradeColor(grade.score),
-                    fontWeight: FontWeight.w600,
-                  ),
-                  textAlign: TextAlign.center,
-                ),
-              ),
-            ],
+              textAlign: TextAlign.center,
+            ),
           ),
-        ),
+          SizedBox(
+            width: 50,
+            child: Text(
+              grade.score.toStringAsFixed(0),
+              style: AppTextStyles.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+          SizedBox(
+            width: 40,
+            child: Text(
+              grade.letterGrade,
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: _getGradeColor(grade.score),
+                fontWeight: FontWeight.w600,
+              ),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -347,116 +302,5 @@ class _GradesPageState extends ConsumerState<GradesPage> {
     if (score >= 70) return AppColors.info;
     if (score >= 60) return AppColors.warning;
     return AppColors.error;
-  }
-
-  void _showAddEditDialog(BuildContext context, {Grade? grade}) {
-    final isEditing = grade != null;
-    final courseController = TextEditingController(
-      text: grade?.courseName ?? '',
-    );
-    final creditController = TextEditingController(
-      text: grade?.credit.toString() ?? '',
-    );
-    final scoreController = TextEditingController(
-      text: grade?.score.toString() ?? '',
-    );
-    final semesterController = TextEditingController(
-      text: grade?.semester ?? _getDefaultSemester(),
-    );
-    final formKey = GlobalKey<FormState>();
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(isEditing ? '编辑成绩' : '添加成绩'),
-        content: Form(
-          key: formKey,
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: courseController,
-                  decoration: const InputDecoration(labelText: '课程名称'),
-                  validator: (v) => v?.isEmpty ?? true ? '请输入课程名称' : null,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: creditController,
-                  decoration: const InputDecoration(labelText: '学分'),
-                  keyboardType: TextInputType.number,
-                  validator: (v) {
-                    if (v?.isEmpty ?? true) return '请输入学分';
-                    final credit = double.tryParse(v!);
-                    if (credit == null || credit <= 0) return '请输入有效学分';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: scoreController,
-                  decoration: const InputDecoration(labelText: '成绩 (0-100)'),
-                  keyboardType: TextInputType.number,
-                  validator: (v) {
-                    if (v?.isEmpty ?? true) return '请输入成绩';
-                    final score = double.tryParse(v!);
-                    if (score == null || score < 0 || score > 100)
-                      return '请输入0-100的成绩';
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: semesterController,
-                  decoration: const InputDecoration(
-                    labelText: '学期 (如: 2024-2025-1)',
-                  ),
-                  validator: (v) => v?.isEmpty ?? true ? '请输入学期' : null,
-                ),
-              ],
-            ),
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-          ElevatedButton(
-            onPressed: () {
-              if (formKey.currentState?.validate() ?? false) {
-                final score = double.parse(scoreController.text);
-                final newGrade = Grade(
-                  id: grade?.id ?? const Uuid().v4(),
-                  userId: Supabase.instance.client.auth.currentUser!.id,
-                  courseName: courseController.text.trim(),
-                  credit: double.parse(creditController.text),
-                  score: score,
-                  gradePoint: Grade.calculateGradePoint(score),
-                  semester: semesterController.text.trim(),
-                  status: score >= 60 ? GradeStatus.passed : GradeStatus.failed,
-                  createdAt: grade?.createdAt ?? DateTime.now(),
-                );
-
-                if (isEditing) {
-                  ref.read(gradeStateProvider.notifier).updateGrade(newGrade);
-                } else {
-                  ref.read(gradeStateProvider.notifier).addGrade(newGrade);
-                }
-                Navigator.pop(context);
-              }
-            },
-            child: Text(isEditing ? '保存' : '添加'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  String _getDefaultSemester() {
-    final now = DateTime.now();
-    final year = now.month >= 9 ? now.year : now.year - 1;
-    final term = now.month >= 2 && now.month < 9 ? '2' : '1';
-    return '$year-${year + 1}-$term';
   }
 }

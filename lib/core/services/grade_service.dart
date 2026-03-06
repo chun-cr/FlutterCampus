@@ -10,12 +10,34 @@ class GradeService {
     final response = await _supabaseClient
         .from('grades')
         .select()
-        .eq('user_id', userId)
+        .eq('user_id', userId);
+
+    return (response as List)
+        .map((json) => Grade.fromJson(json as Map<String, dynamic>))
+        .toList();
+  }
+
+  /// 教师用：按学生 user_id 查询成绩
+  Future<List<Grade>> fetchGradesByStudentId(String studentId) async {
+    final response = await _supabaseClient
+        .from('grades')
+        .select()
+        .eq('user_id', studentId)
         .order('created_at', ascending: false);
 
     return (response as List)
         .map((json) => Grade.fromJson(json as Map<String, dynamic>))
         .toList();
+  }
+
+  /// 教师用：查询所有学生列表
+  Future<List<Map<String, dynamic>>> fetchStudents() async {
+    final response = await _supabaseClient
+        .from('users')
+        .select('id, name, student_id, department')
+        .eq('type', 'student')
+        .order('name');
+    return (response as List).cast<Map<String, dynamic>>();
   }
 
   Future<Grade> addGrade(Grade grade) async {

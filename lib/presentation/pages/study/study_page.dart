@@ -1,13 +1,22 @@
+import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../theme/theme.dart';
+import '../../../../core/services/course_service.dart';
+import '../../../../core/services/grade_service.dart';
+import '../../../../domain/models/grade.dart';
+import '../../../../domain/models/course.dart';
 
 class StudyPage extends ConsumerWidget {
   const StudyPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final gradeState = ref.watch(gradeStateProvider);
+    final currentSemester = gradeState.semesterSummaries.isNotEmpty
+        ? gradeState.semesterSummaries.first
+        : null;
     return Center(
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 600),
@@ -18,100 +27,7 @@ class StudyPage extends ConsumerWidget {
             children: [
               // 1. 智能课表模块
               _buildSectionHeader('智能课表', subtitle: 'SCHEDULE'),
-              _buildPremiumCard(
-                child: Column(
-                  children: [
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withValues(alpha: 0.08),
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                          child: const Icon(
-                            Icons.schedule_rounded,
-                            color: AppColors.primary,
-                            size: 24,
-                          ),
-                        ),
-                        const SizedBox(width: 20),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('高等数学', style: AppTextStyles.titleMedium),
-                              const SizedBox(height: 4),
-                              Text(
-                                '08:00 - 09:40',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                '一号楼 · 301室',
-                                style: AppTextStyles.caption.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 16,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              width: 0.5,
-                            ),
-                            borderRadius: BorderRadius.circular(24),
-                          ),
-                          child: Text(
-                            '导航',
-                            style: AppTextStyles.labelMedium.copyWith(
-                              color: AppColors.primary,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 24),
-                      child: Divider(
-                        height: 1,
-                        thickness: 0.5,
-                        color: AppColors.greyLight,
-                      ),
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        _buildQuickAction(
-                          context,
-                          Icons.calendar_today_outlined,
-                          '完整课表',
-                          onTap: () => context.push('/schedule'),
-                        ),
-                        _buildQuickAction(
-                          context,
-                          Icons.notifications_none_outlined,
-                          '课程提醒',
-                        ),
-                        _buildQuickAction(
-                          context,
-                          Icons.meeting_room_outlined,
-                          '查找教室',
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
+              _buildScheduleCard(context, ref),
               const SizedBox(height: 40),
 
               // 2. 图书馆助手
@@ -185,14 +101,14 @@ class StudyPage extends ConsumerWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              '本学期绩点',
+                              currentSemester != null ? '本学期绩点' : '暂无成绩数据',
                               style: AppTextStyles.labelMedium.copyWith(
                                 color: AppColors.textSecondary,
                               ),
                             ),
                             const SizedBox(height: 4),
                             Text(
-                              '3.8',
+                              currentSemester?.gpa.toStringAsFixed(2) ?? '--',
                               style: AppTextStyles.headlineLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.w300,
@@ -201,22 +117,32 @@ class StudyPage extends ConsumerWidget {
                           ],
                         ),
                         Text(
-                          '+0.2 较上学期提升',
+                          '共 ${currentSemester?.courseCount ?? 0} 门课 · ${currentSemester?.totalCredits.toStringAsFixed(1) ?? '0'} 学分',
                           style: AppTextStyles.caption.copyWith(
-                            color: AppColors.success,
+                            color: AppColors.textSecondary,
                           ),
                         ),
                       ],
                     ),
                     const SizedBox(height: 32),
                     Container(
-                      height: 120,
+                      height: 140,
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: AppColors.background.withValues(alpha: 0.5),
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: CustomPaint(painter: _MockChartPainter()),
+                      child: gradeState.grades.isEmpty
+                          ? Center(
+                              child: Text(
+                                '暂无成绩数据',
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            )
+                          : _GpaChartWidget(
+                              summaries: gradeState.semesterSummaries)
                     ),
                     const SizedBox(height: 24),
                     Center(
@@ -274,6 +200,176 @@ class StudyPage extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  /// 智能课表卡片：显示今天最近一节课
+  Widget _buildScheduleCard(BuildContext context, WidgetRef ref) {
+    final courseState = ref.watch(coursesStateProvider);
+    final today = DateTime.now().weekday; // 1=周一...7=周日
+    final now = TimeOfDay.now();
+
+    // 过滤出今天的课程，按 start_time 升序排列
+    Course? nextCourse;
+    if (!courseState.isLoading && courseState.error == null) {
+      final todayCourses = courseState.courses
+          .where((c) => c.weekday == today)
+          .toList()
+        ..sort((a, b) => a.startTime.compareTo(b.startTime));
+
+      // 取最近未结束的一节
+      nextCourse = todayCourses.firstWhere(
+        (c) {
+          final parts = c.endTime.split(':');
+          if (parts.length < 2) return false;
+          final end = TimeOfDay(
+            hour: int.tryParse(parts[0]) ?? 0,
+            minute: int.tryParse(parts[1]) ?? 0,
+          );
+          // 结束时间大于现在即为未结束
+          return end.hour * 60 + end.minute > now.hour * 60 + now.minute;
+        },
+        orElse: () => todayCourses.isNotEmpty ? todayCourses.last : Course(
+          id: '',
+          name: '',
+          teacher: '',
+          location: '',
+          weekday: today,
+          startTime: '',
+          endTime: '',
+          startWeek: 1,
+          endWeek: 16,
+        ),
+      );
+      // 如果 todayCourses 为空，设为 null
+      if (todayCourses.isEmpty) nextCourse = null;
+    }
+
+    return _buildPremiumCard(
+      child: Column(
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(12),
+                decoration: BoxDecoration(
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                child: const Icon(
+                  Icons.schedule_rounded,
+                  color: AppColors.primary,
+                  size: 24,
+                ),
+              ),
+              const SizedBox(width: 20),
+              Expanded(
+                child: courseState.isLoading
+                    ? Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('加载中……', style: AppTextStyles.titleMedium),
+                          const SizedBox(height: 4),
+                          Text(
+                            '请稍候',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ],
+                      )
+                    : nextCourse == null
+                        ? Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('今日暂无课程', style: AppTextStyles.titleMedium),
+                              const SizedBox(height: 4),
+                              Text(
+                                '好好休息吧',
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(nextCourse.name, style: AppTextStyles.titleMedium),
+                              const SizedBox(height: 4),
+                              Text(
+                                nextCourse.timeSlotDisplay,
+                                style: AppTextStyles.bodyMedium.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                              const SizedBox(height: 2),
+                              Text(
+                                nextCourse.location,
+                                style: AppTextStyles.caption.copyWith(
+                                  color: AppColors.textSecondary,
+                                ),
+                              ),
+                            ],
+                          ),
+              ),
+              GestureDetector(
+                onTap: null, // 导航功能暂不实现
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: AppColors.primary.withValues(alpha: 0.3),
+                      width: 0.5,
+                    ),
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                  child: Text(
+                    '导航',
+                    style: AppTextStyles.labelMedium.copyWith(
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 24),
+            child: Divider(
+              height: 1,
+              thickness: 0.5,
+              color: AppColors.greyLight,
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              _buildQuickAction(
+                context,
+                Icons.calendar_today_outlined,
+                '完整课表',
+                onTap: () => context.push('/schedule'),
+              ),
+              _buildQuickAction(
+                context,
+                Icons.edit_calendar_outlined,
+                '请假申请',
+                onTap: () => context.push('/leave-apply'),
+              ),
+              _buildQuickAction(
+                context,
+                Icons.meeting_room_outlined,
+                '查找教室',
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
@@ -424,68 +520,167 @@ class StudyPage extends ConsumerWidget {
   }
 }
 
-class _MockChartPainter extends CustomPainter {
+class _RealGpaChartPainter extends CustomPainter {
+  _RealGpaChartPainter({
+    required this.summaries,
+    required this.count,
+    required this.barWidth,
+    required this.left0,
+    required this.chartBottom,
+  });
+  final List<SemesterGradeSummary> summaries;
+  final int count;
+  final double barWidth;
+  final double left0;
+  final double chartBottom;
+
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.primary.withValues(alpha: 0.6)
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
+    if (summaries.isEmpty) return;
 
-    final path = Path();
-    path.moveTo(0, size.height * 0.85);
-    path.quadraticBezierTo(
-      size.width * 0.3,
-      size.height * 0.6,
-      size.width * 0.5,
-      size.height * 0.7,
-    );
-    path.quadraticBezierTo(
-      size.width * 0.8,
-      size.height * 0.9,
-      size.width,
-      size.height * 0.2,
-    );
+    final data = summaries.take(4).toList().reversed.toList();
 
-    canvas.drawPath(path, paint);
+    // 背景网格线（GPA 1.0 / 2.0 / 3.0 / 4.0）
+    final gridPaint = Paint()
+      ..color = AppColors.greyLight.withValues(alpha: 0.4)
+      ..strokeWidth = 0.5;
+    for (final level in [1.0, 2.0, 3.0, 4.0]) {
+      final y = chartBottom - (level / 4.0) * chartBottom;
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
+    }
 
-    // Gradient fill under the line
-    final fillPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          AppColors.primary.withValues(alpha: 0.15),
-          AppColors.primary.withValues(alpha: 0.0),
-        ],
-      ).createShader(Rect.fromLTRB(0, 0, size.width, size.height))
-      ..style = PaintingStyle.fill;
+    // 渐变色柱子
+    for (int i = 0; i < count; i++) {
+      final gpa = data[i].gpa.clamp(0.0, 4.0);
+      final rawHeight = (gpa / 4.0) * chartBottom;
+      final barHeight = max(rawHeight, 8.0);
+      final left = count == 1 ? left0 : left0 + i * (barWidth / 1.4 * 2);
+      final top = chartBottom - barHeight;
 
-    final fillPath = Path.from(path)
-      ..lineTo(size.width, size.height)
-      ..lineTo(0, size.height)
-      ..close();
-
-    canvas.drawPath(fillPath, fillPaint);
-
-    // Subtle Dots
-    final dotPaint = Paint()..color = AppColors.surface;
-    final dotBorderPaint = Paint()
-      ..color = AppColors.primary
-      ..strokeWidth = 1.5
-      ..style = PaintingStyle.stroke;
-
-    final points = [
-      Offset(size.width * 0.5, size.height * 0.7),
-      Offset(size.width, size.height * 0.2),
-    ];
-
-    for (var point in points) {
-      canvas.drawCircle(point, 4, dotPaint);
-      canvas.drawCircle(point, 4, dotBorderPaint);
+      final rect = RRect.fromRectAndCorners(
+        Rect.fromLTWH(left, top, barWidth, barHeight),
+        topLeft: const Radius.circular(6),
+        topRight: const Radius.circular(6),
+      );
+      canvas.drawRRect(
+        rect,
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppColors.primary,
+              AppColors.primary.withValues(alpha: 0.3),
+            ],
+          ).createShader(Rect.fromLTWH(left, top, barWidth, barHeight))
+          ..style = PaintingStyle.fill,
+      );
     }
   }
 
   @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+  bool shouldRepaint(_RealGpaChartPainter old) =>
+      old.summaries != summaries;
+}
+
+/// 柱状图 Widget：用 Stack + Positioned 叠加文字，避免 Web 上 TextPainter 报错
+class _GpaChartWidget extends StatelessWidget {
+  const _GpaChartWidget({required this.summaries});
+  final List<SemesterGradeSummary> summaries;
+
+  @override
+  Widget build(BuildContext context) {
+    final data = summaries.take(4).toList().reversed.toList();
+    final count = data.length;
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final w = constraints.maxWidth;
+        final h = constraints.maxHeight;
+        const chartBottomPad = 24.0; // 底部学期标注预留空间
+        final chartBottom = h - chartBottomPad;
+
+        late double barWidth;
+        late double left0;
+        if (count == 1) {
+          barWidth = w * 0.3;
+          left0 = (w - barWidth) / 2;
+        } else {
+          barWidth = w / (count * 2 + 1) * 1.4;
+          left0 = barWidth / 1.4;
+        }
+
+        // 预先计算每个柱子的布局信息
+        final bars = List.generate(count, (i) {
+          final gpa = data[i].gpa.clamp(0.0, 4.0);
+          final rawHeight = (gpa / 4.0) * chartBottom;
+          final barHeight = max(rawHeight, 8.0);
+          final left = count == 1 ? left0 : left0 + i * (barWidth / 1.4 * 2);
+          final top = chartBottom - barHeight;
+          final semester = data[i].semester;
+          final semLabel =
+              semester.length >= 9 ? semester.substring(7) : semester;
+          return (
+            gpa: gpa,
+            left: left,
+            top: top,
+            barWidth: barWidth,
+            semLabel: semLabel,
+          );
+        });
+
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            // 底层：只画网格线 + 柱子
+            Positioned.fill(
+              child: CustomPaint(
+                painter: _RealGpaChartPainter(
+                  summaries: data,
+                  count: count,
+                  barWidth: barWidth,
+                  left0: left0,
+                  chartBottom: chartBottom,
+                ),
+              ),
+            ),
+            // 上层：每个柱子的 GPA 数字 + 学期标注
+            for (final bar in bars) ...[
+              // GPA 数字（柱子上方）
+              Positioned(
+                left: bar.left,
+                top: bar.top - 16,
+                width: bar.barWidth,
+                child: Text(
+                  bar.gpa.toStringAsFixed(1),
+                  textAlign: TextAlign.center,
+                  style: const TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 10,
+                    fontWeight: FontWeight.w700,
+                    height: 1,
+                  ),
+                ),
+              ),
+              // 学期标注（底部）
+              Positioned(
+                left: bar.left,
+                top: h - 14,
+                width: bar.barWidth,
+                child: Text(
+                  bar.semLabel,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.textSecondary,
+                    fontSize: 9,
+                    height: 1,
+                  ),
+                ),
+              ),
+            ],
+          ],
+        );
+      },
+    );
+  }
 }

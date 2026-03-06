@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../theme/theme.dart';
+import '../../../ui/components/date_picker_sheet.dart';
 import '../../../core/services/exam_countdown_service.dart';
 import '../../../domain/models/exam_countdown.dart';
 
@@ -439,15 +440,16 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
                   const SizedBox(height: 8),
                   InkWell(
                     onTap: () async {
-                      final picked = await showDatePicker(
-                        context: context,
+                      final picked = await DatePickerSheet.showDateTime(
+                        context,
                         initialDate: selectedDate,
-                        firstDate: DateTime.now().subtract(
+                        minDate: DateTime.now().subtract(
                           const Duration(days: 365),
                         ),
-                        lastDate: DateTime.now().add(
+                        maxDate: DateTime.now().add(
                           const Duration(days: 365 * 2),
                         ),
+                        title: '选择考试日期',
                       );
                       if (picked != null) {
                         setDialogState(() => selectedDate = picked);
