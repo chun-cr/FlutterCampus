@@ -157,3 +157,43 @@ CREATE TABLE public.users (
   CONSTRAINT users_pkey PRIMARY KEY (id),
   CONSTRAINT users_id_fkey FOREIGN KEY (id) REFERENCES auth.users(id)
 );
+
+CREATE TABLE borrow_request (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  user_id UUID NOT NULL REFERENCES auth.users(id),
+  book_id UUID NOT NULL REFERENCES book(id),
+  status TEXT NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending', 'borrowed', 'due_soon', 'returned', 'cancelled')),
+  reservation_code TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT now(),
+  confirmed_at TIMESTAMPTZ,    -- 用户点击"确认已取书"的时间
+  due_date TIMESTAMPTZ,        -- 应还日期 = confirmed_at + 30天
+  returned_at TIMESTAMPTZ      -- 用户点击"确认归还"的时间
+);
+
+CREATE TABLE seat (
+id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+floor TEXT NOT NULL,        -- 如'一楼','二楼','三楼','四楼'
+zone TEXT NOT NULL,         -- 如'A区','B区','C区','D区'
+seat_number INTEGER NOT NULL, -- 座位号，如 1~48
+has_power BOOLEAN DEFAULT false,  -- 是否有插座
+has_window BOOLEAN DEFAULT false, -- 是否靠窗
+is_enabled BOOLEAN DEFAULT true,  -- 是否启用（管理员可下架）
+UNIQUE(floor, zone, seat_number)
+);
+
+CREATE TABLE seat_reservation (
+id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+user_id UUID NOT NULL REFERENCES auth.users(id),
+seat_id UUID NOT NULL REFERENCES seat(id),
+status TEXT NOT NULL DEFAULT 'reserved'
+CHECK (status IN ('reserved', 'using', 'completed', 'cancelled', 'expired')),
+reservation_code TEXT UNIQUE NOT NULL, -- 6位大写预约码
+date DATE NOT NULL,                    -- 预约日期
+start_time TIME NOT NULL,              -- 预约开始时间
+end_time TIME NOT NULL,                -- 预约结束时间
+checked_in_at TIMESTAMPTZ,            -- 用户点击签到时间
+checked_out_at TIMESTAMPTZ,           -- 用户点击签退时间
+created_at TIMESTAMPTZ DEFAULT now(),
+UNIQUE(seat_id, date, start_time)     -- 同一座位同一时段只能预约一次
+);

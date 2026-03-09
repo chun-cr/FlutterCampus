@@ -20,6 +20,9 @@ import '../pages/study/schedule_page.dart';
 import '../pages/teacher/teacher_grade_page.dart';
 import '../../features/office/pages/leave_approval_page.dart';
 import '../../features/study/pages/leave_apply_page.dart';
+import '../../features/library/pages/all_books_page.dart';
+import '../../features/library/pages/book_detail_page.dart';
+import '../../features/library/pages/my_reservations_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -86,6 +89,21 @@ final GoRouter appRouter = GoRouter(
         GoRoute(
           path: 'stats',
           builder: (context, state) => const LibraryStatsPage(),
+        ),
+        GoRoute(
+          path: 'books',
+          builder: (context, state) => const AllBooksPage(),
+        ),
+        GoRoute(
+          path: 'books/:id',
+          builder: (context, state) {
+            final bookId = state.pathParameters['id']!;
+            return BookDetailPage(bookId: bookId);
+          },
+        ),
+        GoRoute(
+          path: 'seat-reservations',
+          builder: (context, state) => const MyReservationsPage(),
         ),
       ],
     ),
