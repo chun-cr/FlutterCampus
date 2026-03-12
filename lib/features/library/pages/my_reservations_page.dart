@@ -82,6 +82,8 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
                       onActionSuccess: () {
                         ref.invalidate(myReservationsProvider);
                         ref.invalidate(seatAvailableCountProvider);
+                        ref.invalidate(myTodayReservationProvider);
+                        ref.invalidate(seatsProvider);
                       },
                     ),
                   ),

@@ -23,6 +23,7 @@ import '../../features/study/pages/leave_apply_page.dart';
 import '../../features/library/pages/all_books_page.dart';
 import '../../features/library/pages/book_detail_page.dart';
 import '../../features/library/pages/my_reservations_page.dart';
+import '../pages/study/find_room_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -121,6 +122,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/schedule',
       builder: (context, state) => const SchedulePage(),
+    ),
+    // 查找教室
+    GoRoute(
+      path: '/find-room',
+      builder: (context, state) => const FindRoomPage(),
     ),
     // 请假审批
     GoRoute(

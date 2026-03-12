@@ -70,14 +70,24 @@ final myReservationsProvider =
 // 首页座位卡片：今日可用数量
 // ---------------------------------------------------------------------------
 
-/// 默认查询：今天 3楼 A区 可用座位数（供首页功能卡片展示）
+/// 默认查询：今天 三楼 A区 可用座位数（供首页功能卡片展示）
 final seatAvailableCountProvider = FutureProvider<int>((ref) async {
   final repo = ref.watch(seatRepositoryProvider);
   return repo.fetchAvailableCount(
-    floor: '3楼',
+    floor: '三楼',
     zone: 'A区',
-    date: DateTime.now(),
   );
+});
+
+// ---------------------------------------------------------------------------
+// 当天进行中的预约（供座位预约页顶部提示条使用）
+// ---------------------------------------------------------------------------
+
+/// 查询当天 reserved/using 状态的预约，有则返回，无则 null
+final myTodayReservationProvider =
+    FutureProvider<SeatReservation?>((ref) async {
+  final repo = ref.watch(seatRepositoryProvider);
+  return repo.fetchMyTodayReservation();
 });
 
 // ---------------------------------------------------------------------------

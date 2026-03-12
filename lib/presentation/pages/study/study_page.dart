@@ -366,6 +366,7 @@ class StudyPage extends ConsumerWidget {
                 context,
                 Icons.meeting_room_outlined,
                 '查找教室',
+                onTap: () => context.push('/find-room'),
               ),
             ],
           ),

@@ -11,21 +11,11 @@ class BookRepository {
       final response = await _supabase
           .from('books')
           .select()
-          .eq('is_recommended', true)
           .limit(limit);
 
       return _mapResponseToBooks(response);
     } catch (e) {
-      // 推荐书查询失败时降级为普通列表
-      try {
-        final response = await _supabase
-            .from('books')
-            .select()
-            .limit(limit);
-        return _mapResponseToBooks(response);
-      } catch (fallbackError) {
-        throw Exception('获取推荐图书失败：$fallbackError');
-      }
+      throw Exception('获取推荐图书失败：$e');
     }
   }
 

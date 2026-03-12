@@ -20,7 +20,7 @@ class SeatReservationPage extends ConsumerStatefulWidget {
 
 class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
   // --- 筛选状态 ---
-  String _selectedFloor = '3楼';
+  String _selectedFloor = '三楼';
   String _selectedZone = 'A区';
   DateTime _selectedDate = DateTime.now();
   String? _selectedStartTime;
@@ -30,16 +30,44 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
   String? _selectedSeatId;
   int? _selectedSeatNumber;
 
-  static const _floors = ['1楼', '2楼', '3楼', '4楼'];
+  // --- 预约成功本地缓存（即时反馈）---
+  String? _reservedSeatId; // 本次会话中已预约的座位id
+  bool _isLoading = false;  // 防重复提交
+
+  static const _floors = ['一楼', '二楼', '三楼', '四楼'];
   static const _zones = ['A区', 'B区', 'C区', 'D区'];
 
-  List<Map<String, String>> get _timeSlots => SeatRepository.getTimeSlots();
+  // 三个固定时段
+  static const List<Map<String, String>> _fixedTimeSlots = [
+    {'start': '07:00', 'end': '12:00', 'label': '上午 07:00-12:00'},
+    {'start': '13:00', 'end': '18:00', 'label': '下午 13:00-18:00'},
+    {'start': '18:30', 'end': '22:00', 'label': '晚上 18:30-22:00'},
+  ];
 
   SeatQuery get _currentQuery => SeatQuery(
         floor: _selectedFloor,
         zone: _selectedZone,
         date: _selectedDate,
       );
+
+  /// 判断时段是否已过期（仅对今天生效）
+  bool _isSlotExpired(Map<String, String> slot) {
+    final today = DateTime.now();
+    final isToday = _selectedDate.year == today.year &&
+        _selectedDate.month == today.month &&
+        _selectedDate.day == today.day;
+    if (!isToday) return false;
+
+    final endParts = slot['end']!.split(':');
+    final slotEnd = DateTime(
+      today.year,
+      today.month,
+      today.day,
+      int.parse(endParts[0]),
+      int.parse(endParts[1]),
+    );
+    return DateTime.now().isAfter(slotEnd);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,10 +81,18 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
         actions: [
           TextButton(
             onPressed: () => context.push('/library/seat-reservations'),
+            style: TextButton.styleFrom(
+              backgroundColor: Colors.white,
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+            ),
             child: Text(
               '我的预约',
               style: AppTextStyles.bodySmall.copyWith(
-                color: AppColors.white,
+                color: const Color(0xFF333333),
                 fontWeight: FontWeight.w500,
               ),
             ),
@@ -71,12 +107,12 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
           _buildLegend(),
           Expanded(
             child: seatsAsync.when(
-              loading: () => _buildLoadingGrid(),
+              loading: _buildLoadingGrid,
               error: (error, _) => _ErrorView(
                 message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(seatsProvider(_currentQuery)),
               ),
-              data: (seats) => _buildSeatGrid(seats),
+              data: _buildSeatGrid,
             ),
           ),
           _buildBottomPanel(),
@@ -223,8 +259,27 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
             child: SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
-                children: _timeSlots.map((slot) {
+                children: _fixedTimeSlots.map((slot) {
                   final isSelected = slot['start'] == _selectedStartTime;
+                  final expired = _isSlotExpired(slot);
+                  if (expired) {
+                    // 过期样式：灰色，不可点击
+                    return Container(
+                      margin: const EdgeInsets.only(right: 8),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 7),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFF5F5F5),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        '${slot['label']!} (已过期)',
+                        style: AppTextStyles.caption.copyWith(
+                          color: const Color(0xFFBDBDBD),
+                        ),
+                      ),
+                    );
+                  }
                   return _buildChip(
                     label: slot['label']!,
                     isSelected: isSelected,
@@ -324,41 +379,50 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
       itemCount: seats.length,
       itemBuilder: (context, index) {
         final seat = seats[index];
-        final isSelected = _selectedSeatId == seat.id;
-        return _buildSeatCell(seat: seat, isSelected: isSelected);
+        return _buildSeatCell(seat: seat);
       },
     );
   }
 
-  Widget _buildSeatCell({required Seat seat, required bool isSelected}) {
+  Widget _buildSeatCell({required Seat seat}) {
+    // 优先级：myReservation > reservedSeatId > selected > occupied > available
+    final bool isMyReservation =
+        seat.status == SeatStatus.myReservation || seat.id == _reservedSeatId;
+    final bool isSelected = !isMyReservation && seat.id == _selectedSeatId;
+    final bool isOccupied =
+        !isMyReservation && !isSelected && seat.status == SeatStatus.occupied;
+
     final Color bgColor;
     final Color borderColor;
     final Color textColor;
     final bool isInteractive;
+    final String cellLabel;
 
-    if (isSelected) {
+    if (isMyReservation) {
+      bgColor = const Color(0xFFE3F2FD);
+      borderColor = const Color(0xFF90CAF9);
+      textColor = const Color(0xFF1565C0);
+      isInteractive = false;
+      cellLabel = '我的';
+    } else if (isSelected) {
       bgColor = const Color(0xFF1A1A1A);
       borderColor = const Color(0xFF1A1A1A);
       textColor = AppColors.white;
       isInteractive = true;
+      cellLabel = '${seat.seatNumber}';
+    } else if (isOccupied) {
+      bgColor = const Color(0xFFF5F5F5);
+      borderColor = const Color(0xFFE0E0E0);
+      textColor = const Color(0xFFBDBDBD);
+      isInteractive = false;
+      cellLabel = '${seat.seatNumber}';
     } else {
-      switch (seat.status) {
-        case SeatStatus.available:
-          bgColor = const Color(0xFFF0F7F0);
-          borderColor = const Color(0xFFC8E6C9);
-          textColor = const Color(0xFF388E3C);
-          isInteractive = true;
-        case SeatStatus.occupied:
-          bgColor = const Color(0xFFF5F5F5);
-          borderColor = const Color(0xFFE0E0E0);
-          textColor = const Color(0xFFBDBDBD);
-          isInteractive = false;
-        case SeatStatus.myReservation:
-          bgColor = const Color(0xFFE3F2FD);
-          borderColor = const Color(0xFF90CAF9);
-          textColor = const Color(0xFF1565C0);
-          isInteractive = false; // 已预约，不可再次选择
-      }
+      // available
+      bgColor = const Color(0xFFF0F7F0);
+      borderColor = const Color(0xFFC8E6C9);
+      textColor = const Color(0xFF388E3C);
+      isInteractive = true;
+      cellLabel = '${seat.seatNumber}';
     }
 
     return GestureDetector(
@@ -386,7 +450,7 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(
-              '${seat.seatNumber}',
+              cellLabel,
               style: TextStyle(
                 fontSize: 11,
                 fontWeight: FontWeight.w600,
@@ -465,105 +529,175 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (hasSelection) ...[
-            Row(
-              children: [
-                const Icon(
-                  Icons.chair_outlined,
-                  color: Color(0xFF333333),
-                  size: 18,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  '$_selectedFloor $_selectedZone ${_selectedSeatNumber ?? ''}号座'
-                  '${hasTime ? '  |  $_selectedStartTime-$_selectedEndTime' : '  |  请选择时段'}',
-                  style: AppTextStyles.bodyMedium.copyWith(
-                    color: AppColors.textPrimary,
+          // 选座提示行（仅在未预约时显示）
+          if (_reservedSeatId == null) ...[
+            if (hasSelection) ...[
+              Row(
+                children: [
+                  const Icon(
+                    Icons.chair_outlined,
+                    color: Color(0xFF333333),
+                    size: 18,
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-          ] else if (!hasTime) ...[
-            Text(
-              '请先选择时段，再点选座位',
-              style: AppTextStyles.caption.copyWith(
-                color: AppColors.textDisabled,
+                  const SizedBox(width: 8),
+                  Text(
+                    '$_selectedFloor $_selectedZone ${_selectedSeatNumber ?? ''}号座'
+                    '${hasTime ? '  |  $_selectedStartTime-$_selectedEndTime' : '  |  请选择时段'}',
+                    style: AppTextStyles.bodyMedium.copyWith(
+                      color: AppColors.textPrimary,
+                    ),
+                  ),
+                ],
               ),
-            ),
-            const SizedBox(height: 8),
+              const SizedBox(height: 12),
+            ] else if (!hasTime) ...[
+              Text(
+                '请先选择时段，再点选座位',
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textDisabled,
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
           ],
-          GestureDetector(
-            onTap: canConfirm ? () => _showConfirmSheet() : null,
-            child: Container(
+
+          // 按钮区
+          if (_reservedSeatId != null)
+            // 已预约：灰色禁用按钮
+            Container(
               height: 50,
               width: double.infinity,
               alignment: Alignment.center,
               decoration: BoxDecoration(
-                color: canConfirm
-                    ? const Color(0xFF1A1A1A)
-                    : const Color(0xFFF0F0F0),
+                color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                canConfirm
-                    ? '确认预约'
-                    : (hasSelection ? '请选择时段' : '请选择座位与时段'),
+                '已预约',
                 style: AppTextStyles.bodyMedium.copyWith(
+                  color: const Color(0xFFBDBDBD),
                   fontWeight: FontWeight.w600,
-                  color: canConfirm
-                      ? AppColors.white
-                      : const Color(0xFFBDBDBD),
                 ),
               ),
+            )
+          else
+            GestureDetector(
+              onTap: canConfirm && !_isLoading ? _handleReservation : null,
+              child: Container(
+                height: 50,
+                width: double.infinity,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: canConfirm
+                      ? const Color(0xFF1A1A1A)
+                      : const Color(0xFFF0F0F0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: _isLoading
+                    ? const SizedBox(
+                        width: 20,
+                        height: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.white,
+                        ),
+                      )
+                    : Text(
+                        canConfirm
+                            ? '确认预约'
+                            : (hasSelection ? '请选择时段' : '请选择座位与时段'),
+                        style: AppTextStyles.bodyMedium.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: canConfirm
+                              ? AppColors.white
+                              : const Color(0xFFBDBDBD),
+                        ),
+                      ),
+              ),
             ),
-          ),
         ],
       ),
     );
   }
 
   // ---------------------------------------------------------------------------
-  // 确认预约弹窗
+  // 确认弹窗 + 预约执行
   // ---------------------------------------------------------------------------
-  Future<void> _showConfirmSheet() async {
+  Future<void> _handleReservation() async {
+    if (_selectedSeatId == null || _selectedStartTime == null) return;
+    if (_isLoading) return;
+
+    // 第一步：弹出确认弹窗，等待用户操作
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (_) => _ConfirmDialog(
+      builder: (ctx) => _ConfirmDialog(
         title: '确认预约',
-        content:
-            '预约信息：\n$_selectedFloor $_selectedZone ${_selectedSeatNumber}号座\n时段：$_selectedStartTime-$_selectedEndTime\n\n确认后将生成预约码，请在开始时间 30 分钟内完成签到。',
+        content: '预约信息：\n'
+            '$_selectedFloor $_selectedZone ${_selectedSeatNumber}号座\n'
+            '时段：$_selectedStartTime-$_selectedEndTime\n\n'
+            '确认后将生成预约码，请在开始时间 30 分钟内完成签到。',
         confirmText: '确认预约',
         cancelText: '返回',
       ),
     );
+
+    // 用户点击“返回”或关闭弹窗
     if (confirmed != true) return;
-
-    final notifier = ref.read(seatReservationNotifierProvider.notifier);
-    final code = await notifier.createReservation(
-      seatId: _selectedSeatId!,
-      date: _selectedDate,
-      startTime: _selectedStartTime!,
-      endTime: _selectedEndTime!,
-    );
-
     if (!mounted) return;
 
-    if (code != null) {
-      // 刷新座位列表与首页可用数量
+    // 第二步：执行预约
+    setState(() => _isLoading = true);
+
+    // 预先保存座位信息（成功后 setState 会清空）
+    final seatId = _selectedSeatId!;
+    final seatNumber = _selectedSeatNumber!;
+    final savedFloor = _selectedFloor;
+    final savedZone = _selectedZone;
+    final savedStartTime = _selectedStartTime!;
+    final savedEndTime = _selectedEndTime!;
+
+    try {
+      final code = await SeatRepository().createReservation(
+        seatId: seatId,
+        date: _selectedDate,
+        startTime: savedStartTime,
+        endTime: savedEndTime,
+      );
+
+      if (!mounted) return;
+
+      // 第三步：更新本地状态，按钮变灰，座位变蓝
+      setState(() {
+        _reservedSeatId = seatId;
+        _selectedSeatId = null;
+        _selectedSeatNumber = null;
+        _isLoading = false;
+      });
+
+      // 刷新座位图及相关 provider
       ref.invalidate(seatsProvider(_currentQuery));
       ref.invalidate(seatAvailableCountProvider);
       ref.invalidate(myReservationsProvider);
-      setState(() {
-        _selectedSeatId = null;
-        _selectedSeatNumber = null;
-      });
-      _showSuccessSheet(code);
-    } else {
-      final errState = ref.read(seatReservationNotifierProvider);
-      final msg = errState is AsyncError
-          ? errState.error.toString().replaceFirst('Exception: ', '')
-          : '预约失败，请重试';
+      ref.invalidate(myTodayReservationProvider);
+
+      // 第四步：显示成功弹窗
+      if (!mounted) return;
+      _showSuccessSheet(
+        code: code,
+        floor: savedFloor,
+        zone: savedZone,
+        seatNumber: seatNumber,
+        startTime: savedStartTime,
+        endTime: savedEndTime,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isLoading = false);
+      // 冲突错误时刷新座位图
+      final msg = e.toString().replaceFirst('Exception: ', '');
+      if (msg.contains('已被预约') || msg.contains('冲突')) {
+        ref.invalidate(seatsProvider(_currentQuery));
+      }
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(msg),
@@ -578,18 +712,25 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
   // ---------------------------------------------------------------------------
   // 预约成功底部弹窗
   // ---------------------------------------------------------------------------
-  void _showSuccessSheet(String code) {
+  void _showSuccessSheet({
+    required String code,
+    required String floor,
+    required String zone,
+    required int seatNumber,
+    required String startTime,
+    required String endTime,
+  }) {
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
       builder: (_) => _SuccessSheet(
         code: code,
-        floor: _selectedFloor,
-        zone: _selectedZone,
-        seatNumber: _selectedSeatNumber ?? 0,
-        startTime: _selectedStartTime ?? '',
-        endTime: _selectedEndTime ?? '',
+        floor: floor,
+        zone: zone,
+        seatNumber: seatNumber,
+        startTime: startTime,
+        endTime: endTime,
         onViewReservations: () {
           Navigator.of(context).pop();
           context.push('/library/seat-reservations');
@@ -627,6 +768,7 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
     );
   }
 }
+
 
 // ---------------------------------------------------------------------------
 // 错误视图
@@ -686,14 +828,12 @@ class _ConfirmDialog extends StatelessWidget {
     required this.content,
     required this.confirmText,
     required this.cancelText,
-    this.isDestructive = false,
   });
 
   final String title;
   final String content;
   final String confirmText;
   final String cancelText;
-  final bool isDestructive;
 
   @override
   Widget build(BuildContext context) {
@@ -728,9 +868,7 @@ class _ConfirmDialog extends StatelessWidget {
           child: Text(
             confirmText,
             style: AppTextStyles.bodySmall.copyWith(
-              color: isDestructive
-                  ? const Color(0xFFD32F2F)
-                  : AppColors.textPrimary,
+              color: AppColors.textPrimary,
               fontWeight: FontWeight.w600,
             ),
           ),

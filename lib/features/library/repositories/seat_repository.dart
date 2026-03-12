@@ -39,13 +39,13 @@ class SeatRepository {
 
       if (seats.isEmpty) return seats;
 
-      // 2. 拉取当日该区域的预约记录（reserved/using 状态），获取占用 seatId
+      // 2. 先获取该楼层+区域所有座位的 id 列表，再查预约记录
       final dateStr = _formatDate(date);
+      final seatIds = seats.map((s) => s.id).toList();
       final reservationsResp = await _supabase
           .from('seat_reservation')
           .select('seat_id, user_id')
-          .eq('floor', floor)
-          .eq('zone', zone)
+          .inFilter('seat_id', seatIds)
           .eq('date', dateStr)
           .inFilter('status', ['reserved', 'using']);
 
@@ -117,14 +117,8 @@ class SeatRepository {
       throw Exception('该座位已被预约，请选择其他座位');
     }
 
-    // 3. 获取座位信息（用于冗余存储楼层/区域信息）
-    final seatResp = await _supabase
-        .from('seat')
-        .select('floor, zone, seat_number')
-        .eq('id', seatId)
-        .single();
 
-    // 4. 生成唯一预约码（最多重试 5 次）
+    // 3. 生成唯一预约码（最多重试 5 次）
     String code = '';
     for (int i = 0; i < 5; i++) {
       code = _generateCode();
@@ -137,14 +131,11 @@ class SeatRepository {
       if (i == 4) throw Exception('生成预约码失败，请重试');
     }
 
-    // 5. 插入记录
+    // 5. 插入记录（seat_reservation 表只存 seat_id，不存冗余的 floor/zone/seat_number）
     try {
       await _supabase.from('seat_reservation').insert({
         'user_id': user.id,
         'seat_id': seatId,
-        'floor': seatResp['floor'],
-        'zone': seatResp['zone'],
-        'seat_number': seatResp['seat_number'],
         'status': 'reserved',
         'reservation_code': code,
         'date': dateStr,
@@ -152,6 +143,15 @@ class SeatRepository {
         'end_time': endTime,
       });
       return code;
+    } on PostgrestException catch (e) {
+      // 唯一约束冲突（数据库层兜底）：座位在此时段已被预约
+      if (e.code == '23505' ||
+          e.message.contains('duplicate') ||
+          e.message.contains('conflict') ||
+          e.message.contains('unique')) {
+        throw Exception('该座位在此时段已被预约，请选择其他座位或时段');
+      }
+      throw Exception('预约失败：${e.message}');
     } catch (e) {
       throw Exception('预约失败：$e');
     }
@@ -239,31 +239,31 @@ class SeatRepository {
     }
   }
 
-  /// 获取指定楼层+区域今日可用座位数（供首页卡片展示）
+  /// 获取指定樓层+区域今日可用座位数（供首页卡片展示）
   Future<int> fetchAvailableCount({
     required String floor,
     required String zone,
-    required DateTime date,
   }) async {
     try {
-      final dateStr = _formatDate(date);
+      final today = DateTime.now();
+      final dateStr = _formatDate(today);
 
-      // 总启用座位数
-      final totalResp = await _supabase
+      // 查该樓层+区域所有启用座位
+      final seatIdsResp = await _supabase
           .from('seat')
           .select('id')
           .eq('floor', floor)
           .eq('zone', zone)
           .eq('is_enabled', true);
+      final seatIds = (seatIdsResp as List).map((r) => r['id'] as String).toList();
+      final total = seatIds.length;
+      if (seatIds.isEmpty) return 0;
 
-      final total = (totalResp as List).length;
-
-      // 当日已占用座位数（reserved/using）
+      // 查今天已占用座位数
       final occupiedResp = await _supabase
           .from('seat_reservation')
           .select('seat_id')
-          .eq('floor', floor)
-          .eq('zone', zone)
+          .inFilter('seat_id', seatIds)
           .eq('date', dateStr)
           .inFilter('status', ['reserved', 'using']);
 
@@ -287,6 +287,26 @@ class SeatRepository {
       slots.add({'start': start, 'end': end, 'label': '$start-$end'});
     }
     return slots;
+  }
+
+  /// 查询当天进行中的预约（reserved/using），供首页提示条使用
+  Future<SeatReservation?> fetchMyTodayReservation() async {
+    final user = _supabase.auth.currentUser;
+    if (user == null) return null;
+    final dateStr = _formatDate(DateTime.now());
+    try {
+      final response = await _supabase
+          .from('seat_reservation')
+          .select('*, seat(floor, zone, seat_number, has_power, has_window)')
+          .eq('user_id', user.id)
+          .eq('date', dateStr)
+          .inFilter('status', ['reserved', 'using'])
+          .maybeSingle();
+      if (response == null) return null;
+      return SeatReservation.fromJson(response);
+    } catch (_) {
+      return null;
+    }
   }
 
   /// 格式化日期为 "yyyy-MM-dd"
