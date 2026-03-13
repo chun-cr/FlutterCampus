@@ -39,252 +39,263 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.background,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(
-            Icons.arrow_back_ios_new,
-            color: AppColors.textPrimary,
-            size: 20,
-          ),
-          onPressed: () => context.pop(),
-        ),
-      ),
-      extendBodyBehindAppBar: true,
-      body: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 400),
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(
-                horizontal: 32.0,
-                vertical: 48.0,
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  const SizedBox(height: 16),
-                  // 图标
-                  Center(
-                    child: Container(
-                      width: 64,
-                      height: 64,
-                      decoration: BoxDecoration(
-                        color: AppColors.surface,
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: AppColors.greyLight,
-                          width: 0.5,
-                        ),
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.lock_outline,
-                          size: 28,
-                          color: AppColors.primary,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 48),
-                  // 标题
-                  Text(
-                    '忘记密码？',
-                    style: AppTextStyles.headlineMedium.copyWith(
-                      fontWeight: FontWeight.w400,
-                      letterSpacing: 1.0,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    '请输入您的邮箱，我们将发送重置链接',
-                    style: AppTextStyles.bodyMedium.copyWith(
-                      color: AppColors.textSecondary,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
-                  const SizedBox(height: 64),
+    final screenHeight = MediaQuery.of(context).size.height;
+    final topSectionHeight = screenHeight * 0.35;
+    final inputBorder = OutlineInputBorder(
+      borderRadius: BorderRadius.circular(12),
+      borderSide: BorderSide.none,
+    );
 
-                  if (!_isSubmitted)
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          // 邮箱输入
-                          Text(
-                            '邮箱',
-                            style: AppTextStyles.labelMedium.copyWith(
-                              color: AppColors.textSecondary,
-                              fontWeight: FontWeight.w500,
+    return Scaffold(
+      backgroundColor: const Color(0xFFF5F5F5),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(
+                height: topSectionHeight,
+                width: double.infinity,
+                child: Container(color: const Color(0xFF1A1A1A)),
+              ),
+              Expanded(child: Container(color: AppColors.white)),
+            ],
+          ),
+          SafeArea(
+            bottom: false,
+            child: Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 420),
+                child: Stack(
+                  children: [
+                    Column(
+                      children: [
+                        SizedBox(
+                          height: topSectionHeight,
+                          child: const Center(
+                            child: Icon(
+                              Icons.lock_outline_rounded,
+                              size: 40,
+                              color: Colors.white,
                             ),
                           ),
-                          const SizedBox(height: 8),
-                          TextFormField(
-                            controller: _emailController,
-                            keyboardType: TextInputType.emailAddress,
-                            style: AppTextStyles.bodyMedium,
-                            cursorColor: AppColors.primary,
-                            decoration: InputDecoration(
-                              hintText: '输入您的邮箱',
-                              hintStyle: AppTextStyles.bodyMedium.copyWith(
-                                color: AppColors.textDisabled,
-                              ),
-                              filled: true,
-                              fillColor: AppColors.surface,
-                              contentPadding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 16,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.greyLight,
-                                  width: 0.5,
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.greyLight,
-                                  width: 0.5,
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12),
-                                borderSide: const BorderSide(
-                                  color: AppColors.primary,
-                                  width: 1,
-                                ),
+                        ),
+                        Expanded(
+                          child: Container(
+                            width: double.infinity,
+                            decoration: const BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.vertical(
+                                top: Radius.circular(32),
                               ),
                             ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return '请输入邮箱';
-                              }
-                              if (!RegExp(
-                                r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
-                              ).hasMatch(value)) {
-                                return '请输入有效的邮箱地址';
-                              }
-                              return null;
-                            },
-                          ),
-                          const SizedBox(height: 48),
-                          // 提交按钮
-                          ElevatedButton(
-                            onPressed: _isLoading ? null : _submit,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.black,
-                              foregroundColor: AppColors.white,
-                              elevation: 0,
-                              padding: const EdgeInsets.symmetric(vertical: 18),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
-                              ),
-                            ),
-                            child: _isLoading
-                                ? const SizedBox(
-                                    width: 20,
-                                    height: 20,
-                                    child: CircularProgressIndicator(
-                                      strokeWidth: 1.5,
-                                      valueColor: AlwaysStoppedAnimation<Color>(
-                                        AppColors.white,
-                                      ),
-                                    ),
-                                  )
-                                : Text(
-                                    '发送重置链接',
-                                    style: AppTextStyles.button.copyWith(
-                                      color: AppColors.white,
-                                      fontWeight: FontWeight.w400,
-                                      letterSpacing: 1.0,
+                            child: SingleChildScrollView(
+                              padding: const EdgeInsets.fromLTRB(32, 40, 32, 32),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.stretch,
+                                children: [
+                                  Text(
+                                    '忘记密码',
+                                    style: AppTextStyles.headlineMedium.copyWith(
+                                      fontSize: 22,
+                                      fontWeight: FontWeight.w700,
+                                      color: const Color(0xFF1A1A1A),
                                     ),
                                   ),
-                          ),
-                        ],
-                      ),
-                    )
-                  else
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        // 成功提示
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 24,
-                            horizontal: 16,
-                          ),
-                          decoration: BoxDecoration(
-                            color: AppColors.surface,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(
-                              color: AppColors.greyLight,
-                              width: 0.5,
-                            ),
-                          ),
-                          child: Column(
-                            children: [
-                              const Icon(
-                                Icons.check_circle_outline,
-                                size: 48,
-                                color: AppColors.success,
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    '输入邮箱，我们将发送重置链接',
+                                    style: AppTextStyles.bodySmall.copyWith(
+                                      fontSize: 13,
+                                      color: const Color(0xFF999999),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 32),
+                                  if (!_isSubmitted)
+                                    Form(
+                                      key: _formKey,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.stretch,
+                                        children: [
+                                          TextFormField(
+                                            controller: _emailController,
+                                            keyboardType:
+                                                TextInputType.emailAddress,
+                                            style: AppTextStyles.bodyMedium,
+                                            cursorColor:
+                                                const Color(0xFF1A1A1A),
+                                            decoration: InputDecoration(
+                                              hintText: '输入您的邮箱',
+                                              hintStyle:
+                                                  AppTextStyles.bodyMedium.copyWith(
+                                                color: const Color(0xFF999999),
+                                              ),
+                                              filled: true,
+                                              fillColor: const Color(0xFFF7F7F7),
+                                              prefixIcon: const Icon(
+                                                Icons.email_outlined,
+                                                color: Color(0xFF999999),
+                                                size: 20,
+                                              ),
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 18,
+                                                vertical: 18,
+                                              ),
+                                              border: inputBorder,
+                                              enabledBorder: inputBorder,
+                                              focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                                borderSide: const BorderSide(
+                                                  color: Color(0xFF1A1A1A),
+                                                  width: 1.5,
+                                                ),
+                                              ),
+                                            ),
+                                            validator: (value) {
+                                              if (value == null || value.isEmpty) {
+                                                return '请输入邮箱';
+                                              }
+                                              if (!RegExp(
+                                                r'^[^\s@]+@[^\s@]+\.[^\s@]+$',
+                                              ).hasMatch(value)) {
+                                                return '请输入有效的邮箱地址';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+                                          const SizedBox(height: 32),
+                                          ElevatedButton(
+                                            onPressed:
+                                                _isLoading ? null : _submit,
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFF1A1A1A),
+                                              foregroundColor: Colors.white,
+                                              elevation: 0,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 18,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: _isLoading
+                                                ? const SizedBox(
+                                                    width: 20,
+                                                    height: 20,
+                                                    child:
+                                                        CircularProgressIndicator(
+                                                      strokeWidth: 1.5,
+                                                      valueColor:
+                                                          AlwaysStoppedAnimation<
+                                                              Color>(
+                                                        Colors.white,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Text(
+                                                    '发送重置链接',
+                                                    style:
+                                                        AppTextStyles.button.copyWith(
+                                                      color: Colors.white,
+                                                      fontWeight:
+                                                          FontWeight.w500,
+                                                      letterSpacing: 1.0,
+                                                    ),
+                                                  ),
+                                          ),
+                                        ],
+                                      ),
+                                    )
+                                  else
+                                    Column(
+                                      children: [
+                                        const Icon(
+                                          Icons.check_circle_outline_rounded,
+                                          size: 56,
+                                          color: Color(0xFF1A1A1A),
+                                        ),
+                                        const SizedBox(height: 20),
+                                        Text(
+                                          '邮件已发送',
+                                          style:
+                                              AppTextStyles.titleMedium.copyWith(
+                                            color: const Color(0xFF1A1A1A),
+                                            fontWeight: FontWeight.w700,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 8),
+                                        Text(
+                                          '请检查您的邮箱获取重置链接',
+                                          style: AppTextStyles.bodyMedium.copyWith(
+                                            color: AppColors.textSecondary,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                        const SizedBox(height: 32),
+                                        SizedBox(
+                                          width: double.infinity,
+                                          child: ElevatedButton(
+                                            onPressed: () {
+                                              context.go('/login');
+                                            },
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  const Color(0xFF1A1A1A),
+                                              foregroundColor: Colors.white,
+                                              elevation: 0,
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                vertical: 18,
+                                              ),
+                                              shape: RoundedRectangleBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(12),
+                                              ),
+                                            ),
+                                            child: Text(
+                                              '返回登录',
+                                              style:
+                                                  AppTextStyles.button.copyWith(
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.w500,
+                                                letterSpacing: 1.0,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                ],
                               ),
-                              const SizedBox(height: 16),
-                              Text(
-                                '邮件已发送',
-                                style: AppTextStyles.titleMedium.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                              const SizedBox(height: 8),
-                              Text(
-                                '请检查您的邮箱获取重置链接',
-                                style: AppTextStyles.bodyMedium.copyWith(
-                                  color: AppColors.textSecondary,
-                                ),
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 48),
-                        // 返回登录按钮
-                        ElevatedButton(
-                          onPressed: () {
-                            context.go('/login');
-                          },
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: AppColors.black,
-                            foregroundColor: AppColors.white,
-                            elevation: 0,
-                            padding: const EdgeInsets.symmetric(vertical: 18),
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                            ),
-                          ),
-                          child: Text(
-                            '返回登录',
-                            style: AppTextStyles.button.copyWith(
-                              color: AppColors.white,
-                              fontWeight: FontWeight.w400,
-                              letterSpacing: 1.0,
                             ),
                           ),
                         ),
                       ],
                     ),
-                  const SizedBox(height: 32),
-                ],
+                    Positioned(
+                      top: 0,
+                      left: 0,
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.white,
+                          size: 20,
+                        ),
+                        onPressed: () => context.pop(),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
-        ),
+        ],
       ),
     );
   }

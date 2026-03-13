@@ -35,43 +35,44 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
+      backgroundColor: const Color(0xFF1A1A1A),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // 应用图标
             const Icon(
-              Icons.school_outlined,
+              Icons.school_rounded,
               size: 56,
-              color: AppColors.primary,
+              color: Colors.white,
             ),
-            const SizedBox(height: 32),
-            // 应用名称
+            const SizedBox(height: 24),
             Text(
               '校园通',
-              style: AppTextStyles.headlineLarge.copyWith(
-                color: AppColors.textPrimary,
-                fontWeight: FontWeight.w400,
+              style: AppTextStyles.headlineMedium.copyWith(
+                fontSize: 28,
+                fontWeight: FontWeight.w700,
+                color: Colors.white,
                 letterSpacing: 2.0,
               ),
             ),
             const SizedBox(height: 8),
             Text(
-              '智慧校园',
-              style: AppTextStyles.labelMedium.copyWith(
-                color: AppColors.textSecondary,
-                letterSpacing: 4.0,
+              '智慧校园一站式服务平台',
+              style: AppTextStyles.bodySmall.copyWith(
+                fontSize: 13,
+                color: Colors.white.withOpacity(0.5),
+                letterSpacing: 1.0,
               ),
             ),
             const SizedBox(height: 64),
-            // 加载指示器
-            const SizedBox(
-              width: 24,
-              height: 24,
+            SizedBox(
+              width: 20,
+              height: 20,
               child: CircularProgressIndicator(
                 strokeWidth: 1.5,
-                valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  Colors.white.withOpacity(0.5),
+                ),
               ),
             ),
           ],

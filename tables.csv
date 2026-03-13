@@ -211,3 +211,73 @@ CREATE TABLE public.book_reservations (
   updated_at timestamptz DEFAULT now(),
   CONSTRAINT book_reservations_pkey PRIMARY KEY (id)
 );
+-- 教师详细档案（扩展 public.users，type='teacher'）
+CREATE TABLE public.teacher_profiles (
+  id             uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  teacher_no     text UNIQUE NOT NULL,          -- 工号，如 'CS20180023'
+  title          text,                          -- 职称：讲师/副教授/教授
+  department     text NOT NULL DEFAULT '计算机系',
+  office         text,                          -- 办公室，如 '计算机楼 301'
+  avatar_url     text,
+  bio            text,
+  created_at     timestamptz DEFAULT now(),
+  CONSTRAINT teacher_profiles_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.classes (
+  id             uuid NOT NULL DEFAULT gen_random_uuid(),
+  class_name     text NOT NULL UNIQUE,          -- 如 '22级计算机1班'
+  grade          text NOT NULL,                 -- 年级，如 '2022'
+  major          text NOT NULL,                 -- 专业，如 '计算机科学与技术'
+  department     text NOT NULL DEFAULT '计算机系',
+  student_count  integer DEFAULT 0,             -- 实际人数（冗余字段，可由触发器维护）
+  head_teacher_id uuid REFERENCES auth.users(id), -- 班主任
+  created_at     timestamptz DEFAULT now(),
+  CONSTRAINT classes_pkey PRIMARY KEY (id)
+);
+CREATE TABLE public.students (
+  id             uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  student_no     text UNIQUE NOT NULL,          -- 学号，如 '2022030101'
+  name           text NOT NULL,
+  gender         text CHECK (gender IN ('男', '女', '其他')),
+  class_id       uuid NOT NULL REFERENCES public.classes(id),
+  phone          text,
+  email          text,
+  enrollment_year integer,                       -- 入学年份
+  status         text NOT NULL DEFAULT 'active'
+                   CHECK (status IN ('active', 'suspended', 'graduated', 'dropped')),
+  avatar_url     text,
+  created_at     timestamptz DEFAULT now(),
+  CONSTRAINT students_pkey PRIMARY KEY (id)
+);
+
+-- 索引：按班级快速查询名册
+CREATE INDEX idx_students_class_id ON public.students(class_id);
+
+CREATE TABLE public.teacher_schedules (
+  id             uuid NOT NULL DEFAULT gen_random_uuid(),
+  teacher_id     uuid NOT NULL REFERENCES auth.users(id),
+  course_name    text NOT NULL,                 -- 课程名，如 '数据结构'
+  course_code    text,                          -- 课程编号，如 'CS301'
+  class_ids      uuid[],                        -- 授课班级（数组，支持合班）
+  class_names    text NOT NULL,                 -- 冗余展示字段，如 '22级计算机1、2班'
+  location       text NOT NULL,                 -- 教室，如 '计算机楼 101'
+  weekday        integer NOT NULL               -- 周几：1=周一 … 7=周日
+                   CHECK (weekday BETWEEN 1 AND 7),
+  period_start   integer NOT NULL               -- 第几节开始：1/3/5/7/9
+                   CHECK (period_start IN (1,3,5,7,9)),
+  period_end     integer NOT NULL               -- 第几节结束：2/4/6/8/10/11
+                   CHECK (period_end IN (2,4,6,8,10,11)),
+  start_time     text NOT NULL,                 -- 如 '08:00'
+  end_time       text NOT NULL,                 -- 如 '09:40'
+  start_week     integer NOT NULL DEFAULT 1,    -- 起始教学周
+  end_week       integer NOT NULL DEFAULT 18,   -- 结束教学周
+  week_type      text DEFAULT 'all'             -- 'all'=每周 / 'odd'=单周 / 'even'=双周
+                   CHECK (week_type IN ('all', 'odd', 'even')),
+  semester       text NOT NULL,                 -- 学期，如 '2024-2025-2'
+  color          text,                          -- 课表色块颜色（十六进制）
+  created_at     timestamptz DEFAULT now(),
+  CONSTRAINT teacher_schedules_pkey PRIMARY KEY (id)
+);
+
+-- 索引：按教师+学期快速查询
+CREATE INDEX idx_teacher_schedules_teacher ON public.teacher_schedules(teacher_id, semester);

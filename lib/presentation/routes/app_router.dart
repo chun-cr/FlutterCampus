@@ -26,6 +26,8 @@ import '../../features/library/pages/book_detail_page.dart';
 import '../../features/library/pages/my_reservations_page.dart';
 import '../../features/life/pages/map_detail_page.dart';
 import '../pages/study/find_room_page.dart';
+import '../pages/teacher/class_roster_page.dart';
+import '../pages/teacher/teacher_weekly_schedule_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -128,6 +130,15 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/schedule',
       builder: (context, state) => const SchedulePage(),
+    ),
+    // 教师教学日历
+    GoRoute(
+      path: '/teacher/schedule',
+      builder: (context, state) => const TeacherWeeklySchedulePage(),
+    ),
+    GoRoute(
+      path: '/teacher/class-roster',
+      builder: (context, state) => const ClassRosterPage(),
     ),
     // 查找教室
     GoRoute(

@@ -98,12 +98,24 @@ class TeacherTeachingPage extends ConsumerWidget {
                         _buildQuickAction(
                           Icons.calendar_today_outlined,
                           '教学日历',
+                          onTap: () => context.push('/teacher/schedule'),
                         ),
                         _buildQuickAction(
                           Icons.notifications_none_outlined,
                           '班级名册',
+                          onTap: () => context.push(
+                            '/teacher/class-roster',
+                            extra: const {
+                              'classId': '11111111-0001-0000-0000-000000000000',
+                              'className': '22级软工1、2班',
+                            },
+                          ),
                         ),
-                        _buildQuickAction(Icons.meeting_room_outlined, '调课申请'),
+                        _buildQuickAction(
+                          Icons.meeting_room_outlined,
+                          '调课申请',
+                          onTap: () => context.push('/leave-approval'),
+                        ),
                       ],
                     ),
                   ],
@@ -320,23 +332,34 @@ class TeacherTeachingPage extends ConsumerWidget {
     );
   }
 
-  Widget _buildQuickAction(IconData icon, String label) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Icon(
-          icon,
-          color: AppColors.textPrimary.withValues(alpha: 0.7),
-          size: 28,
+  Widget _buildQuickAction(
+    IconData icon,
+    String label, {
+    VoidCallback? onTap,
+  }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(12),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              icon,
+              color: AppColors.textPrimary.withValues(alpha: 0.7),
+              size: 28,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              label,
+              style: AppTextStyles.labelMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(height: 12),
-        Text(
-          label,
-          style: AppTextStyles.labelMedium.copyWith(
-            color: AppColors.textSecondary,
-          ),
-        ),
-      ],
+      ),
     );
   }
 
