@@ -9,6 +9,7 @@ import '../../components/components.dart';
 import '../../../features/library/models/announcement.dart';
 import '../../../features/library/providers/announcement_provider.dart';
 import '../../../features/library/providers/borrow_provider.dart';
+import '../../../features/library/providers/reservation_provider.dart';
 import '../../../features/library/providers/seat_provider.dart';
 import '../../theme/theme.dart';
 
@@ -116,18 +117,63 @@ class LibraryHomePage extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 16),
-            const Row(
+            Row(
               children: [
                 Expanded(
-                  child: _QuickFeatureCard(
-                    icon: Icons.event_available_outlined,
-                    title: '图书预定',
-                    count: '0',
-                    badge: '暂无待取',
-                    route: '/library/reservations',
+                  child: Consumer(
+                    builder: (context, ref, _) {
+                      final statsAsync = ref.watch(myReservationStatsProvider);
+                      return statsAsync.when(
+                        loading: () => const _QuickFeatureCard(
+                          icon: Icons.event_available_outlined,
+                          title: '图书预定',
+                          count: '-',
+                          badge: '加载中',
+                          route: '/library/reservations',
+                        ),
+                        error: (_, __) => const _QuickFeatureCard(
+                          icon: Icons.event_available_outlined,
+                          title: '图书预定',
+                          count: '-',
+                          badge: '图书预定',
+                          route: '/library/reservations',
+                        ),
+                        data: (stats) {
+                          if (stats.availableCount > 0) {
+                            return _QuickFeatureCard(
+                              icon: Icons.event_available_outlined,
+                              title: '图书预定',
+                              count: '${stats.availableCount}',
+                              badge: '可借阅',
+                              badgeColor: const Color(0xFFE8F5E9),
+                              badgeTextColor: const Color(0xFF2E7D32),
+                              route: '/library/reservations',
+                            );
+                          }
+
+                          if (stats.queuingCount > 0) {
+                            return _QuickFeatureCard(
+                              icon: Icons.event_available_outlined,
+                              title: '图书预定',
+                              count: '${stats.queuingCount}',
+                              badge: '预约中',
+                              route: '/library/reservations',
+                            );
+                          }
+
+                          return const _QuickFeatureCard(
+                            icon: Icons.event_available_outlined,
+                            title: '图书预定',
+                            count: '0',
+                            badge: '暂无预约',
+                            route: '/library/reservations',
+                          );
+                        },
+                      );
+                    },
                   ),
                 ),
-                SizedBox(width: 16),
+                const SizedBox(width: 16),
                 Expanded(
                   child: _QuickFeatureCard(
                     icon: Icons.bar_chart_outlined,

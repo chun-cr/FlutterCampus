@@ -316,7 +316,7 @@ class StudyPage extends ConsumerWidget {
                           ),
               ),
               GestureDetector(
-                onTap: null, // 导航功能暂不实现
+                onTap: () => context.push('/campus-map'),
                 child: Container(
                   padding: const EdgeInsets.symmetric(
                     horizontal: 16,
@@ -521,8 +521,8 @@ class StudyPage extends ConsumerWidget {
   }
 }
 
-class _RealGpaChartPainter extends CustomPainter {
-  _RealGpaChartPainter({
+class _GpaLineChartPainter extends CustomPainter {
+  _GpaLineChartPainter({
     required this.summaries,
     required this.count,
     required this.barWidth,
@@ -540,47 +540,82 @@ class _RealGpaChartPainter extends CustomPainter {
     if (summaries.isEmpty) return;
 
     final data = summaries.take(4).toList().reversed.toList();
+    final maxGpa = data.map((e) => e.gpa).reduce(max);
+    final maxIndex = data.indexWhere((item) => item.gpa == maxGpa);
 
     // 背景网格线（GPA 1.0 / 2.0 / 3.0 / 4.0）
     final gridPaint = Paint()
-      ..color = AppColors.greyLight.withValues(alpha: 0.4)
+      ..color = const Color(0xFFEEEEEE)
       ..strokeWidth = 0.5;
     for (final level in [1.0, 2.0, 3.0, 4.0]) {
       final y = chartBottom - (level / 4.0) * chartBottom;
       canvas.drawLine(Offset(0, y), Offset(size.width, y), gridPaint);
     }
 
-    // 渐变色柱子
-    for (int i = 0; i < count; i++) {
+    final leftPad = barWidth;
+    final pointGap = count <= 1
+        ? 0.0
+        : (size.width - leftPad * 2) / (count - 1);
+    final points = List.generate(count, (i) {
       final gpa = data[i].gpa.clamp(0.0, 4.0);
-      final rawHeight = (gpa / 4.0) * chartBottom;
-      final barHeight = max(rawHeight, 8.0);
-      final left = count == 1 ? left0 : left0 + i * (barWidth / 1.4 * 2);
-      final top = chartBottom - barHeight;
+      final x = count == 1 ? size.width / 2 : leftPad + i * pointGap;
+      final rawY = chartBottom - (gpa / 4.0) * chartBottom;
+      final y = gpa == 0 ? chartBottom - 4 : rawY;
+      return Offset(x, y);
+    });
 
-      final rect = RRect.fromRectAndCorners(
-        Rect.fromLTWH(left, top, barWidth, barHeight),
-        topLeft: const Radius.circular(6),
-        topRight: const Radius.circular(6),
+    final linePath = Path()..moveTo(points.first.dx, points.first.dy);
+    for (int i = 1; i < points.length; i++) {
+      linePath.lineTo(points[i].dx, points[i].dy);
+    }
+
+    final fillPath = Path.from(linePath)
+      ..lineTo(points.last.dx, chartBottom)
+      ..lineTo(points.first.dx, chartBottom)
+      ..close();
+
+    canvas.drawPath(
+      fillPath,
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: [
+            const Color(0xFF1A1A1A).withOpacity(0.08),
+            Colors.transparent,
+          ],
+        ).createShader(Rect.fromLTWH(0, 0, size.width, chartBottom))
+        ..style = PaintingStyle.fill,
+    );
+
+    canvas.drawPath(
+      linePath,
+      Paint()
+        ..color = const Color(0xFF1A1A1A)
+        ..strokeWidth = 2
+        ..strokeCap = StrokeCap.round
+        ..strokeJoin = StrokeJoin.round
+        ..style = PaintingStyle.stroke,
+    );
+
+    for (int i = 0; i < points.length; i++) {
+      final point = points[i];
+      final isMax = i == maxIndex;
+      canvas.drawCircle(
+        point,
+        isMax ? 6 : 5,
+        Paint()..color = const Color(0xFF1A1A1A),
       );
-      canvas.drawRRect(
-        rect,
-        Paint()
-          ..shader = LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              AppColors.primary,
-              AppColors.primary.withValues(alpha: 0.3),
-            ],
-          ).createShader(Rect.fromLTWH(left, top, barWidth, barHeight))
-          ..style = PaintingStyle.fill,
+      canvas.drawCircle(
+        point,
+        isMax ? 3.5 : 3,
+        Paint()..color = Colors.white,
       );
     }
   }
 
   @override
-  bool shouldRepaint(_RealGpaChartPainter old) =>
+  bool shouldRepaint(_GpaLineChartPainter old) =>
       old.summaries != summaries;
 }
 
@@ -604,26 +639,29 @@ class _GpaChartWidget extends StatelessWidget {
         late double barWidth;
         late double left0;
         if (count == 1) {
-          barWidth = w * 0.3;
+          barWidth = w * 0.15;
           left0 = (w - barWidth) / 2;
         } else {
-          barWidth = w / (count * 2 + 1) * 1.4;
-          left0 = barWidth / 1.4;
+          barWidth = w * 0.15;
+          left0 = barWidth;
         }
+
+        final spacing = count <= 1
+            ? 0.0
+            : (w - left0 * 2) / (count - 1);
 
         // 预先计算每个柱子的布局信息
         final bars = List.generate(count, (i) {
           final gpa = data[i].gpa.clamp(0.0, 4.0);
-          final rawHeight = (gpa / 4.0) * chartBottom;
-          final barHeight = max(rawHeight, 8.0);
-          final left = count == 1 ? left0 : left0 + i * (barWidth / 1.4 * 2);
-          final top = chartBottom - barHeight;
+          final xCenter = count == 1 ? w / 2 : left0 + i * spacing;
+          final rawY = chartBottom - (gpa / 4.0) * chartBottom;
+          final top = gpa == 0 ? chartBottom - 4 : rawY;
           final semester = data[i].semester;
           final semLabel =
               semester.length >= 9 ? semester.substring(7) : semester;
           return (
             gpa: gpa,
-            left: left,
+            left: xCenter - barWidth / 2,
             top: top,
             barWidth: barWidth,
             semLabel: semLabel,
@@ -636,7 +674,7 @@ class _GpaChartWidget extends StatelessWidget {
             // 底层：只画网格线 + 柱子
             Positioned.fill(
               child: CustomPaint(
-                painter: _RealGpaChartPainter(
+                painter: _GpaLineChartPainter(
                   summaries: data,
                   count: count,
                   barWidth: barWidth,
@@ -650,13 +688,13 @@ class _GpaChartWidget extends StatelessWidget {
               // GPA 数字（柱子上方）
               Positioned(
                 left: bar.left,
-                top: bar.top - 16,
+                top: bar.top - 18,
                 width: bar.barWidth,
                 child: Text(
                   bar.gpa.toStringAsFixed(1),
                   textAlign: TextAlign.center,
                   style: const TextStyle(
-                    color: AppColors.primary,
+                    color: Color(0xFF1A1A1A),
                     fontSize: 10,
                     fontWeight: FontWeight.w700,
                     height: 1,
@@ -671,8 +709,8 @@ class _GpaChartWidget extends StatelessWidget {
                 child: Text(
                   bar.semLabel,
                   textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
+                  style: const TextStyle(
+                    color: Color(0xFF999999),
                     fontSize: 9,
                     height: 1,
                   ),

@@ -12,6 +12,7 @@ import '../pages/study/book_search_page.dart';
 import '../pages/study/seat_reservation_page.dart';
 import '../pages/study/my_loans_page.dart';
 import '../pages/study/library_stats_page.dart';
+import '../pages/library/reservations_page.dart';
 import '../pages/study/grades_page.dart';
 import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
@@ -23,6 +24,7 @@ import '../../features/study/pages/leave_apply_page.dart';
 import '../../features/library/pages/all_books_page.dart';
 import '../../features/library/pages/book_detail_page.dart';
 import '../../features/library/pages/my_reservations_page.dart';
+import '../../features/life/pages/map_detail_page.dart';
 import '../pages/study/find_room_page.dart';
 
 final GoRouter appRouter = GoRouter(
@@ -88,6 +90,10 @@ final GoRouter appRouter = GoRouter(
           builder: (context, state) => const MyLoansPage(),
         ),
         GoRoute(
+          path: 'reservations',
+          builder: (context, state) => const ReservationsPage(),
+        ),
+        GoRoute(
           path: 'stats',
           builder: (context, state) => const LibraryStatsPage(),
         ),
@@ -127,6 +133,11 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/find-room',
       builder: (context, state) => const FindRoomPage(),
+    ),
+    // 校园地图
+    GoRoute(
+      path: '/campus-map',
+      builder: (context, state) => const MapDetailPage(),
     ),
     // 请假审批
     GoRoute(

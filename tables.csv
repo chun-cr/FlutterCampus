@@ -197,3 +197,17 @@ checked_out_at TIMESTAMPTZ,           -- 用户点击签退时间
 created_at TIMESTAMPTZ DEFAULT now(),
 UNIQUE(seat_id, date, start_time)     -- 同一座位同一时段只能预约一次
 );
+
+CREATE TABLE public.book_reservations (
+  id uuid NOT NULL DEFAULT gen_random_uuid(),
+  user_id uuid NOT NULL REFERENCES auth.users(id),
+  book_id uuid NOT NULL REFERENCES public.books(id),
+  status text NOT NULL DEFAULT 'queuing'
+    CHECK (status IN ('queuing', 'available', 'expired', 'cancelled')),
+  queue_position integer NOT NULL DEFAULT 1,
+  available_deadline timestamptz,        -- 可借阅状态的截止时间（available 时设置，3天后）
+  notified_at timestamptz,               -- 系统推送通知的时间
+  created_at timestamptz DEFAULT now(),
+  updated_at timestamptz DEFAULT now(),
+  CONSTRAINT book_reservations_pkey PRIMARY KEY (id)
+);

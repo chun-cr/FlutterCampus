@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../../../core/services/campus_news_service.dart';
-import '../../../features/life/pages/map_detail_page.dart';
 import '../../theme/theme.dart';
 
 class LifePage extends ConsumerStatefulWidget {
@@ -125,11 +125,7 @@ class _LifePageState extends ConsumerState<LifePage> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(
-                          MaterialPageRoute(
-                            builder: (_) => const MapDetailPage(),
-                          ),
-                        );
+                        context.push('/campus-map');
                       },
                       child: SizedBox(
                         height: 160,
