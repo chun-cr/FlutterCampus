@@ -28,6 +28,16 @@ import '../../features/life/pages/map_detail_page.dart';
 import '../pages/study/find_room_page.dart';
 import '../pages/teacher/class_roster_page.dart';
 import '../pages/teacher/teacher_weekly_schedule_page.dart';
+import '../pages/teacher/reschedule_apply_page.dart';
+import '../pages/teacher/attendance_page.dart';
+import '../pages/teacher/assignment_page.dart';
+import '../pages/teacher/submission_list_page.dart';
+import '../pages/teacher/scholarship_page.dart';
+import '../pages/teacher/scholarship_applicant_page.dart';
+import '../pages/teacher/venue_page.dart';
+import '../pages/teacher/research_page.dart';
+import '../pages/teacher/notice_page.dart';
+import '../pages/teacher/notice_detail_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -154,6 +164,70 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/leave-approval',
       builder: (context, state) => const LeaveApprovalPage(),
+    ),
+    // 调课申请（教师端）
+    GoRoute(
+      path: '/teacher/reschedule',
+      builder: (context, state) => const RescheduleApplyPage(),
+    ),
+    // 课堂签到（教师端）
+    GoRoute(
+      path: '/teacher/attendance',
+      builder: (context, state) => const AttendancePage(),
+    ),
+    // 作业批改（教师端）
+    GoRoute(
+      path: '/teacher/assignment',
+      builder: (context, state) => const AssignmentPage(),
+      routes: [
+        GoRoute(
+          path: 'submissions',
+          builder: (context, state) {
+            final assignment = state.extra as Assignment;
+            return SubmissionListPage(assignment: assignment);
+          },
+        ),
+      ],
+    ),
+    // 奖助学金审核（教师端）
+    GoRoute(
+      path: '/teacher/scholarship',
+      builder: (context, state) => const ScholarshipPage(),
+      routes: [
+        GoRoute(
+          path: 'applicants',
+          builder: (context, state) {
+            final scholarship = state.extra as Scholarship;
+            return ScholarshipApplicantPage(scholarship: scholarship);
+          },
+        ),
+      ],
+    ),
+    // 场地借用（教师端）
+    GoRoute(
+      path: '/teacher/venue',
+      builder: (context, state) => const VenuePage(),
+    ),
+    // 科研概况详情页
+    GoRoute(
+      path: '/teacher/research',
+      builder: (context, state) => const ResearchPage(),
+    ),
+    // 通知列表页
+    GoRoute(
+      path: '/teacher/notice',
+      builder: (context, state) {
+        final category = state.extra as String? ?? NoticeCategory.academic;
+        return NoticePage(category: category);
+      },
+    ),
+    // 通知详情页
+    GoRoute(
+      path: '/teacher/notice/detail',
+      builder: (context, state) {
+        final notice = state.extra as Notice;
+        return NoticeDetailPage(notice: notice);
+      },
     ),
     // 学生请假申请
     GoRoute(

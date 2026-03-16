@@ -145,11 +145,13 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
                           context,
                           Icons.notifications_none_outlined,
                           '奖助学金',
+                          onTap: () => context.push('/teacher/scholarship'),
                         ),
                         _buildQuickAction(
                           context,
                           Icons.meeting_room_outlined,
                           '场地借用',
+                          onTap: () => context.push('/teacher/venue'),
                         ),
                       ],
                     ),
@@ -160,58 +162,11 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
 
               // 2. 生活服务
               _buildSectionHeader('生活服务', subtitle: 'LIFE SERVICES'),
-              _buildPremiumCard(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: _buildLibraryStat(
-                            '财务报销',
-                            '2',
-                            '笔正在处理',
-                            AppColors.textPrimary,
-                          ),
-                        ),
-                        Container(
-                          width: 1,
-                          height: 48,
-                          color: AppColors.greyLight.withValues(alpha: 0.5),
-                        ),
-                        Expanded(
-                          child: _buildLibraryStat(
-                            '教工食堂',
-                            '11:30',
-                            '开始供餐',
-                            AppColors.primary,
-                          ),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 32),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () => context.push('/library'),
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor:
-                              AppColors.primary.withValues(alpha: 0.05),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
-                        ),
-                        child: Text(
-                          '查看通勤班车时刻表',
-                          style: AppTextStyles.button.copyWith(
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const _CanteenCard(),
+              const SizedBox(height: 16),
+              const _BusCard(),
+              const SizedBox(height: 16),
+              const _ReimbursementCard(),
               const SizedBox(height: 40),
 
               // 3. 科研概况
@@ -243,42 +198,105 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
                             ),
                           ],
                         ),
-                        Text(
-                          '正常使用中',
-                          style: AppTextStyles.caption.copyWith(
-                            color: AppColors.success,
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 10, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: AppColors.success.withValues(alpha: 0.1),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Text(
+                            '正常使用中',
+                            style: AppTextStyles.labelSmall.copyWith(
+                              color: AppColors.success,
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 8),
+                    Text(
+                      '4个项目',
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
                     Container(
                       height: 120,
                       width: double.infinity,
                       decoration: BoxDecoration(
-                        color: AppColors.background.withValues(alpha: 0.5),
+                        color: AppColors.background,
                         borderRadius: BorderRadius.circular(16),
                       ),
-                      child: CustomPaint(painter: _MockChartPainter()),
+                      child: CustomPaint(painter: _MockSpendingChartPainter()),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('1月', style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDisabled)),
+                        Text('3月', style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDisabled)),
+                        Text('6月', style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDisabled)),
+                        Text('9月', style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDisabled)),
+                        Text('12月', style: AppTextStyles.labelSmall.copyWith(color: AppColors.textDisabled)),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('3个', style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary)),
+                              const SizedBox(height: 4),
+                              Text('进行中项目', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                            ],
+                          ),
+                        ),
+                        Container(width: 1, height: 24, color: AppColors.greyLight),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('3篇', style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary)),
+                              const SizedBox(height: 4),
+                              Text('已发表论文', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                            ],
+                          ),
+                        ),
+                        Container(width: 1, height: 24, color: AppColors.greyLight),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Text('¥32,200', style: AppTextStyles.titleMedium.copyWith(color: AppColors.primary)),
+                              const SizedBox(height: 4),
+                              Text('本年支出', style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 24),
                     Center(
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          const Icon(
-                            Icons.auto_graph_rounded,
-                            size: 16,
-                            color: AppColors.textSecondary,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '查看详细分析',
-                            style: AppTextStyles.labelMedium.copyWith(
+                      child: GestureDetector(
+                        onTap: () => context.push('/teacher/research'),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.auto_graph_rounded,
+                              size: 16,
                               color: AppColors.textSecondary,
                             ),
-                          ),
-                        ],
+                            const SizedBox(width: 8),
+                            Text(
+                              '查看详细分析',
+                              style: AppTextStyles.labelMedium.copyWith(
+                                color: AppColors.textSecondary,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -297,7 +315,7 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
                       title: '教务处通知',
                       subtitle: '关于期中教学检查的通知',
                       color: AppColors.primary,
-                      onTap: () => context.push('/grades'),
+                      onTap: () => context.push('/teacher/notice', extra: 'academic'),
                     ),
                   ),
                   const SizedBox(width: 16),
@@ -308,7 +326,7 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
                       title: '科研处通知',
                       subtitle: '国家自然科学基金申报指南',
                       color: AppColors.campusOrange,
-                      onTap: () => context.push('/exam-countdown'),
+                      onTap: () => context.push('/teacher/notice', extra: 'research'),
                     ),
                   ),
                 ],
@@ -460,31 +478,7 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
     );
   }
 
-  Widget _buildLibraryStat(
-    String label,
-    String value,
-    String sub,
-    Color valueColor,
-  ) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: AppTextStyles.headlineMedium.copyWith(
-            color: valueColor,
-            fontWeight: FontWeight.w300,
-          ),
-        ),
-        const SizedBox(height: 4),
-        Text(label, style: AppTextStyles.labelMedium),
-        const SizedBox(height: 6),
-        Text(
-          sub,
-          style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
-        ),
-      ],
-    );
-  }
+
 
   Widget _buildToolCard(
     BuildContext context, {
@@ -533,28 +527,40 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
   }
 }
 
-class _MockChartPainter extends CustomPainter {
+class _MockSpendingChartPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
+    // 虚拟本年12个月经费支出，基于 monthlySpending: [0, 0, 8000, 12000, 3200, 0, 0, 6000, 2400, 800, 0, 0]
+    final data = [0.0, 0.0, 8000.0, 12000.0, 3200.0, 0.0, 0.0, 6000.0, 2400.0, 800.0, 0.0, 0.0];
+    final maxVal = 12000.0;
+    
     final paint = Paint()
       ..color = AppColors.primary.withValues(alpha: 0.6)
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
     final path = Path();
-    path.moveTo(0, size.height * 0.85);
-    path.quadraticBezierTo(
-      size.width * 0.3,
-      size.height * 0.6,
-      size.width * 0.5,
-      size.height * 0.7,
-    );
-    path.quadraticBezierTo(
-      size.width * 0.8,
-      size.height * 0.9,
-      size.width,
-      size.height * 0.2,
-    );
+    
+    // 生成折线点
+    final points = <Offset>[];
+    for (int i = 0; i < data.length; i++) {
+      final x = size.width * (i / (data.length - 1));
+      // 0为底部，由于最大高度预留点空间，最高占80%高度
+      final y = size.height - (data[i] / maxVal) * (size.height * 0.8);
+      points.add(Offset(x, y));
+    }
+
+    if (points.isNotEmpty) {
+      path.moveTo(points.first.dx, points.first.dy);
+      // 使用平滑贝塞尔曲线
+      for (var i = 0; i < points.length - 1; i++) {
+        var p0 = points[i];
+        var p1 = points[i + 1];
+        var ctrl1 = Offset(p0.dx + (p1.dx - p0.dx) / 2, p0.dy);
+        var ctrl2 = Offset(p0.dx + (p1.dx - p0.dx) / 2, p1.dy);
+        path.cubicTo(ctrl1.dx, ctrl1.dy, ctrl2.dx, ctrl2.dy, p1.dx, p1.dy);
+      }
+    }
 
     canvas.drawPath(path, paint);
 
@@ -582,17 +588,937 @@ class _MockChartPainter extends CustomPainter {
       ..strokeWidth = 1.5
       ..style = PaintingStyle.stroke;
 
-    final points = [
-      Offset(size.width * 0.5, size.height * 0.7),
-      Offset(size.width, size.height * 0.2),
-    ];
-
-    for (final point in points) {
-      canvas.drawCircle(point, 4, dotPaint);
-      canvas.drawCircle(point, 4, dotBorderPaint);
+    // 绘制有支出的数据点
+    for (int i = 0; i < points.length; i++) {
+      if (data[i] > 0) {
+        final point = points[i];
+        canvas.drawCircle(point, 3, dotPaint);
+        canvas.drawCircle(point, 3, dotBorderPaint);
+      }
     }
   }
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ===========================================================================
+// 生活服务模块 - 数据与组件
+// ===========================================================================
+
+class DayMenu {
+  const DayMenu({
+    required this.breakfast,
+    required this.lunch,
+    required this.dinner,
+  });
+  final List<String> breakfast;
+  final List<String> lunch;
+  final List<String> dinner;
+}
+
+final weeklyMenu = {
+  1: const DayMenu(
+    breakfast: ['豆浆', '油条', '包子', '煮鸡蛋'],
+    lunch: ['红烧肉', '清蒸鱼', '番茄炒蛋', '炒时蔬', '紫菜蛋花汤'],
+    dinner: ['宫保鸡丁', '麻婆豆腐', '炒青菜', '冬瓜排骨汤'],
+  ),
+  2: const DayMenu(
+    breakfast: ['小米粥', '馒头', '咸菜', '茶叶蛋'],
+    lunch: ['糖醋里脊', '鱼香肉丝', '蒜蓉西兰花', '米饭', '酸辣汤'],
+    dinner: ['红烧排骨', '炒土豆丝', '清炒豆芽', '玉米浓汤'],
+  ),
+  3: const DayMenu(
+    breakfast: ['南瓜粥', '葱油饼', '拍黄瓜', '卤蛋'],
+    lunch: ['东坡肉', '清蒸虾', '炒莴笋', '蒸米饭', '番茄蛋汤'],
+    dinner: ['黑椒牛柳', '手撕包菜', '炒豆腐', '萝卜排骨汤'],
+  ),
+  4: const DayMenu(
+    breakfast: ['绿豆粥', '韭菜盒子', '拌菠菜', '白煮蛋'],
+    lunch: ['回锅肉', '蒸鲈鱼', '炒花椰菜', '扬州炒饭', '冬瓜汤'],
+    dinner: ['椒盐排条', '蒜苔炒肉', '清炒油麦菜', '番茄蛋花汤'],
+  ),
+  5: const DayMenu(
+    breakfast: ['红豆粥', '煎饺', '凉拌木耳', '溏心蛋'],
+    lunch: ['粉蒸肉', '红烧鲫鱼', '炒藕片', '白米饭', '紫菜汤'],
+    dinner: ['照烧鸡腿', '炒三丝', '清蒸豆腐', '菌菇汤'],
+  ),
+  6: const DayMenu(
+    breakfast: ['皮蛋瘦肉粥', '油饼', '小咸菜', '茶叶蛋'],
+    lunch: ['红烧牛肉', '清蒸鳕鱼', '炒时令蔬菜', '炒饭', '酸辣汤'],
+    dinner: ['葱爆羊肉', '干煸豆角', '炒青菜', '排骨玉米汤'],
+  ),
+  7: const DayMenu(
+    breakfast: ['八宝粥', '花卷', '酱牛肉', '荷包蛋'],
+    lunch: ['红烧肘子', '清蒸鲈鱼', '炒双色花椰菜', '扬州炒饭', '骨汤'],
+    dinner: ['烤鸭', '炒时蔬', '蒸蛋羹', '萝卜丝汤'],
+  ),
+};
+
+class BusSchedule {
+  const BusSchedule({
+    required this.route,
+    required this.from,
+    required this.to,
+    required this.times,
+  });
+  final String route;
+  final String from;
+  final String to;
+  final List<String> times;
+}
+
+final busSchedules = [
+  const BusSchedule(
+    route: '1路',
+    from: '学校正门',
+    to: '市中心广场',
+    times: ['07:15', '08:30', '12:00', '17:30', '18:45', '21:00'],
+  ),
+  const BusSchedule(
+    route: '1路',
+    from: '市中心广场',
+    to: '学校正门',
+    times: ['07:45', '09:00', '13:00', '18:00', '19:15', '21:30'],
+  ),
+  const BusSchedule(
+    route: '2路',
+    from: '学校正门',
+    to: '火车站',
+    times: ['08:00', '12:30', '17:00', '20:30'],
+  ),
+  const BusSchedule(
+    route: '2路',
+    from: '火车站',
+    to: '学校正门',
+    times: ['08:45', '13:15', '17:45', '21:15'],
+  ),
+];
+
+class ReimbursementRecord {
+  const ReimbursementRecord({
+    required this.id,
+    required this.title,
+    required this.amount,
+    required this.status,
+    required this.date,
+  });
+  final String id;
+  final String title;
+  final double amount;
+  final String status;
+  final String date;
+}
+
+final mockReimbursements = [
+  const ReimbursementRecord(
+    id: '2025-012',
+    title: '差旅费报销',
+    amount: 1200,
+    status: 'processing',
+    date: '3月10日',
+  ),
+  const ReimbursementRecord(
+    id: '2025-008',
+    title: '科研耗材采购',
+    amount: 3400,
+    status: 'approved',
+    date: '2月28日',
+  ),
+  const ReimbursementRecord(
+    id: '2025-003',
+    title: '会议注册费',
+    amount: 800,
+    status: 'approved',
+    date: '2月15日',
+  ),
+];
+
+// ---------------------------------------------------------------------------
+// 卡片一：今日食堂
+// ---------------------------------------------------------------------------
+class _CanteenCard extends StatelessWidget {
+  const _CanteenCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final timeStr =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    String statusText;
+    Color statusBgColor;
+    Color statusTextColor;
+    String currentMealType; // 'breakfast', 'lunch', 'dinner'
+    String mealTitle;
+
+    // 根据当前时间判断餐次标签
+    if (timeStr.compareTo('06:00') >= 0 && timeStr.compareTo('09:00') < 0) {
+      statusText = '早餐供应中';
+      statusBgColor = AppColors.success.withValues(alpha: 0.1);
+      statusTextColor = AppColors.success;
+      currentMealType = 'breakfast';
+      mealTitle = '今日早餐';
+    } else if (timeStr.compareTo('09:00') >= 0 &&
+        timeStr.compareTo('11:00') < 0) {
+      statusText = '午餐 11:00起';
+      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
+      statusTextColor = AppColors.textDisabled;
+      currentMealType = 'lunch';
+      mealTitle = '今日午餐';
+    } else if (timeStr.compareTo('11:00') >= 0 &&
+        timeStr.compareTo('13:30') < 0) {
+      statusText = '午餐供应中';
+      statusBgColor = AppColors.success.withValues(alpha: 0.1);
+      statusTextColor = AppColors.success;
+      currentMealType = 'lunch';
+      mealTitle = '今日午餐';
+    } else if (timeStr.compareTo('13:30') >= 0 &&
+        timeStr.compareTo('17:00') < 0) {
+      statusText = '晚餐 17:00起';
+      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
+      statusTextColor = AppColors.textDisabled;
+      currentMealType = 'dinner';
+      mealTitle = '今日晚餐';
+    } else if (timeStr.compareTo('17:00') >= 0 &&
+        timeStr.compareTo('19:00') < 0) {
+      statusText = '晚餐供应中';
+      statusBgColor = AppColors.success.withValues(alpha: 0.1);
+      statusTextColor = AppColors.success;
+      currentMealType = 'dinner';
+      mealTitle = '今日晚餐';
+    } else {
+      statusText = '明日 07:00起';
+      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
+      statusTextColor = AppColors.textDisabled;
+      currentMealType = 'breakfast';
+      mealTitle = '明日早餐';
+    }
+
+    // 获取当前星期对应的菜单（周末也支持，默认给1如果超出）
+    final menu = weeklyMenu[now.weekday] ?? weeklyMenu[1]!;
+    List<String> items;
+    if (currentMealType == 'breakfast') {
+      items = menu.breakfast;
+    } else if (currentMealType == 'lunch') {
+      items = menu.lunch;
+    } else {
+      items = menu.dinner;
+    }
+
+    return GestureDetector(
+      onTap: () {
+        showModalBottomSheet(
+          context: context,
+          isScrollControlled: true,
+          backgroundColor: AppColors.background,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          ),
+          builder: (ctx) => _MenuSheet(menu: menu),
+        );
+      },
+      child: Container(
+        padding: const EdgeInsets.all(24),
+        decoration: BoxDecoration(
+          color: AppColors.surface,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(
+            color: AppColors.greyLight.withValues(alpha: 0.6),
+            width: 0.5,
+          ),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 顶部行
+            Row(
+              children: [
+                const Icon(Icons.restaurant_outlined,
+                    color: AppColors.primary, size: 20),
+                const SizedBox(width: 8),
+                Text('教工食堂', style: AppTextStyles.titleMedium),
+                const Spacer(),
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: statusBgColor,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Text(
+                    statusText,
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: statusTextColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 20),
+            // 内容行
+            Text(
+              mealTitle,
+              style: AppTextStyles.labelMedium.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+            const SizedBox(height: 12),
+            SingleChildScrollView(
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: [
+                  ...items.take(4).map(_buildDishTag),
+                  if (items.length > 4) _buildDishTag('...'),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDishTag(String text) {
+    return Container(
+      margin: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      decoration: BoxDecoration(
+        color: AppColors.background,
+        borderRadius: BorderRadius.circular(20),
+      ),
+      child: Text(
+        text,
+        style: AppTextStyles.caption.copyWith(color: AppColors.textPrimary),
+      ),
+    );
+  }
+}
+
+class _MenuSheet extends StatelessWidget {
+  const _MenuSheet({required this.menu});
+  final DayMenu menu;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: AppColors.greyLight,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text('今日菜单', style: AppTextStyles.titleLarge),
+            const SizedBox(height: 24),
+            _buildMealSection(
+              icon: Icons.free_breakfast_outlined,
+              title: '早餐',
+              timeRange: '07:00 - 09:00',
+              items: menu.breakfast,
+            ),
+            const Divider(height: 32, thickness: 0.5, color: AppColors.greyLight),
+            _buildMealSection(
+              icon: Icons.rice_bowl_outlined,
+              title: '午餐',
+              timeRange: '11:00 - 13:30',
+              items: menu.lunch,
+            ),
+            const Divider(height: 32, thickness: 0.5, color: AppColors.greyLight),
+            _buildMealSection(
+              icon: Icons.dinner_dining_outlined,
+              title: '晚餐',
+              timeRange: '17:00 - 19:00',
+              items: menu.dinner,
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildMealSection({
+    required IconData icon,
+    required String title,
+    required String timeRange,
+    required List<String> items,
+  }) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Icon(icon, size: 18, color: AppColors.primary),
+            const SizedBox(width: 8),
+            Text(title, style: AppTextStyles.titleMedium),
+            const SizedBox(width: 12),
+            Text(
+              timeRange,
+              style: AppTextStyles.caption.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: items.map((item) {
+            return Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              decoration: BoxDecoration(
+                color: AppColors.background,
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                item,
+                style: AppTextStyles.caption.copyWith(color: AppColors.textPrimary),
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    );
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 卡片二：通勤班车
+// ---------------------------------------------------------------------------
+
+class _NextBusInfo {
+  _NextBusInfo({
+    required this.route,
+    required this.from,
+    required this.to,
+    required this.time,
+    required this.minutesLeft,
+  });
+  final String route;
+  final String from;
+  final String to;
+  final String time;
+  final int minutesLeft;
+}
+
+class _BusCard extends StatelessWidget {
+  const _BusCard();
+
+  /// 遍历所有班车数据，找到今天时间上最接近的下一班车
+  _NextBusInfo? _findNextBus() {
+    final now = DateTime.now();
+    final currentTimeStr =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    _NextBusInfo? nextBus;
+    int minMinutesDiff = 999999;
+
+    for (final schedule in busSchedules) {
+      for (final time in schedule.times) {
+        if (time.compareTo(currentTimeStr) >= 0) {
+          // 这个班次在未来
+          final parts = time.split(':');
+          final h = int.parse(parts[0]);
+          final m = int.parse(parts[1]);
+          final diff = (h * 60 + m) - (now.hour * 60 + now.minute);
+          
+          if (diff >= 0 && diff < minMinutesDiff) {
+            minMinutesDiff = diff;
+            nextBus = _NextBusInfo(
+              route: schedule.route,
+              from: schedule.from,
+              to: schedule.to,
+              time: time,
+              minutesLeft: diff,
+            );
+          }
+        }
+      }
+    }
+
+    return nextBus;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final nextBus = _findNextBus();
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.greyLight.withValues(alpha: 0.6),
+          width: 0.5,
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.directions_bus_outlined,
+                  color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text('通勤班车', style: AppTextStyles.titleMedium),
+              const Spacer(),
+              GestureDetector(
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: AppColors.background,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    builder: (ctx) => const _BusSheet(),
+                  );
+                },
+                child: Row(
+                  children: [
+                    Text(
+                      '查看全部',
+                      style: AppTextStyles.labelMedium.copyWith(
+                        color: AppColors.primary,
+                      ),
+                    ),
+                    const Icon(Icons.chevron_right,
+                        size: 16, color: AppColors.primary),
+                  ],
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 20),
+          if (nextBus != null) ...[
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+              decoration: BoxDecoration(
+                color: AppColors.primary.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                nextBus.route,
+                style: AppTextStyles.caption.copyWith(color: AppColors.primary),
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '${nextBus.from} → ${nextBus.to}',
+              style: AppTextStyles.titleMedium,
+            ),
+            const SizedBox(height: 8),
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                Text(
+                  nextBus.time,
+                  style: AppTextStyles.headlineMedium.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 4),
+                  child: Text(
+                    '距现在 ${nextBus.minutesLeft} 分钟',
+                    style: AppTextStyles.caption.copyWith(
+                      color: AppColors.textSecondary,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ] else ...[
+            Text(
+              '今日班次已全部发车',
+              style: AppTextStyles.titleMedium.copyWith(
+                color: AppColors.textDisabled,
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+}
+
+class _BusSheet extends StatelessWidget {
+  const _BusSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    final now = DateTime.now();
+    final currentTimeStr =
+        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: AppColors.greyLight,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Text('通勤班车时刻表', style: AppTextStyles.titleLarge),
+            const SizedBox(height: 24),
+            // 将相同路线名分组展示
+            ..._buildGroupedSchedules(currentTimeStr),
+          ],
+        ),
+      ),
+    );
+  }
+
+  List<Widget> _buildGroupedSchedules(String currentTimeStr) {
+    final groups = <String, List<BusSchedule>>{};
+    for (final s in busSchedules) {
+      groups.putIfAbsent(s.route, () => []).add(s);
+    }
+
+    final children = <Widget>[];
+    groups.forEach((route, schedules) {
+      children.add(Text(route, style: AppTextStyles.titleMedium));
+      children.add(const SizedBox(height: 12));
+      for (final s in schedules) {
+        children.add(Text('${s.from} → ${s.to}', style: AppTextStyles.labelMedium));
+        children.add(const SizedBox(height: 8));
+
+        // 找最近未发出的一班标记为最近
+        int closestIndex = -1;
+        for (int i = 0; i < s.times.length; i++) {
+          if (s.times[i].compareTo(currentTimeStr) >= 0) {
+            closestIndex = i;
+            break;
+          }
+        }
+
+        children.add(
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Row(
+              children: List.generate(s.times.length, (i) {
+                final time = s.times[i];
+                final isPast = time.compareTo(currentTimeStr) < 0;
+                final isClosest = i == closestIndex;
+
+                return Container(
+                  margin: const EdgeInsets.only(right: 8),
+                  child: Stack(
+                    clipBehavior: Clip.none,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 10, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: isPast
+                              ? AppColors.greyLight.withValues(alpha: 0.5)
+                              : AppColors.primary.withValues(alpha: 0.1),
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          time,
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: isPast
+                                ? AppColors.textDisabled
+                                : AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      if (isClosest)
+                        Positioned(
+                          right: -4,
+                          top: -6,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 4, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: AppColors.error,
+                              borderRadius: BorderRadius.circular(4),
+                            ),
+                            child: const Text(
+                              '最近',
+                              style: TextStyle(
+                                  fontSize: 8, color: Colors.white),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                );
+              }),
+            ),
+          ),
+        );
+        children.add(const SizedBox(height: 16));
+      }
+      children.add(const Divider(height: 24, thickness: 0.5, color: AppColors.greyLight));
+    });
+
+    if (children.isNotEmpty) {
+      children.removeLast(); // 移除最后的分隔线
+    }
+    return children;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 卡片三：财务报销
+// ---------------------------------------------------------------------------
+class _ReimbursementCard extends StatelessWidget {
+  const _ReimbursementCard();
+
+  @override
+  Widget build(BuildContext context) {
+    // 处理中数量
+    final processingCount = mockReimbursements
+        .where((e) => e.status == 'processing')
+        .length;
+
+    // 前几条记录
+    final recentRecords = mockReimbursements.take(2).toList();
+
+    return Container(
+      padding: const EdgeInsets.all(24),
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: AppColors.greyLight.withValues(alpha: 0.6),
+          width: 0.5,
+        ),
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              const Icon(Icons.receipt_long_outlined,
+                  color: AppColors.primary, size: 20),
+              const SizedBox(width: 8),
+              Text('财务报销', style: AppTextStyles.titleMedium),
+              const Spacer(),
+              if (processingCount > 0)
+                Text(
+                  '$processingCount笔审批中',
+                  style: AppTextStyles.labelMedium.copyWith(
+                    color: AppColors.campusOrange,
+                  ),
+                ),
+            ],
+          ),
+          const SizedBox(height: 16),
+          for (int i = 0; i < recentRecords.length; i++) ...[
+            _buildRecordRow(recentRecords[i]),
+            if (i < recentRecords.length - 1)
+              const Divider(height: 24, thickness: 0.5, color: AppColors.greyLight),
+          ],
+          if (mockReimbursements.length > recentRecords.length) ...[
+            const SizedBox(height: 16),
+            SizedBox(
+              width: double.infinity,
+              child: TextButton(
+                onPressed: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: AppColors.background,
+                    shape: const RoundedRectangleBorder(
+                      borderRadius:
+                          BorderRadius.vertical(top: Radius.circular(24)),
+                    ),
+                    builder: (ctx) => const _ReimbursementSheet(),
+                  );
+                },
+                child: Text(
+                  '查看全部记录',
+                  style: AppTextStyles.button.copyWith(
+                    color: AppColors.primary,
+                  ),
+                ),
+              ),
+            ),
+          ]
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRecordRow(ReimbursementRecord record) {
+    String statusLabel;
+    Color statusColor;
+
+    if (record.status == 'processing') {
+      statusLabel = '审批中';
+      statusColor = AppColors.campusOrange;
+    } else if (record.status == 'approved') {
+      statusLabel = '已到账';
+      statusColor = AppColors.success;
+    } else {
+      statusLabel = '已驳回';
+      statusColor = AppColors.error;
+    }
+
+    return Row(
+      children: [
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(record.title, style: AppTextStyles.labelMedium),
+              const SizedBox(height: 4),
+              Text(
+                record.date,
+                style: AppTextStyles.caption.copyWith(
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.end,
+          children: [
+            Text(
+              '¥${record.amount.toStringAsFixed(0)}',
+              style: AppTextStyles.labelMedium.copyWith(
+                color: AppColors.textPrimary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: statusColor.withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                statusLabel,
+                style: AppTextStyles.caption.copyWith(
+                  color: statusColor,
+                  fontSize: 10,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+}
+
+class _ReimbursementSheet extends StatelessWidget {
+  const _ReimbursementSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.only(bottom: 24),
+                decoration: BoxDecoration(
+                  color: AppColors.greyLight,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text('报销记录', style: AppTextStyles.titleLarge),
+            ),
+            const SizedBox(height: 16),
+            ...mockReimbursements.map(_buildListTile),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildListTile(ReimbursementRecord record) {
+    IconData icon;
+    Color color;
+    String label;
+
+    if (record.status == 'processing') {
+      icon = Icons.pending_outlined;
+      color = AppColors.campusOrange;
+      label = '审批中';
+    } else if (record.status == 'approved') {
+      icon = Icons.check_circle_outline;
+      color = AppColors.success;
+      label = '已到账';
+    } else {
+      icon = Icons.cancel_outlined;
+      color = AppColors.error;
+      label = '已驳回';
+    }
+
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
+      leading: Container(
+        padding: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.1),
+          shape: BoxShape.circle,
+        ),
+        child: Icon(icon, color: color, size: 24),
+      ),
+      title: Text(record.title, style: AppTextStyles.titleMedium),
+      subtitle: Text(
+        '#${record.id} · ${record.date}',
+        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+      ),
+      trailing: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            '¥${record.amount.toStringAsFixed(0)}',
+            style: AppTextStyles.titleMedium.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: AppTextStyles.caption.copyWith(color: color),
+          ),
+        ],
+      ),
+    );
+  }
 }

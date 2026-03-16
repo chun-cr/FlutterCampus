@@ -127,7 +127,11 @@ class ClassRosterPage extends ConsumerWidget {
                   border: InputBorder.none,
                 ),
               )
-            : Text(className, style: AppTextStyles.titleLarge),
+            : Text(
+                className,
+                style: AppTextStyles.titleMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
         actions: [
           IconButton(
             onPressed: () {
@@ -285,15 +289,22 @@ class _OverviewCard extends StatelessWidget {
     }
 
     Widget divider() {
-      return Container(width: 1, height: 44, color: AppColors.greyLight);
+      return Container(width: 1, height: 32, color: AppColors.greyLight);
     }
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(color: AppColors.greyLight, width: 0.5),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
       ),
       child: Row(
         children: [
@@ -334,14 +345,17 @@ class _GenderTabBar extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
               decoration: BoxDecoration(
-                color: selected ? AppColors.primary : AppColors.greyLight,
+                color: selected ? AppColors.primary : AppColors.surface,
                 borderRadius: BorderRadius.circular(999),
+                border: selected
+                    ? null
+                    : Border.all(color: AppColors.greyLight, width: 1),
               ),
               child: Text(
                 labels[index],
                 style: AppTextStyles.labelMedium.copyWith(
                   color: selected ? AppColors.white : AppColors.textSecondary,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: selected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ),
@@ -368,16 +382,15 @@ class _StudentTile extends StatelessWidget {
     return Theme(
       data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
       child: ExpansionTile(
-        tilePadding: const EdgeInsets.symmetric(horizontal: 0, vertical: 4),
+        tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
         childrenPadding: const EdgeInsets.only(left: 56, right: 8, bottom: 12),
         leading: CircleAvatar(
           radius: 22,
-          backgroundColor: AppColors.primary.withOpacity(0.1),
+          backgroundColor: AppColors.primary.withValues(alpha: 0.1),
           child: Text(
             student.name.isNotEmpty ? student.name.characters.first : '?',
             style: AppTextStyles.titleMedium.copyWith(
               color: AppColors.primary,
-              fontWeight: FontWeight.w700,
             ),
           ),
         ),
@@ -392,10 +405,10 @@ class _StudentTile extends StatelessWidget {
                 overflow: TextOverflow.ellipsis,
               ),
             ),
-            const SizedBox(width: 6),
+            const SizedBox(width: 4),
             Icon(
               isMale ? Icons.male_rounded : Icons.female_rounded,
-              size: 16,
+              size: 14,
               color: genderColor,
             ),
           ],
@@ -407,16 +420,15 @@ class _StudentTile extends StatelessWidget {
           ),
         ),
         trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
           decoration: BoxDecoration(
-            color: student.statusColor.withOpacity(0.12),
-            borderRadius: BorderRadius.circular(999),
+            color: student.statusColor.withValues(alpha: 0.1),
+            borderRadius: BorderRadius.circular(20),
           ),
           child: Text(
             student.statusLabel,
             style: AppTextStyles.labelSmall.copyWith(
               color: student.statusColor,
-              fontWeight: FontWeight.w600,
             ),
           ),
         ),

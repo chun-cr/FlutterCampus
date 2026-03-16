@@ -242,11 +242,11 @@ class _TeacherCalendarPageState extends ConsumerState<TeacherCalendarPage> {
   Widget _buildGridAndCourses(int currentWeek) {
     final hoursCount = _endHour - _startHour + 1;
     final totalHeight = hoursCount * _hourHeight;
-    final weekCourses = _courses.where((course) => course.weekday >= 1 && course.weekday <= 5).toList();
+    final weekCourses = _courses.where((course) => course.weekday >= 1 && course.weekday <= 7).toList();
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        final dayWidth = constraints.maxWidth / 5;
+        final dayWidth = constraints.maxWidth / 7;
 
         return SizedBox(
           height: totalHeight,
@@ -263,7 +263,7 @@ class _TeacherCalendarPageState extends ConsumerState<TeacherCalendarPage> {
                   ),
                 );
               }),
-              ...List.generate(6, (index) {
+              ...List.generate(8, (index) {
                 return Positioned(
                   top: 0,
                   bottom: 0,
@@ -274,7 +274,7 @@ class _TeacherCalendarPageState extends ConsumerState<TeacherCalendarPage> {
                   ),
                 );
               }),
-              ...List.generate(5, (index) {
+              ...List.generate(7, (index) {
                 final weekday = index + 1;
                 final date = weekdayToDate(currentWeek, weekday);
                 final isToday = _isSameDay(date, DateTime.now());
@@ -442,7 +442,7 @@ class _DateHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const weekLabels = ['周一', '周二', '周三', '周四', '周五'];
+    const weekLabels = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
 
     return Container(
       height: 44,
@@ -455,7 +455,7 @@ class _DateHeader extends StatelessWidget {
       child: Row(
         children: [
           const SizedBox(width: 40),
-          ...List.generate(5, (index) {
+          ...List.generate(7, (index) {
             final weekday = index + 1;
             final date = weekdayToDate(currentWeek, weekday);
             final isToday = _isSameDay(date, DateTime.now());

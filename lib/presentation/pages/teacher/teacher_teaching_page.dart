@@ -114,7 +114,7 @@ class TeacherTeachingPage extends ConsumerWidget {
                         _buildQuickAction(
                           Icons.meeting_room_outlined,
                           '调课申请',
-                          onTap: () => context.push('/leave-approval'),
+                          onTap: () => context.push('/teacher/reschedule'),
                         ),
                       ],
                     ),
@@ -131,11 +131,14 @@ class TeacherTeachingPage extends ConsumerWidget {
                     Row(
                       children: [
                         Expanded(
-                          child: _buildLibraryStat(
-                            '待批改',
-                            '12',
-                            '份作业',
-                            AppColors.textPrimary,
+                          child: GestureDetector(
+                            onTap: () => context.push('/teacher/assignment'),
+                            child: _buildLibraryStat(
+                              '待批改',
+                              '30', // 暂可以用静态数字
+                              '份作业',
+                              AppColors.textPrimary,
+                            ),
                           ),
                         ),
                         Container(
@@ -144,11 +147,14 @@ class TeacherTeachingPage extends ConsumerWidget {
                           color: AppColors.greyLight.withValues(alpha: 0.5),
                         ),
                         Expanded(
-                          child: _buildLibraryStat(
-                            '课堂签到',
-                            '待发起',
-                            '点击发起',
-                            AppColors.primary,
+                          child: GestureDetector(
+                            onTap: () => context.push('/teacher/attendance'),
+                            child: _buildLibraryStat(
+                              '课堂签到',
+                              '待发起',
+                              '点击发起',
+                              AppColors.primary,
+                            ),
                           ),
                         ),
                       ],
@@ -157,7 +163,7 @@ class TeacherTeachingPage extends ConsumerWidget {
                     SizedBox(
                       width: double.infinity,
                       child: TextButton(
-                        onPressed: () => context.push('/library'),
+                        onPressed: () => context.push('/teacher/attendance'),
                         style: TextButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           backgroundColor: AppColors.primary.withValues(
@@ -168,7 +174,7 @@ class TeacherTeachingPage extends ConsumerWidget {
                           ),
                         ),
                         child: Text(
-                          '进入教学工作台',
+                          '发起课堂签到',
                           style: AppTextStyles.button.copyWith(
                             color: AppColors.primary,
                           ),

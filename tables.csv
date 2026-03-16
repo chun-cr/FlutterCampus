@@ -281,3 +281,77 @@ CREATE TABLE public.teacher_schedules (
 
 -- 索引：按教师+学期快速查询
 CREATE INDEX idx_teacher_schedules_teacher ON public.teacher_schedules(teacher_id, semester);
+
+
+CREATE TABLE public.reschedule_applications (
+  id               uuid NOT NULL DEFAULT gen_random_uuid(),
+  teacher_id       uuid NOT NULL REFERENCES auth.users(id),
+  teacher_name     text NOT NULL,
+
+  -- 原课程信息
+  course_name      text NOT NULL,
+  course_code      text,
+  original_weekday integer NOT NULL,       -- 原周几 1-5
+  original_period  text NOT NULL,          -- 原节次，如 '1-2'
+  original_time    text NOT NULL,          -- 如 '08:00-09:40'
+  original_location text NOT NULL,         -- 原教室
+  original_week    integer,                -- 哪一周
+
+  -- 申请类型
+  apply_type       text NOT NULL           -- 'time'换时间 / 'room'换教室
+    CHECK (apply_type IN ('time', 'room')),
+
+  -- 调整后信息
+  new_weekday      integer,                -- 新周几（换时间时填）
+  new_period       text,                   -- 新节次（换时间时填）
+  new_time         text,                   -- 新时间（换时间时填）
+  new_location     text,                   -- 新教室（换教室时填）
+
+  -- 申请说明
+  reason           text,                   -- 申请原因
+
+  -- 审核信息
+  status           text NOT NULL DEFAULT 'pending'
+    CHECK (status IN ('pending', 'approved', 'rejected')),
+  admin_comment    text,                   -- 审核意见
+  reviewed_at      timestamptz,            -- 审核时间
+
+  created_at       timestamptz DEFAULT now(),
+  updated_at       timestamptz DEFAULT now(),
+
+  CONSTRAINT reschedule_applications_pkey PRIMARY KEY (id)
+);
+
+-- 索引：按教师查询申请列表
+CREATE INDEX idx_reschedule_teacher ON public.reschedule_applications(teacher_id, created_at DESC);
+
+
+CREATE TABLE public.assignment_submissions (
+  id            uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  assignment_id text NOT NULL,          -- 对应虚拟作业的id字符串
+  student_id    uuid NOT NULL,          -- 对应 students 表的 id
+  student_name  text NOT NULL,
+  student_no    text NOT NULL,
+  score         numeric,                -- null=未批改
+  comment       text,
+  graded_at     timestamptz,
+  submitted_at  timestamptz DEFAULT now(),
+  UNIQUE(assignment_id, student_id)
+);
+
+CREATE INDEX idx_submissions_assignment ON public.assignment_submissions(assignment_id);
+
+CREATE TABLE public.scholarship_reviews (
+  id                uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+  scholarship_id    text NOT NULL,       -- 对应虚拟项目id
+  student_id        uuid NOT NULL REFERENCES public.students(id),
+  student_name      text NOT NULL,
+  student_no        text NOT NULL,
+  apply_reason      text,               -- 申请理由（虚拟）
+  teacher_result    text                -- 'recommended'/'not_recommended'
+    CHECK (teacher_result IN ('recommended', 'not_recommended')),
+  teacher_comment   text,
+  reviewed_at       timestamptz,
+  created_at        timestamptz DEFAULT now(),
+  UNIQUE(scholarship_id, student_id)
+);
