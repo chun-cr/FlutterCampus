@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../components/components.dart';
 import '../../theme/theme.dart';
@@ -402,14 +403,7 @@ class _LoanCard extends ConsumerWidget {
       final msg = err is AsyncError
           ? err.error.toString().replaceFirst('Exception: ', '')
           : '操作失败，请重试';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF666666),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: msg, isError: false);
     }
   }
 
@@ -435,14 +429,7 @@ class _LoanCard extends ConsumerWidget {
       final msg = err is AsyncError
           ? err.error.toString().replaceFirst('Exception: ', '')
           : '操作失败，请重试';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF666666),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: msg, isError: false);
     }
   }
 
@@ -467,14 +454,7 @@ class _LoanCard extends ConsumerWidget {
       final msg = err is AsyncError
           ? err.error.toString().replaceFirst('Exception: ', '')
           : '操作失败，请重试';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF666666),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: msg, isError: false);
     }
   }
 

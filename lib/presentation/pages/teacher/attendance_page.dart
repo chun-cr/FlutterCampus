@@ -1,4 +1,5 @@
 import 'dart:async';
+import '../../components/campus_snackbar.dart';
 import 'dart:math';
 
 import 'package:flutter/material.dart';
@@ -491,15 +492,7 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
 
   void _showSnackBar(String message, {bool isSuccess = false}) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        backgroundColor: isSuccess ? AppColors.success : AppColors.error,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      ),
-    );
+    CampusSnackBar.show(context, message: message, isError: true);
   }
 
   @override

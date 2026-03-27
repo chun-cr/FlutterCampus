@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/grade.dart';
+import 'auth_service.dart';
 
 class GradeService {
   GradeService(this._supabaseClient);
@@ -68,6 +69,10 @@ class GradeService {
 
 final gradeServiceProvider = Provider<GradeService>((ref) {
   return GradeService(Supabase.instance.client);
+});
+
+final gradeCurrentUserIdProvider = Provider<String?>((ref) {
+  return ref.watch(progressCurrentUserIdProvider);
 });
 
 class GradesState {
@@ -187,6 +192,6 @@ final gradeStateProvider = StateNotifierProvider<GradesNotifier, GradesState>((
   ref,
 ) {
   final gradeService = ref.watch(gradeServiceProvider);
-  final userId = Supabase.instance.client.auth.currentUser?.id;
+  final userId = ref.watch(gradeCurrentUserIdProvider);
   return GradesNotifier(gradeService, userId);
 });

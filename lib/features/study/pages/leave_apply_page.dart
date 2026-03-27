@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -204,9 +205,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('提交失败：$e')),
-        );
+        CampusSnackBar.show(context, message: '提交失败：$e', isError: false);
       }
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -553,9 +552,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
         _loadMyLeaves();
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('撤销失败：$e')),
-          );
+          CampusSnackBar.show(context, message: '撤销失败：$e', isError: false);
         }
       }
     }

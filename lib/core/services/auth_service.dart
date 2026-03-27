@@ -180,6 +180,10 @@ final authStateProvider = StateNotifierProvider<AuthNotifier, AuthState>((ref) {
   return AuthNotifier(ref.watch(authServiceProvider));
 });
 
+final progressCurrentUserIdProvider = Provider<String?>((ref) {
+  return ref.watch(authStateProvider.select((state) => state.user?.id));
+});
+
 class AuthState {
   AuthState({this.user, this.isLoading = false, this.error});
   final models.User? user;

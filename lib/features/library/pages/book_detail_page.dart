@@ -206,14 +206,7 @@ class _BookDetailBodyState extends ConsumerState<_BookDetailBody> {
       final message = error is AsyncError
           ? error.error.toString().replaceFirst('Exception: ', '')
           : '预约失败，请重试';
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF666666),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: message, isError: false);
     }
   }
 

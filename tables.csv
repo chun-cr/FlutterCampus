@@ -79,12 +79,15 @@ CREATE TABLE public.exam_countdowns (
 CREATE TABLE public.grades (
   id uuid NOT NULL DEFAULT gen_random_uuid(),
   course_id text NOT NULL,
+  user_id uuid NOT NULL REFERENCES auth.users(id),
   course_name text NOT NULL,
   semester text NOT NULL,
   score numeric NOT NULL,
   grade_point numeric NOT NULL,
   credit numeric NOT NULL,
   status text DEFAULT 'passed'::text,
+  teacher_id uuid REFERENCES auth.users(id),
+  created_at timestamp with time zone DEFAULT now(),
   CONSTRAINT grades_pkey PRIMARY KEY (id)
 );
 CREATE TABLE public.help_tasks (
@@ -355,3 +358,39 @@ CREATE TABLE public.scholarship_reviews (
   created_at        timestamptz DEFAULT now(),
   UNIQUE(scholarship_id, student_id)
 );
+
+create extension if not exists pgcrypto;
+create table public.canteens (
+  id uuid primary key default gen_random_uuid(),
+  name text not null,
+  type text not null check (type in ('student', 'teacher', 'mixed')),
+  is_open boolean not null default true,
+  open_time text,
+  sort_order integer not null default 0,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
+);
+create table public.canteen_weekly_menus (
+  id uuid primary key default gen_random_uuid(),
+  canteen_id uuid not null references public.canteens(id) on delete cascade,
+  weekday integer not null check (weekday between 1 and 7),
+  breakfast_items text[] not null default '{}',
+  lunch_items text[] not null default '{}',
+  dinner_items text[] not null default '{}',
+  featured_note text,
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now(),
+  unique (canteen_id, weekday)
+);
+alter table public.canteens enable row level security;
+alter table public.canteen_weekly_menus enable row level security;
+create policy "已登录用户可读取食堂信息"
+on public.canteens
+for select
+to authenticated
+using (true);
+create policy "已登录用户可读取食堂周菜单"
+on public.canteen_weekly_menus
+for select
+to authenticated
+using (true);

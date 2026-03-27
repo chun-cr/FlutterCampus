@@ -50,6 +50,30 @@ class SecondHandService {
       throw Exception('获取闲置商品失败');
     }
   }
+  Future<void> addItem({
+    required String title,
+    String? description,
+    required double price,
+    String? condition,
+  }) async {
+    try {
+      final user = _supabase.auth.currentUser;
+      if (user == null) throw Exception('未登录');
+
+      await _supabase.from('second_hand_items').insert({
+        'title': title,
+        'description': description,
+        'price': price,
+        'condition': condition ?? 'good',
+        'seller_id': user.id,
+        'created_at': DateTime.now().toIso8601String(),
+        'is_sold': false,
+      });
+    } catch (e) {
+      print('SecondHandService insert error: $e');
+      throw Exception('发布闲置信息失败');
+    }
+  }
 }
 
 final secondHandServiceProvider = Provider<SecondHandService>((ref) {
@@ -92,6 +116,20 @@ class SecondHandNotifier extends StateNotifier<SecondHandState> {
       state = state.copyWith(items: items, isLoading: false);
     } catch (e) {
       state = state.copyWith(error: '加载失败：$e', isLoading: false);
+    }
+  }
+  Future<void> addItem(SecondHandItem item) async {
+    try {
+      await _service.addItem(
+        title: item.title,
+        description: item.description,
+        price: item.price,
+        condition: item.condition.name,
+      );
+      await loadItems();
+    } catch (e) {
+      state = state.copyWith(error: '发布失败：$e');
+      rethrow;
     }
   }
 }

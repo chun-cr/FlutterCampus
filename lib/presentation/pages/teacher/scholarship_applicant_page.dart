@@ -1,4 +1,5 @@
 import 'dart:math';
+import '../../components/campus_snackbar.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -622,15 +623,7 @@ class _ReviewSheetState extends ConsumerState<_ReviewSheet> {
 
       if (mounted) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('审核已提交'),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-          ),
-        );
+        CampusSnackBar.show(context, message: '审核已提交', isError: false);
       }
       // 刷新外部列表
       ref.invalidate(
@@ -639,13 +632,7 @@ class _ReviewSheetState extends ConsumerState<_ReviewSheet> {
       ref.invalidate(scholarshipReviewedCountProvider);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('审核提交失败: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        CampusSnackBar.show(context, message: '审核提交失败: $e', isError: true);
       }
     }
   }

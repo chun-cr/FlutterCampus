@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../features/library/models/seat_reservation.dart';
 import '../../../features/library/providers/seat_provider.dart';
@@ -434,14 +435,7 @@ class _ReservationCard extends ConsumerWidget {
     final msg = errState is AsyncError
         ? errState.error.toString().replaceFirst('Exception: ', '')
         : '操作失败，请重试';
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        behavior: SnackBarBehavior.floating,
-        backgroundColor: const Color(0xFF666666),
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    CampusSnackBar.show(context, message: msg, isError: false);
   }
 
   // --- 工具方法 ---

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
@@ -168,9 +169,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                 if (context.mounted) Navigator.pop(context);
               } catch (e) {
                 if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text('操作失败：$e')),
-                  );
+                  CampusSnackBar.show(context, message: '操作失败：$e', isError: false);
                 }
               }
             },
@@ -209,9 +208,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
         _refreshGrades();
       } catch (e) {
         if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('删除失败：$e')),
-          );
+          CampusSnackBar.show(context, message: '删除失败：$e', isError: false);
         }
       }
     }

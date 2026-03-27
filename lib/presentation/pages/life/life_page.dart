@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/services/campus_news_service.dart';
+import '../../../domain/models/canteen_weekly_menu.dart';
+import '../../components/canteen_menu_panel.dart';
 import '../../theme/theme.dart';
 
 class LifePage extends ConsumerStatefulWidget {
@@ -75,45 +77,9 @@ class _LifePageState extends ConsumerState<LifePage> {
 
               // 2. 食堂与后勤 (Daily Menu - Minimalist)
               _buildSectionHeader('食堂菜单'),
-              _buildPremiumCard(
-                child: Column(
-                  children: [
-                    _buildCanteenItem('一食堂', '红烧肉、麻婆豆腐', 4.8),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(
-                        height: 1,
-                        thickness: 0.5,
-                        color: AppColors.greyLight,
-                      ),
-                    ),
-                    _buildCanteenItem('二食堂', '糖醉排骨、时令蔬菜', 4.5),
-                    const SizedBox(height: 32),
-                    SizedBox(
-                      width: double.infinity,
-                      child: TextButton(
-                        onPressed: () {},
-                        style: TextButton.styleFrom(
-                          padding: const EdgeInsets.symmetric(vertical: 16),
-                          backgroundColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                            side: BorderSide(
-                              color: AppColors.primary.withValues(alpha: 0.3),
-                              width: 0.5,
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          '查看全部菜单',
-                          style: AppTextStyles.button.copyWith(
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              const CanteenMenuPanel(
+                audience: CanteenAudience.student,
+                emptyTitle: '学生食堂菜单暂未开放',
               ),
               const SizedBox(height: 48),
 
@@ -452,48 +418,6 @@ class _LifePageState extends ConsumerState<LifePage> {
           fontWeight: FontWeight.w600,
         ),
       ),
-    );
-  }
-
-  Widget _buildCanteenItem(String name, String menu, double rating) {
-    return Row(
-      children: [
-        Expanded(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(name, style: AppTextStyles.titleMedium),
-              const SizedBox(height: 4),
-              Text(
-                menu,
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.textSecondary,
-                ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-            ],
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-          decoration: BoxDecoration(
-            color: AppColors.background,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              const Icon(
-                Icons.star_rounded,
-                size: 14,
-                color: AppColors.textPrimary,
-              ),
-              const SizedBox(width: 4),
-              Text(rating.toString(), style: AppTextStyles.labelMedium),
-            ],
-          ),
-        ),
-      ],
     );
   }
 }

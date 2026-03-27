@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../../domain/models/canteen_weekly_menu.dart';
 import '../../theme/theme.dart';
+import '../../components/canteen_menu_panel.dart';
 import '../../../core/services/leave_service.dart';
 
 class TeacherOfficePage extends ConsumerStatefulWidget {
@@ -34,7 +36,36 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // 1. 办公审批模块
+              // 1. 教务通知
+              _buildSectionHeader('教务通知', subtitle: 'OFFICIAL NOTICES'),
+              Row(
+                children: [
+                  Expanded(
+                    child: _buildToolCard(
+                      context,
+                      icon: Icons.school_outlined,
+                      title: '教务处通知',
+                      subtitle: '关于期中教学检查的通知',
+                      color: AppColors.primary,
+                      onTap: () => context.push('/teacher/notice', extra: 'academic'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: _buildToolCard(
+                      context,
+                      icon: Icons.timer_outlined,
+                      title: '科研处通知',
+                      subtitle: '国家自然科学基金申报指南',
+                      color: AppColors.campusOrange,
+                      onTap: () => context.push('/teacher/notice', extra: 'research'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 40),
+
+              // 2. 办公审批模块
               _buildSectionHeader('办公审批', subtitle: 'APPROVALS'),
               _buildPremiumCard(
                 child: Column(
@@ -160,7 +191,7 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
               ),
               const SizedBox(height: 40),
 
-              // 2. 生活服务
+              // 3. 生活服务
               _buildSectionHeader('生活服务', subtitle: 'LIFE SERVICES'),
               const _CanteenCard(),
               const SizedBox(height: 16),
@@ -169,7 +200,7 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
               const _ReimbursementCard(),
               const SizedBox(height: 40),
 
-              // 3. 科研概况
+              // 4. 科研概况
               _buildSectionHeader('科研概况', subtitle: 'RESEARCH PROGRESS'),
               _buildPremiumCard(
                 child: Column(
@@ -301,35 +332,6 @@ class _TeacherOfficePageState extends ConsumerState<TeacherOfficePage> {
                     ),
                   ],
                 ),
-              ),
-              const SizedBox(height: 40),
-
-              // 4. 教务通知
-              _buildSectionHeader('教务通知', subtitle: 'OFFICIAL NOTICES'),
-              Row(
-                children: [
-                  Expanded(
-                    child: _buildToolCard(
-                      context,
-                      icon: Icons.school_outlined,
-                      title: '教务处通知',
-                      subtitle: '关于期中教学检查的通知',
-                      color: AppColors.primary,
-                      onTap: () => context.push('/teacher/notice', extra: 'academic'),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  Expanded(
-                    child: _buildToolCard(
-                      context,
-                      icon: Icons.timer_outlined,
-                      title: '科研处通知',
-                      subtitle: '国家自然科学基金申报指南',
-                      color: AppColors.campusOrange,
-                      onTap: () => context.push('/teacher/notice', extra: 'research'),
-                    ),
-                  ),
-                ],
               ),
               const SizedBox(height: 80),
             ],
@@ -606,55 +608,6 @@ class _MockSpendingChartPainter extends CustomPainter {
 // 生活服务模块 - 数据与组件
 // ===========================================================================
 
-class DayMenu {
-  const DayMenu({
-    required this.breakfast,
-    required this.lunch,
-    required this.dinner,
-  });
-  final List<String> breakfast;
-  final List<String> lunch;
-  final List<String> dinner;
-}
-
-final weeklyMenu = {
-  1: const DayMenu(
-    breakfast: ['豆浆', '油条', '包子', '煮鸡蛋'],
-    lunch: ['红烧肉', '清蒸鱼', '番茄炒蛋', '炒时蔬', '紫菜蛋花汤'],
-    dinner: ['宫保鸡丁', '麻婆豆腐', '炒青菜', '冬瓜排骨汤'],
-  ),
-  2: const DayMenu(
-    breakfast: ['小米粥', '馒头', '咸菜', '茶叶蛋'],
-    lunch: ['糖醋里脊', '鱼香肉丝', '蒜蓉西兰花', '米饭', '酸辣汤'],
-    dinner: ['红烧排骨', '炒土豆丝', '清炒豆芽', '玉米浓汤'],
-  ),
-  3: const DayMenu(
-    breakfast: ['南瓜粥', '葱油饼', '拍黄瓜', '卤蛋'],
-    lunch: ['东坡肉', '清蒸虾', '炒莴笋', '蒸米饭', '番茄蛋汤'],
-    dinner: ['黑椒牛柳', '手撕包菜', '炒豆腐', '萝卜排骨汤'],
-  ),
-  4: const DayMenu(
-    breakfast: ['绿豆粥', '韭菜盒子', '拌菠菜', '白煮蛋'],
-    lunch: ['回锅肉', '蒸鲈鱼', '炒花椰菜', '扬州炒饭', '冬瓜汤'],
-    dinner: ['椒盐排条', '蒜苔炒肉', '清炒油麦菜', '番茄蛋花汤'],
-  ),
-  5: const DayMenu(
-    breakfast: ['红豆粥', '煎饺', '凉拌木耳', '溏心蛋'],
-    lunch: ['粉蒸肉', '红烧鲫鱼', '炒藕片', '白米饭', '紫菜汤'],
-    dinner: ['照烧鸡腿', '炒三丝', '清蒸豆腐', '菌菇汤'],
-  ),
-  6: const DayMenu(
-    breakfast: ['皮蛋瘦肉粥', '油饼', '小咸菜', '茶叶蛋'],
-    lunch: ['红烧牛肉', '清蒸鳕鱼', '炒时令蔬菜', '炒饭', '酸辣汤'],
-    dinner: ['葱爆羊肉', '干煸豆角', '炒青菜', '排骨玉米汤'],
-  ),
-  7: const DayMenu(
-    breakfast: ['八宝粥', '花卷', '酱牛肉', '荷包蛋'],
-    lunch: ['红烧肘子', '清蒸鲈鱼', '炒双色花椰菜', '扬州炒饭', '骨汤'],
-    dinner: ['烤鸭', '炒时蔬', '蒸蛋羹', '萝卜丝汤'],
-  ),
-};
-
 class BusSchedule {
   const BusSchedule({
     required this.route,
@@ -742,254 +695,9 @@ class _CanteenCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final now = DateTime.now();
-    final timeStr =
-        '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}';
-
-    String statusText;
-    Color statusBgColor;
-    Color statusTextColor;
-    String currentMealType; // 'breakfast', 'lunch', 'dinner'
-    String mealTitle;
-
-    // 根据当前时间判断餐次标签
-    if (timeStr.compareTo('06:00') >= 0 && timeStr.compareTo('09:00') < 0) {
-      statusText = '早餐供应中';
-      statusBgColor = AppColors.success.withValues(alpha: 0.1);
-      statusTextColor = AppColors.success;
-      currentMealType = 'breakfast';
-      mealTitle = '今日早餐';
-    } else if (timeStr.compareTo('09:00') >= 0 &&
-        timeStr.compareTo('11:00') < 0) {
-      statusText = '午餐 11:00起';
-      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
-      statusTextColor = AppColors.textDisabled;
-      currentMealType = 'lunch';
-      mealTitle = '今日午餐';
-    } else if (timeStr.compareTo('11:00') >= 0 &&
-        timeStr.compareTo('13:30') < 0) {
-      statusText = '午餐供应中';
-      statusBgColor = AppColors.success.withValues(alpha: 0.1);
-      statusTextColor = AppColors.success;
-      currentMealType = 'lunch';
-      mealTitle = '今日午餐';
-    } else if (timeStr.compareTo('13:30') >= 0 &&
-        timeStr.compareTo('17:00') < 0) {
-      statusText = '晚餐 17:00起';
-      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
-      statusTextColor = AppColors.textDisabled;
-      currentMealType = 'dinner';
-      mealTitle = '今日晚餐';
-    } else if (timeStr.compareTo('17:00') >= 0 &&
-        timeStr.compareTo('19:00') < 0) {
-      statusText = '晚餐供应中';
-      statusBgColor = AppColors.success.withValues(alpha: 0.1);
-      statusTextColor = AppColors.success;
-      currentMealType = 'dinner';
-      mealTitle = '今日晚餐';
-    } else {
-      statusText = '明日 07:00起';
-      statusBgColor = AppColors.greyLight.withValues(alpha: 0.5);
-      statusTextColor = AppColors.textDisabled;
-      currentMealType = 'breakfast';
-      mealTitle = '明日早餐';
-    }
-
-    // 获取当前星期对应的菜单（周末也支持，默认给1如果超出）
-    final menu = weeklyMenu[now.weekday] ?? weeklyMenu[1]!;
-    List<String> items;
-    if (currentMealType == 'breakfast') {
-      items = menu.breakfast;
-    } else if (currentMealType == 'lunch') {
-      items = menu.lunch;
-    } else {
-      items = menu.dinner;
-    }
-
-    return GestureDetector(
-      onTap: () {
-        showModalBottomSheet(
-          context: context,
-          isScrollControlled: true,
-          backgroundColor: AppColors.background,
-          shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-          ),
-          builder: (ctx) => _MenuSheet(menu: menu),
-        );
-      },
-      child: Container(
-        padding: const EdgeInsets.all(24),
-        decoration: BoxDecoration(
-          color: AppColors.surface,
-          borderRadius: BorderRadius.circular(24),
-          border: Border.all(
-            color: AppColors.greyLight.withValues(alpha: 0.6),
-            width: 0.5,
-          ),
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // 顶部行
-            Row(
-              children: [
-                const Icon(Icons.restaurant_outlined,
-                    color: AppColors.primary, size: 20),
-                const SizedBox(width: 8),
-                Text('教工食堂', style: AppTextStyles.titleMedium),
-                const Spacer(),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: statusBgColor,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Text(
-                    statusText,
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: statusTextColor,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            // 内容行
-            Text(
-              mealTitle,
-              style: AppTextStyles.labelMedium.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-            const SizedBox(height: 12),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Row(
-                children: [
-                  ...items.take(4).map(_buildDishTag),
-                  if (items.length > 4) _buildDishTag('...'),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDishTag(String text) {
-    return Container(
-      margin: const EdgeInsets.only(right: 8),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-      decoration: BoxDecoration(
-        color: AppColors.background,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Text(
-        text,
-        style: AppTextStyles.caption.copyWith(color: AppColors.textPrimary),
-      ),
-    );
-  }
-}
-
-class _MenuSheet extends StatelessWidget {
-  const _MenuSheet({required this.menu});
-  final DayMenu menu;
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Center(
-              child: Container(
-                width: 40,
-                height: 4,
-                margin: const EdgeInsets.only(bottom: 24),
-                decoration: BoxDecoration(
-                  color: AppColors.greyLight,
-                  borderRadius: BorderRadius.circular(2),
-                ),
-              ),
-            ),
-            Text('今日菜单', style: AppTextStyles.titleLarge),
-            const SizedBox(height: 24),
-            _buildMealSection(
-              icon: Icons.free_breakfast_outlined,
-              title: '早餐',
-              timeRange: '07:00 - 09:00',
-              items: menu.breakfast,
-            ),
-            const Divider(height: 32, thickness: 0.5, color: AppColors.greyLight),
-            _buildMealSection(
-              icon: Icons.rice_bowl_outlined,
-              title: '午餐',
-              timeRange: '11:00 - 13:30',
-              items: menu.lunch,
-            ),
-            const Divider(height: 32, thickness: 0.5, color: AppColors.greyLight),
-            _buildMealSection(
-              icon: Icons.dinner_dining_outlined,
-              title: '晚餐',
-              timeRange: '17:00 - 19:00',
-              items: menu.dinner,
-            ),
-            const SizedBox(height: 16),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildMealSection({
-    required IconData icon,
-    required String title,
-    required String timeRange,
-    required List<String> items,
-  }) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Row(
-          children: [
-            Icon(icon, size: 18, color: AppColors.primary),
-            const SizedBox(width: 8),
-            Text(title, style: AppTextStyles.titleMedium),
-            const SizedBox(width: 12),
-            Text(
-              timeRange,
-              style: AppTextStyles.caption.copyWith(
-                color: AppColors.textSecondary,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: items.map((item) {
-            return Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: AppColors.background,
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                item,
-                style: AppTextStyles.caption.copyWith(color: AppColors.textPrimary),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
+    return const CanteenMenuPanel(
+      audience: CanteenAudience.teacher,
+      emptyTitle: '教工食堂菜单暂未开放',
     );
   }
 }

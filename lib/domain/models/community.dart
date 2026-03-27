@@ -13,6 +13,9 @@ class LostAndFound {
     this.contactInfo,
     required this.createdAt,
     this.isResolved = false,
+    this.resolverName,
+    this.resolverIdNo,
+    this.resolvedAt,
   });
 
   factory LostAndFound.fromJson(Map<String, dynamic> json) {
@@ -30,6 +33,11 @@ class LostAndFound {
       contactInfo: json['contactInfo'] as String?,
       createdAt: DateTime.parse(json['createdAt'] as String),
       isResolved: json['isResolved'] as bool? ?? false,
+      resolverName: json['resolverName'] as String?,
+      resolverIdNo: json['resolverIdNo'] as String?,
+      resolvedAt: json['resolvedAt'] != null
+          ? DateTime.parse(json['resolvedAt'] as String)
+          : null,
     );
   }
   final String id;
@@ -42,6 +50,9 @@ class LostAndFound {
   final String? contactInfo;
   final DateTime createdAt;
   final bool isResolved;
+  final String? resolverName;
+  final String? resolverIdNo;
+  final DateTime? resolvedAt;
 
   /// 相对时间
   String get relativeTime {
@@ -76,6 +87,9 @@ class LostAndFound {
       contactInfo: contactInfo ?? this.contactInfo,
       createdAt: createdAt ?? this.createdAt,
       isResolved: isResolved ?? this.isResolved,
+      resolverName: resolverName ?? this.resolverName,
+      resolverIdNo: resolverIdNo ?? this.resolverIdNo,
+      resolvedAt: resolvedAt ?? this.resolvedAt,
     );
   }
 
@@ -91,6 +105,9 @@ class LostAndFound {
       'contactInfo': contactInfo,
       'createdAt': createdAt.toIso8601String(),
       'isResolved': isResolved,
+      'resolverName': resolverName,
+      'resolverIdNo': resolverIdNo,
+      'resolvedAt': resolvedAt?.toIso8601String(),
     };
   }
 

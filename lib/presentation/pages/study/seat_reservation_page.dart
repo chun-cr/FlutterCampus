@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../features/library/models/seat.dart';
@@ -698,14 +699,7 @@ class _SeatReservationPageState extends ConsumerState<SeatReservationPage> {
       if (msg.contains('已被预约') || msg.contains('冲突')) {
         ref.invalidate(seatsProvider(_currentQuery));
       }
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text(msg),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: const Color(0xFF666666),
-          duration: const Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: msg, isError: false);
     }
   }
 

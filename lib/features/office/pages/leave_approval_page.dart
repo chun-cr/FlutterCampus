@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 
@@ -192,13 +193,7 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
   }
 
   void _showSnackBar(String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(message),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
+    CampusSnackBar.show(context, message: message, isError: false);
   }
 
   // ── 详情信息卡 ───────────────────────────────────────────────────

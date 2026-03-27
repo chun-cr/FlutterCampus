@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/services/second_hand_service.dart';
+import '../../../core/services/lost_and_found_service.dart';
+import '../../../core/services/help_task_service.dart';
+import '../../../domain/models/community.dart';
 import '../../theme/theme.dart';
 
 class HelpPage extends ConsumerWidget {
@@ -10,6 +13,8 @@ class HelpPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final secondHandState = ref.watch(helpSecondHandStateProvider);
+    final lostAndFoundState = ref.watch(helpLostAndFoundStateProvider);
+    final taskState = ref.watch(helpTaskStateProvider);
 
     return Center(
       child: ConstrainedBox(
@@ -51,32 +56,79 @@ class HelpPage extends ConsumerWidget {
               const SizedBox(height: 48),
 
               // 2. 失物招领
-              _buildSectionHeader('最新失物招领'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSectionHeader('失物招领'),
+                  GestureDetector(
+                    onTap: () => context.push('/help/lost_and_found'),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16, right: 4),
+                      child: Text(
+                        '查看全部',
+                        style: AppTextStyles.labelMedium.copyWith(
+                          color: AppColors.primaryBrand,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               _buildPremiumCard(
                 padding: EdgeInsets.zero,
                 child: Column(
                   children: [
-                    _buildListItem(
-                      icon: Icons.directions_car_outlined,
-                      title: '宝马车钥匙',
-                      subtitle: '在二食堂附近拾到',
-                      time: '10分钟前',
-                      tag: '已找到',
-                      isUrgent: false,
-                    ),
-                    const Divider(
-                      height: 1,
-                      thickness: 0.5,
-                      color: AppColors.greyLight,
-                    ),
-                    _buildListItem(
-                      icon: Icons.credit_card_outlined,
-                      title: '学生证',
-                      subtitle: '尾号 01',
-                      time: '1小时前',
-                      tag: '已丢失',
-                      isUrgent: true,
-                    ),
+                    if (lostAndFoundState.isLoading)
+                      const Padding(
+                        padding: EdgeInsets.all(24),
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      )
+                    else if (lostAndFoundState.error != null)
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(child: Text(lostAndFoundState.error!)),
+                      )
+                    else if (lostAndFoundState.items.isEmpty)
+                      Padding(
+                        padding: const EdgeInsets.all(24),
+                        child: Center(
+                          child: Text(
+                            '暂无失物招领',
+                            style: AppTextStyles.bodyMedium.copyWith(
+                              color: AppColors.textSecondary,
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      ...lostAndFoundState.items.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final item = entry.value;
+                        return Column(
+                          children: [
+                            _buildListItem(
+                              icon: _getLostAndFoundIcon(item),
+                              title: item.title,
+                              subtitle: item.location,
+                              time: item.relativeTime,
+                              tag: item.isResolved ? '已解决' : item.type.label,
+                              isUrgent:
+                                  !item.isResolved &&
+                                  item.type == LostFoundType.lost,
+                            ),
+                            if (index < lostAndFoundState.items.length - 1)
+                              const Divider(
+                                height: 1,
+                                thickness: 0.5,
+                                color: AppColors.greyLight,
+                              ),
+                          ],
+                        );
+                      }).toList(),
                   ],
                 ),
               ),
@@ -218,20 +270,67 @@ class HelpPage extends ConsumerWidget {
               const SizedBox(height: 48),
 
               // 4. 校园搭子 (Community Requests)
-              _buildSectionHeader('互助请求'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  _buildSectionHeader('互助请求'),
+                  GestureDetector(
+                    onTap: () => context.push('/help/task_list'),
+                    child: Padding(
+                      padding: const EdgeInsets.only(bottom: 16, right: 4),
+                      child: Text(
+                        '查看全部',
+                        style: AppTextStyles.labelMedium.copyWith(
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
               _buildPremiumCard(
                 child: Column(
                   children: [
-                    _buildTaskItem('二食堂帮打饭', '跑腿任务 · 奖励20元', '5分钟前'),
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
-                      child: Divider(
-                        height: 1,
-                        thickness: 0.5,
-                        color: AppColors.greyLight,
-                      ),
-                    ),
-                    _buildTaskItem('周六打羽毛球搭子', '运动 ·缺2人', '30分钟前'),
+                    if (taskState.isLoading)
+                      const Center(
+                        child: CircularProgressIndicator(
+                          color: AppColors.primary,
+                        ),
+                      )
+                    else if (taskState.error != null)
+                      Center(child: Text(taskState.error!))
+                    else if (taskState.tasks.isEmpty)
+                      Center(
+                        child: Text(
+                          '暂无互助请求',
+                          style: AppTextStyles.bodyMedium.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
+                      )
+                    else
+                      ...taskState.tasks.asMap().entries.map((entry) {
+                        final index = entry.key;
+                        final task = entry.value;
+                        return Column(
+                          children: [
+                            _buildTaskItem(
+                              task.title,
+                              task.tagDisplay,
+                              task.relativeTime,
+                            ),
+                            if (index < taskState.tasks.length - 1)
+                              const Padding(
+                                padding: EdgeInsets.symmetric(vertical: 16),
+                                child: Divider(
+                                  height: 1,
+                                  thickness: 0.5,
+                                  color: AppColors.greyLight,
+                                ),
+                              ),
+                          ],
+                        );
+                      }).toList(),
                   ],
                 ),
               ),
@@ -411,5 +510,13 @@ class HelpPage extends ConsumerWidget {
         ),
       ],
     );
+  }
+
+  IconData _getLostAndFoundIcon(LostAndFound item) {
+    if (item.type == LostFoundType.lost) {
+      return Icons.search_rounded; // 寻物
+    } else {
+      return Icons.volunteer_activism_outlined; // 招领
+    }
   }
 }

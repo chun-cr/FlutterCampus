@@ -38,6 +38,8 @@ import '../pages/teacher/venue_page.dart';
 import '../pages/teacher/research_page.dart';
 import '../pages/teacher/notice_page.dart';
 import '../pages/teacher/notice_detail_page.dart';
+import '../pages/help/lost_and_found_page.dart';
+import '../pages/help/help_task_list_page.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/splash',
@@ -83,6 +85,16 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/help/second_hand',
       builder: (context, state) => const SecondHandListPage(),
+    ),
+    // 互助模块 - 失物招领完整列表页
+    GoRoute(
+      path: '/help/lost_and_found',
+      builder: (context, state) => const LostAndFoundPage(),
+    ),
+    // 互助模块 - 互助请求完整列表页
+    GoRoute(
+      path: '/help/task_list',
+      builder: (context, state) => const HelpTaskListPage(),
     ),
     // 图书馆模块
     GoRoute(

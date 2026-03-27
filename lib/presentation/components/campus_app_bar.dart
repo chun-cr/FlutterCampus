@@ -12,6 +12,7 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.titleStyle,
     this.centerTitle = true,
     this.elevation,
+    this.bottom,
   });
   final String title;
   final bool showBackButton;
@@ -20,9 +21,10 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
   final TextStyle? titleStyle;
   final bool centerTitle;
   final double? elevation;
+  final PreferredSizeWidget? bottom;
 
   @override
-  Size get preferredSize => const Size.fromHeight(AppSpacing.appBarHeight);
+  Size get preferredSize => Size.fromHeight(AppSpacing.appBarHeight + (bottom?.preferredSize.height ?? 0.0));
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,7 @@ class CampusAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: elevation ?? 0,
       shadowColor: AppColors.black.withOpacity(0.03),
       toolbarHeight: AppSpacing.appBarHeight,
+      bottom: bottom,
     );
   }
 }

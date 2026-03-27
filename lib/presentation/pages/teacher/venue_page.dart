@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -638,15 +639,7 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
 
       if (mounted) {
         Navigator.of(context).pop();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('申请已提交，等待审核'),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12)),
-          ),
-        );
+        CampusSnackBar.show(context, message: '申请已提交，等待审核', isError: false);
         // 自动切换到「我的申请」Tab
         widget.tabController.animateTo(1);
       }
@@ -659,13 +652,7 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
 
   void _showSnackBar(String msg, {bool isError = false}) {
     if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(msg),
-        backgroundColor: isError ? AppColors.error : AppColors.success,
-        behavior: SnackBarBehavior.floating,
-      ),
-    );
+    CampusSnackBar.show(context, message: msg, isError: true);
   }
 
   @override

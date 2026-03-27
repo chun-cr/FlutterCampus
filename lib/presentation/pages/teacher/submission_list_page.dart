@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -576,15 +577,7 @@ class _GradingSheetState extends ConsumerState<_GradingSheet> {
         // 关闭 BottomSheet
         Navigator.of(context).pop();
         // 弹出成功提示
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('批改成功'),
-            backgroundColor: AppColors.success,
-            behavior: SnackBarBehavior.floating,
-            shape:
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
+        CampusSnackBar.show(context, message: '批改成功', isError: false);
       }
       // 刷新外部列表页
       ref.invalidate(submissionsProvider(widget.assignment.id));
@@ -593,13 +586,7 @@ class _GradingSheetState extends ConsumerState<_GradingSheet> {
 
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('批改失败: $e'),
-            backgroundColor: AppColors.error,
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
+        CampusSnackBar.show(context, message: '批改失败: $e', isError: true);
       }
     }
   }

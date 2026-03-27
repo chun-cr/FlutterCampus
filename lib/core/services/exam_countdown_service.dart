@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../domain/models/exam_countdown.dart';
+import 'auth_service.dart';
 
 class ExamCountdownService {
   ExamCountdownService(this._supabaseClient);
@@ -46,6 +47,10 @@ class ExamCountdownService {
 
 final examCountdownServiceProvider = Provider<ExamCountdownService>((ref) {
   return ExamCountdownService(Supabase.instance.client);
+});
+
+final examCountdownCurrentUserIdProvider = Provider<String?>((ref) {
+  return ref.watch(progressCurrentUserIdProvider);
 });
 
 class ExamCountdownState {
@@ -155,6 +160,6 @@ class ExamCountdownNotifier extends StateNotifier<ExamCountdownState> {
 final examCountdownStateProvider =
     StateNotifierProvider<ExamCountdownNotifier, ExamCountdownState>((ref) {
       final examService = ref.watch(examCountdownServiceProvider);
-      final userId = Supabase.instance.client.auth.currentUser?.id;
+      final userId = ref.watch(examCountdownCurrentUserIdProvider);
       return ExamCountdownNotifier(examService, userId);
     });
