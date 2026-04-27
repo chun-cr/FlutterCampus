@@ -3,6 +3,7 @@ import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:uuid/uuid.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 import '../../../core/services/grade_service.dart';
 import '../../../domain/models/grade.dart';
@@ -16,8 +17,9 @@ final studentsProvider = FutureProvider<List<Map<String, dynamic>>>((ref) {
 // ── Provider：教师端选中学生的成绩列表 ──────────────────────────────
 final selectedStudentIdProvider = StateProvider<String?>((ref) => null);
 
-final teacherGradesProvider =
-    FutureProvider.autoDispose<List<Grade>>((ref) async {
+final teacherGradesProvider = FutureProvider.autoDispose<List<Grade>>((
+  ref,
+) async {
   final studentId = ref.watch(selectedStudentIdProvider);
   if (studentId == null) return [];
   final service = ref.watch(gradeServiceProvider);
@@ -69,14 +71,18 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
     if (selectedStudentId == null) return;
 
     final isEditing = grade != null;
-    final courseController =
-        TextEditingController(text: grade?.courseName ?? '');
-    final creditController =
-        TextEditingController(text: grade?.credit.toString() ?? '');
-    final scoreController =
-        TextEditingController(text: grade?.score.toString() ?? '');
-    final semesterController =
-        TextEditingController(text: grade?.semester ?? _getDefaultSemester());
+    final courseController = TextEditingController(
+      text: grade?.courseName ?? '',
+    );
+    final creditController = TextEditingController(
+      text: grade?.credit.toString() ?? '',
+    );
+    final scoreController = TextEditingController(
+      text: grade?.score.toString() ?? '',
+    );
+    final semesterController = TextEditingController(
+      text: grade?.semester ?? _getDefaultSemester(),
+    );
     final formKey = GlobalKey<FormState>();
 
     showDialog(
@@ -92,8 +98,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                 TextFormField(
                   controller: courseController,
                   decoration: const InputDecoration(labelText: '课程名称'),
-                  validator: (v) =>
-                      v?.isEmpty ?? true ? '请输入课程名称' : null,
+                  validator: (v) => v?.isEmpty ?? true ? '请输入课程名称' : null,
                 ),
                 const SizedBox(height: 16),
                 TextFormField(
@@ -127,8 +132,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                   decoration: const InputDecoration(
                     labelText: '学期 (如: 2024-2025-1)',
                   ),
-                  validator: (v) =>
-                      v?.isEmpty ?? true ? '请输入学期' : null,
+                  validator: (v) => v?.isEmpty ?? true ? '请输入学期' : null,
                 ),
               ],
             ),
@@ -153,8 +157,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                 score: score,
                 gradePoint: Grade.calculateGradePoint(score),
                 semester: semesterController.text.trim(),
-                status:
-                    score >= 60 ? GradeStatus.passed : GradeStatus.failed,
+                status: score >= 60 ? GradeStatus.passed : GradeStatus.failed,
                 createdAt: grade?.createdAt ?? DateTime.now(),
                 teacherId: teacherId,
               );
@@ -169,7 +172,11 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                 if (context.mounted) Navigator.pop(context);
               } catch (e) {
                 if (context.mounted) {
-                  CampusSnackBar.show(context, message: '操作失败：$e', isError: false);
+                  CampusSnackBar.show(
+                    context,
+                    message: '操作失败：$e',
+                    isError: false,
+                  );
                 }
               }
             },
@@ -194,10 +201,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
           ),
           TextButton(
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text(
-              '删除',
-              style: TextStyle(color: AppColors.error),
-            ),
+            child: const Text('删除', style: TextStyle(color: AppColors.error)),
           ),
         ],
       ),
@@ -216,7 +220,10 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
 
   // ── 学期分组区块 ─────────────────────────────────────────────────
   Widget _buildSemesterSection(
-      BuildContext context, String semester, List<Grade> grades) {
+    BuildContext context,
+    String semester,
+    List<Grade> grades,
+  ) {
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
@@ -228,8 +235,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
         data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
         child: ExpansionTile(
           initiallyExpanded: true,
-          tilePadding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          tilePadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           title: Text(semester, style: AppTextStyles.titleMedium),
           children: grades.map((g) => _buildGradeItem(context, g)).toList(),
         ),
@@ -295,7 +301,9 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
 
   // ── 弹出 BottomSheet 选择学生 ────────────────────────────────────
   void _showStudentPicker(
-      BuildContext context, List<Map<String, dynamic>> students) {
+    BuildContext context,
+    List<Map<String, dynamic>> students,
+  ) {
     final currentId = ref.read(selectedStudentIdProvider);
     showModalBottomSheet(
       context: context,
@@ -342,30 +350,34 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                   final department = s['department'] as String? ?? '';
                   final id = s['id'] as String;
                   final isSelected = id == currentId;
-                  final initial =
-                      name.isNotEmpty ? name.characters.first : '?';
+                  final initial = name.isNotEmpty ? name.characters.first : '?';
 
                   return ListTile(
                     contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 4),
-                    leading: _buildAvatar(initial),
-                    title: Text(
-                      name,
-                      style: AppTextStyles.titleSmall,
+                      horizontal: 20,
+                      vertical: 4,
                     ),
-                    subtitle: [studentId, department]
-                            .where((v) => v.isNotEmpty)
-                            .isNotEmpty
+                    leading: _buildAvatar(initial),
+                    title: Text(name, style: AppTextStyles.titleSmall),
+                    subtitle:
+                        [
+                          studentId,
+                          department,
+                        ].where((v) => v.isNotEmpty).isNotEmpty
                         ? Text(
-                            [studentId, department]
-                                .where((v) => v.isNotEmpty)
-                                .join('  ·  '),
+                            [
+                              studentId,
+                              department,
+                            ].where((v) => v.isNotEmpty).join('  ·  '),
                             style: AppTextStyles.caption,
                           )
                         : null,
                     trailing: isSelected
-                        ? const Icon(Icons.check_rounded,
-                            color: AppColors.primary, size: 20)
+                        ? const Icon(
+                            Icons.check_rounded,
+                            color: AppColors.primary,
+                            size: 20,
+                          )
                         : null,
                     onTap: () {
                       ref.read(selectedStudentIdProvider.notifier).state = id;
@@ -422,17 +434,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
               width: 0.5,
             ),
           ),
-          child: const Row(
-            children: [
-              SizedBox(
-                width: 16,
-                height: 16,
-                child: CircularProgressIndicator(strokeWidth: 2),
-              ),
-              SizedBox(width: 12),
-              Text('加载学生列表…'),
-            ],
-          ),
+          child: const CampusListSkeleton(itemCount: 1),
         ),
         error: (e, _) => Container(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
@@ -458,8 +460,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
         data: (students) {
           if (students.isEmpty) {
             return Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
@@ -470,8 +471,9 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
               ),
               child: Text(
                 '暂无学生数据',
-                style: AppTextStyles.bodyMedium
-                    .copyWith(color: AppColors.textSecondary),
+                style: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textSecondary,
+                ),
               ),
             );
           }
@@ -488,15 +490,15 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
           final studentId = selected?['student_id'] as String? ?? '';
           final department = selected?['department'] as String? ?? '';
           final initial = name.isNotEmpty ? name.characters.first : '?';
-          final subText = [studentId, department]
-              .where((v) => v.isNotEmpty)
-              .join('  ·  ');
+          final subText = [
+            studentId,
+            department,
+          ].where((v) => v.isNotEmpty).join('  ·  ');
 
           return GestureDetector(
             onTap: () => _showStudentPicker(context, students),
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               decoration: BoxDecoration(
                 color: AppColors.surface,
                 borderRadius: BorderRadius.circular(16),
@@ -564,8 +566,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
   // ── 学生信息摘要条 ────────────────────────────────────────────────
   Widget _buildStudentSummary(List<Grade> grades) {
     final totalCourses = grades.length;
-    final totalCredit =
-        grades.fold<double>(0, (sum, g) => sum + g.credit);
+    final totalCredit = grades.fold<double>(0, (sum, g) => sum + g.credit);
 
     // 计算本学期（最新学期）GPA
     final semesters = grades.map((g) => g.semester).toSet().toList()
@@ -573,18 +574,24 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
     double semesterGpa = 0;
     if (semesters.isNotEmpty) {
       final latestSemester = semesters.first;
-      final latestGrades =
-          grades.where((g) => g.semester == latestSemester).toList();
-      final totalCredit2 =
-          latestGrades.fold<double>(0, (sum, g) => sum + g.credit);
+      final latestGrades = grades
+          .where((g) => g.semester == latestSemester)
+          .toList();
+      final totalCredit2 = latestGrades.fold<double>(
+        0,
+        (sum, g) => sum + g.credit,
+      );
       if (totalCredit2 > 0) {
         final weightedSum = latestGrades.fold<double>(
-            0, (sum, g) => sum + g.gradePoint * g.credit);
+          0,
+          (sum, g) => sum + g.gradePoint * g.credit,
+        );
         semesterGpa = weightedSum / totalCredit2;
       }
     }
 
-    final summaryText = '共 $totalCourses 门课  ·  '
+    final summaryText =
+        '共 $totalCourses 门课  ·  '
         '本学期 GPA ${semesterGpa.toStringAsFixed(2)}  ·  '
         '总学分 ${totalCredit.toStringAsFixed(1)}';
 
@@ -599,9 +606,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
         ),
         child: Text(
           summaryText,
-          style: AppTextStyles.labelSmall.copyWith(
-            color: AppColors.primary,
-          ),
+          style: AppTextStyles.labelSmall.copyWith(color: AppColors.primary),
           textAlign: TextAlign.center,
         ),
       ),
@@ -630,8 +635,9 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
           // ── 成绩摘要条（已选学生 + 有数据时） ───────────────────────
           if (selectedStudentId != null)
             gradesAsync.maybeWhen(
-              data: (grades) =>
-                  grades.isNotEmpty ? _buildStudentSummary(grades) : const SizedBox.shrink(),
+              data: (grades) => grades.isNotEmpty
+                  ? _buildStudentSummary(grades)
+                  : const SizedBox.shrink(),
               orElse: () => const SizedBox.shrink(),
             ),
           const SizedBox(height: 8),
@@ -648,10 +654,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                           color: AppColors.greyLight,
                         ),
                         const SizedBox(height: 16),
-                        Text(
-                          '请先选择学生',
-                          style: AppTextStyles.titleMedium,
-                        ),
+                        Text('请先选择学生', style: AppTextStyles.titleMedium),
                         const SizedBox(height: 8),
                         Text(
                           '点击上方卡片选择要管理成绩的学生',
@@ -663,8 +666,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                     ),
                   )
                 : gradesAsync.when(
-                    loading: () =>
-                        const Center(child: CircularProgressIndicator()),
+                    loading: () => const CampusLoading(),
                     error: (e, _) => Center(
                       child: Text(
                         '加载失败：$e',
@@ -685,10 +687,7 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                                 color: AppColors.greyLight,
                               ),
                               const SizedBox(height: 16),
-                              Text(
-                                '该学生暂无成绩',
-                                style: AppTextStyles.titleMedium,
-                              ),
+                              Text('该学生暂无成绩', style: AppTextStyles.titleMedium),
                               const SizedBox(height: 8),
                               Text(
                                 '点击右下角按钮录入成绩',
@@ -705,8 +704,13 @@ class _TeacherGradePageState extends ConsumerState<TeacherGradePage> {
                         padding: const EdgeInsets.all(16),
                         child: Column(
                           children: grouped.entries
-                              .map((e) => _buildSemesterSection(
-                                  context, e.key, e.value))
+                              .map(
+                                (e) => _buildSemesterSection(
+                                  context,
+                                  e.key,
+                                  e.value,
+                                ),
+                              )
                               .toList(),
                         ),
                       );

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
 import '../../../core/services/leave_service.dart';
 import '../../../domain/models/leave_application.dart';
 import '../../../presentation/theme/theme.dart';
@@ -146,8 +145,9 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
                           ),
                           child: Text(
                             '拒绝',
-                            style: AppTextStyles.button
-                                .copyWith(color: AppColors.error),
+                            style: AppTextStyles.button.copyWith(
+                              color: AppColors.error,
+                            ),
                           ),
                         ),
                       ),
@@ -175,10 +175,7 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
                               borderRadius: BorderRadius.circular(12),
                             ),
                           ),
-                          child: Text(
-                            '通过',
-                            style: AppTextStyles.button,
-                          ),
+                          child: Text('通过', style: AppTextStyles.button),
                         ),
                       ),
                     ],
@@ -319,11 +316,9 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
                   ),
                 ),
                 const SizedBox(height: 2),
-                Text(
-                  leave.className,
-                  style: AppTextStyles.caption,
-                ),
-                if (!isPending && leave.teacherComment != null &&
+                Text(leave.className, style: AppTextStyles.caption),
+                if (!isPending &&
+                    leave.teacherComment != null &&
                     leave.teacherComment!.isNotEmpty) ...[
                   const SizedBox(height: 6),
                   Text(
@@ -442,7 +437,9 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
                     const SizedBox(width: 6),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 6, vertical: 2),
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.warning,
                         borderRadius: BorderRadius.circular(10),
@@ -464,48 +461,50 @@ class _LeaveApprovalPageState extends ConsumerState<LeaveApprovalPage>
         ),
       ),
       body: leaveState.isLoading && leaveState.leaves.isEmpty
-          ? const Center(child: CircularProgressIndicator())
+          ? const CampusLoading()
           : leaveState.error != null && leaveState.leaves.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Icon(Icons.error_outline,
-                          size: 48, color: AppColors.error),
-                      const SizedBox(height: 12),
-                      Text(
-                        '加载失败：${leaveState.error}',
-                        style: AppTextStyles.bodySmall
-                            .copyWith(color: AppColors.error),
-                        textAlign: TextAlign.center,
-                      ),
-                      const SizedBox(height: 16),
-                      TextButton(
-                        onPressed: () => ref
-                            .read(leaveStateProvider.notifier)
-                            .loadAllLeaves(),
-                        child: const Text('重试'),
-                      ),
-                    ],
+          ? Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(
+                    Icons.error_outline,
+                    size: 48,
+                    color: AppColors.error,
                   ),
-                )
-              : TabBarView(
-                  controller: _tabController,
-                  children: [
-                    // Tab 1: 待审批
-                    _buildListTab(leaveState.pendingLeaves, '暂无待审批申请'),
-                    // Tab 2: 全部
-                    _buildListTab(leaveState.leaves, '暂无请假记录'),
-                  ],
-                ),
+                  const SizedBox(height: 12),
+                  Text(
+                    '加载失败：${leaveState.error}',
+                    style: AppTextStyles.bodySmall.copyWith(
+                      color: AppColors.error,
+                    ),
+                    textAlign: TextAlign.center,
+                  ),
+                  const SizedBox(height: 16),
+                  TextButton(
+                    onPressed: () =>
+                        ref.read(leaveStateProvider.notifier).loadAllLeaves(),
+                    child: const Text('重试'),
+                  ),
+                ],
+              ),
+            )
+          : TabBarView(
+              controller: _tabController,
+              children: [
+                // Tab 1: 待审批
+                _buildListTab(leaveState.pendingLeaves, '暂无待审批申请'),
+                // Tab 2: 全部
+                _buildListTab(leaveState.leaves, '暂无请假记录'),
+              ],
+            ),
     );
   }
 
   Widget _buildListTab(List<LeaveApplication> items, String emptyMessage) {
     if (items.isEmpty) return _buildEmptyState(emptyMessage);
     return RefreshIndicator(
-      onRefresh: () =>
-          ref.read(leaveStateProvider.notifier).loadAllLeaves(),
+      onRefresh: () => ref.read(leaveStateProvider.notifier).loadAllLeaves(),
       child: ListView.builder(
         padding: const EdgeInsets.fromLTRB(16, 16, 16, 80),
         itemCount: items.length,

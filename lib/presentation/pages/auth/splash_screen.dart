@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 import '../../../core/services/auth_service.dart';
 
@@ -40,11 +41,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.school_rounded,
-              size: 56,
-              color: Colors.white,
-            ),
+            const Icon(Icons.school_rounded, size: 56, color: Colors.white),
             const SizedBox(height: 24),
             Text(
               '校园通',
@@ -65,14 +62,35 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
               ),
             ),
             const SizedBox(height: 64),
-            SizedBox(
-              width: 20,
-              height: 20,
-              child: CircularProgressIndicator(
-                strokeWidth: 1.5,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  Colors.white.withOpacity(0.5),
+            Container(
+              width: 240,
+              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+              decoration: BoxDecoration(
+                color: Colors.white.withValues(alpha: 0.04),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(
+                  color: Colors.white.withValues(alpha: 0.08),
+                  width: 1,
                 ),
+              ),
+              child: Column(
+                children: [
+                  CampusSkeleton(
+                    width: 144,
+                    height: 10,
+                    borderRadius: 999,
+                    baseColor: Colors.white.withValues(alpha: 0.10),
+                    highlightColor: Colors.white.withValues(alpha: 0.18),
+                  ),
+                  const SizedBox(height: 12),
+                  CampusSkeleton(
+                    width: 92,
+                    height: 8,
+                    borderRadius: 999,
+                    baseColor: Colors.white.withValues(alpha: 0.08),
+                    highlightColor: Colors.white.withValues(alpha: 0.16),
+                  ),
+                ],
               ),
             ),
           ],

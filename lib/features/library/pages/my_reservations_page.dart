@@ -3,7 +3,6 @@ import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../features/library/models/seat_reservation.dart';
 import '../../../features/library/providers/seat_provider.dart';
-import '../../../presentation/components/components.dart';
 import '../../../presentation/theme/theme.dart';
 
 // ---------------------------------------------------------------------------
@@ -31,7 +30,12 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
         return all.where((r) => r.status == 'using').toList();
       case 3:
         return all
-            .where((r) => r.status == 'completed' || r.status == 'cancelled' || r.status == 'expired')
+            .where(
+              (r) =>
+                  r.status == 'completed' ||
+                  r.status == 'cancelled' ||
+                  r.status == 'expired',
+            )
             .toList();
       default:
         return all;
@@ -55,12 +59,7 @@ class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
           ),
           Expanded(
             child: reservationsAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Color(0xFF333333),
-                ),
-              ),
+              loading: () => const CampusLoading(),
               error: (error, _) => _ErrorView(
                 message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(myReservationsProvider),
@@ -127,8 +126,10 @@ class _SeatTabBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 margin: const EdgeInsets.only(right: 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: selected
                       ? const Color(0xFF1A1A1A)
@@ -145,8 +146,7 @@ class _SeatTabBar extends StatelessWidget {
                   tabs[i],
                   style: AppTextStyles.bodySmall.copyWith(
                     color: selected ? AppColors.white : AppColors.textSecondary,
-                    fontWeight:
-                        selected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
               ),
@@ -251,17 +251,11 @@ class _ReservationCard extends ConsumerWidget {
                     Row(
                       children: [
                         if (reservation.hasPower) ...[
-                          _FeatureTag(
-                            icon: Icons.power_outlined,
-                            label: '有插座',
-                          ),
+                          _FeatureTag(icon: Icons.power_outlined, label: '有插座'),
                           const SizedBox(width: 6),
                         ],
                         if (reservation.hasWindow)
-                          _FeatureTag(
-                            icon: Icons.window_outlined,
-                            label: '靠窗',
-                          ),
+                          _FeatureTag(icon: Icons.window_outlined, label: '靠窗'),
                       ],
                     ),
                     // 预约码（待签到状态显示）
@@ -325,11 +319,9 @@ class _ReservationCard extends ConsumerWidget {
     );
   }
 
-  bool _hasActions(String status) =>
-      status == 'reserved' || status == 'using';
+  bool _hasActions(String status) => status == 'reserved' || status == 'using';
 
-  Widget _buildActions(
-      BuildContext context, WidgetRef ref, bool isLoading) {
+  Widget _buildActions(BuildContext context, WidgetRef ref, bool isLoading) {
     if (reservation.status == 'reserved') {
       return Row(
         children: [
@@ -490,10 +482,7 @@ class _FeatureTag extends StatelessWidget {
         const SizedBox(width: 2),
         Text(
           label,
-          style: const TextStyle(
-            fontSize: 10,
-            color: Color(0xFFAAAAAA),
-          ),
+          style: const TextStyle(fontSize: 10, color: Color(0xFFAAAAAA)),
         ),
       ],
     );
@@ -576,8 +565,9 @@ class _ActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bgColor =
-        isPrimary ? const Color(0xFF1A1A1A) : const Color(0xFFF0F0F0);
+    final bgColor = isPrimary
+        ? const Color(0xFF1A1A1A)
+        : const Color(0xFFF0F0F0);
     final textColor = isPrimary ? AppColors.white : AppColors.textSecondary;
 
     return GestureDetector(
@@ -653,8 +643,9 @@ class _ConfirmDialog extends StatelessWidget {
           onPressed: () => Navigator.of(context).pop(false),
           child: Text(
             cancelText,
-            style: AppTextStyles.bodySmall
-                .copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
         TextButton(
@@ -686,11 +677,7 @@ class _EmptyView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
-            Icons.chair_outlined,
-            size: 56,
-            color: Color(0xFFCCCCCC),
-          ),
+          const Icon(Icons.chair_outlined, size: 56, color: Color(0xFFCCCCCC)),
           const SizedBox(height: 16),
           Text(
             '暂无预约记录',
@@ -732,8 +719,7 @@ class _ErrorView extends StatelessWidget {
           GestureDetector(
             onTap: onRetry,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(20),

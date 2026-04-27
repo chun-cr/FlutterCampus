@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../components/components.dart';
 import '../../theme/theme.dart';
@@ -28,7 +27,9 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
       case 1:
         return all.where((r) => r.status == ReservationStatus.queuing).toList();
       case 2:
-        return all.where((r) => r.status == ReservationStatus.available).toList();
+        return all
+            .where((r) => r.status == ReservationStatus.available)
+            .toList();
       case 3:
         return all
             .where(
@@ -58,12 +59,7 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
           ),
           Expanded(
             child: reservationsAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Color(0xFF333333),
-                ),
-              ),
+              loading: () => const CampusLoading(),
               error: (error, _) => _ErrorView(
                 message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(myReservationsProvider),
@@ -129,8 +125,10 @@ class _TabBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 margin: const EdgeInsets.only(right: 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: selected
                       ? const Color(0xFF1A1A1A)
@@ -146,11 +144,8 @@ class _TabBar extends StatelessWidget {
                 child: Text(
                   tabs[i],
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: selected
-                        ? AppColors.white
-                        : AppColors.textSecondary,
-                    fontWeight:
-                        selected ? FontWeight.w600 : FontWeight.w400,
+                    color: selected ? AppColors.white : AppColors.textSecondary,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
               ),
@@ -346,7 +341,12 @@ class _ReservationCard extends ConsumerWidget {
         isPrimary: true,
         isLoading: isLoading,
         onTap: () {
-          CampusSnackBar.show(context, message: '请前往 ${reservation.bookLocation} 取书，有效期剩余 ${reservation.deadlineRemainingDays} 天', isError: false);
+          CampusSnackBar.show(
+            context,
+            message:
+                '请前往 ${reservation.bookLocation} 取书，有效期剩余 ${reservation.deadlineRemainingDays} 天',
+            isError: false,
+          );
         },
       );
     }
@@ -372,20 +372,13 @@ class _ReservationCard extends ConsumerWidget {
 
     if (ok) {
       onActionSuccess();
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('已取消预约'),
-          behavior: SnackBarBehavior.floating,
-          backgroundColor: Color(0xFF666666),
-          duration: Duration(seconds: 3),
-        ),
-      );
+      CampusSnackBar.show(context, message: '已取消预约', isError: false);
     } else {
       final err = ref.read(reservationActionNotifierProvider);
       final msg = err is AsyncError
           ? err.error.toString().replaceFirst('Exception: ', '')
           : '操作失败，请重试';
-      CampusSnackBar.show(context, message: msg, isError: false);
+      CampusSnackBar.show(context, message: msg, isError: true);
     }
   }
 
@@ -617,8 +610,7 @@ class _ErrorView extends StatelessWidget {
           GestureDetector(
             onTap: onRetry,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(20),

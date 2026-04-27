@@ -23,11 +23,13 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
   final _reasonController = TextEditingController();
   bool _submitting = false;
 
+  static const int _leaveRangeDays = 90;
+
   // 我的记录（独立 provider，不复用教师端的 leaveStateProvider）
   final _myLeavesProvider =
       StateNotifierProvider<_MyLeavesNotifier, _MyLeavesState>((ref) {
-    return _MyLeavesNotifier(ref.watch(leaveServiceProvider));
-  });
+        return _MyLeavesNotifier(ref.watch(leaveServiceProvider));
+      });
 
   @override
   void initState() {
@@ -52,31 +54,48 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
 
   // ── 日期选择 ──────────────────────────────────────────────────────────
 
+  DateTime _laterDate(DateTime left, DateTime right) {
+    return left.isAfter(right) ? left : right;
+  }
+
   Future<void> _pickStartDate() async {
+    final now = DateTime.now();
     final date = await DatePickerSheet.showDateTime(
       context,
-      initialDate: _startDate ?? DateTime.now(),
-      minDate: DateTime.now().subtract(const Duration(days: 30)),
-      maxDate: DateTime.now().add(const Duration(days: 90)),
+      initialDate: _startDate != null && _startDate!.isAfter(now)
+          ? _startDate!
+          : now,
+      minDate: now,
+      maxDate: now.add(const Duration(days: _leaveRangeDays)),
       title: '选择开始时间',
     );
     if (date != null) {
       setState(() {
         _startDate = date;
         // 结束时间不能早于开始时间
-        if (_endDate != null && _endDate!.isBefore(date)) {
-          _endDate = date;
+        final minEndDate = _laterDate(date, DateTime.now());
+        if (_endDate != null && _endDate!.isBefore(minEndDate)) {
+          _endDate = minEndDate;
         }
       });
     }
   }
 
   Future<void> _pickEndDate() async {
+    if (_startDate == null) {
+      CampusSnackBar.show(context, message: '请先选择开始时间', isError: true);
+      return;
+    }
+
+    final now = DateTime.now();
+    final minSelectableDate = _laterDate(_startDate!, now);
     final date = await DatePickerSheet.showDateTime(
       context,
-      initialDate: _endDate ?? (_startDate ?? DateTime.now()),
-      minDate: _startDate ?? DateTime.now(),
-      maxDate: DateTime.now().add(const Duration(days: 90)),
+      initialDate: _endDate != null && _endDate!.isAfter(minSelectableDate)
+          ? _endDate!
+          : minSelectableDate,
+      minDate: minSelectableDate,
+      maxDate: now.add(const Duration(days: _leaveRangeDays)),
       title: '选择结束时间',
     );
     if (date != null) setState(() => _endDate = date);
@@ -86,9 +105,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
 
   Future<void> _submit() async {
     if (_startDate == null || _endDate == null) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('请先选择开始和结束日期')),
-      );
+      CampusSnackBar.show(context, message: '请先选择开始和结束日期', isError: true);
       return;
     }
 
@@ -106,8 +123,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
           .single();
 
       final studentName = userResponse['name'] as String? ?? '未知学生';
-      final className =
-          userResponse['department'] as String? ?? '未知班级';
+      final className = userResponse['department'] as String? ?? '未知班级';
 
       final leave = LeaveApplication(
         id: '',
@@ -186,8 +202,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
                       onPressed: () => Navigator.pop(ctx),
                       style: FilledButton.styleFrom(
                         backgroundColor: AppColors.primary,
-                        padding:
-                            const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(16),
                         ),
@@ -218,8 +233,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
   Widget build(BuildContext context) {
     final myLeavesState = ref.watch(_myLeavesProvider);
     // 实时计算是否有待审批申请
-    final hasPending =
-        myLeavesState.leaves.any((l) => l.status == 'pending');
+    final hasPending = myLeavesState.leaves.any((l) => l.status == 'pending');
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -227,8 +241,11 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
         backgroundColor: AppColors.background,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded,
-              color: AppColors.primary, size: 20),
+          icon: const Icon(
+            Icons.arrow_back_ios_new_rounded,
+            color: AppColors.primary,
+            size: 20,
+          ),
           onPressed: () => Navigator.of(context).pop(),
         ),
         title: Text(
@@ -288,20 +305,21 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
                   onTap: () => setState(() => _selectedType = type),
                   child: Container(
                     padding: const EdgeInsets.symmetric(
-                        horizontal: 20, vertical: 8),
+                      horizontal: 20,
+                      vertical: 8,
+                    ),
                     decoration: BoxDecoration(
-                      color: selected
-                          ? AppColors.surface
-                          : Colors.transparent,
+                      color: selected ? AppColors.surface : Colors.transparent,
                       borderRadius: BorderRadius.circular(6),
                       boxShadow: selected
                           ? [
                               BoxShadow(
-                                color:
-                                    AppColors.primary.withValues(alpha: 0.08),
+                                color: AppColors.primary.withValues(
+                                  alpha: 0.08,
+                                ),
                                 blurRadius: 4,
                                 offset: const Offset(0, 1),
-                              )
+                              ),
                             ]
                           : null,
                     ),
@@ -311,8 +329,9 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
                         color: selected
                             ? AppColors.primary
                             : AppColors.textSecondary,
-                        fontWeight:
-                            selected ? FontWeight.w600 : FontWeight.w400,
+                        fontWeight: selected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
                       ),
                     ),
                   ),
@@ -376,20 +395,19 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
             decoration: BoxDecoration(
               color: AppColors.background,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: AppColors.greyLight,
-                width: 0.5,
-              ),
+              border: Border.all(color: AppColors.greyLight, width: 0.5),
             ),
             child: TextField(
               controller: _reasonController,
               maxLines: 4,
-              style: AppTextStyles.bodyMedium
-                  .copyWith(color: AppColors.textPrimary),
+              style: AppTextStyles.bodyMedium.copyWith(
+                color: AppColors.textPrimary,
+              ),
               decoration: InputDecoration(
                 hintText: '请描述请假原因…',
-                hintStyle: AppTextStyles.bodyMedium
-                    .copyWith(color: AppColors.textDisabled),
+                hintStyle: AppTextStyles.bodyMedium.copyWith(
+                  color: AppColors.textDisabled,
+                ),
                 border: InputBorder.none,
                 contentPadding: const EdgeInsets.all(16),
               ),
@@ -437,30 +455,24 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
     final formatted = value == null
         ? null
         : '${value.year}年${value.month}月${value.day}日 '
-            '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
+              '${value.hour.toString().padLeft(2, '0')}:${value.minute.toString().padLeft(2, '0')}';
 
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: double.infinity,
-        padding:
-            const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         decoration: BoxDecoration(
           color: AppColors.background,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: AppColors.greyLight,
-            width: 0.5,
-          ),
+          border: Border.all(color: AppColors.greyLight, width: 0.5),
         ),
         child: Row(
           children: [
             Icon(
               Icons.calendar_today_outlined,
               size: 16,
-              color: value == null
-                  ? AppColors.textDisabled
-                  : AppColors.primary,
+              color: value == null ? AppColors.textDisabled : AppColors.primary,
             ),
             const SizedBox(width: 10),
             Text(
@@ -482,8 +494,8 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
   Widget _buildMyLeavesList(_MyLeavesState state) {
     if (state.isLoading) {
       return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 32),
-        child: Center(child: CircularProgressIndicator()),
+        padding: EdgeInsets.symmetric(vertical: 32, horizontal: 16),
+        child: CampusListSkeleton(itemCount: 3, withAvatar: false),
       );
     }
 
@@ -493,8 +505,9 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
         child: Center(
           child: Text(
             '暂无请假记录',
-            style: AppTextStyles.bodyMedium
-                .copyWith(color: AppColors.textSecondary),
+            style: AppTextStyles.bodyMedium.copyWith(
+              color: AppColors.textSecondary,
+            ),
           ),
         ),
       );
@@ -502,10 +515,12 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
 
     return Column(
       children: state.leaves
-          .map((leave) => Padding(
-                padding: const EdgeInsets.only(bottom: 8),
-                child: _buildLeaveCard(leave),
-              ))
+          .map(
+            (leave) => Padding(
+              padding: const EdgeInsets.only(bottom: 8),
+              child: _buildLeaveCard(leave),
+            ),
+          )
           .toList(),
     );
   }
@@ -538,9 +553,7 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
             onPressed: () => Navigator.pop(ctx, true),
             child: Text(
               '确认',
-              style: AppTextStyles.button.copyWith(
-                color: AppColors.error,
-              ),
+              style: AppTextStyles.button.copyWith(color: AppColors.error),
             ),
           ),
         ],
@@ -616,7 +629,9 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
                   children: [
                     Container(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 2),
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
                       decoration: BoxDecoration(
                         color: statusColor.withValues(alpha: 0.1),
                         borderRadius: BorderRadius.circular(4),
@@ -658,7 +673,9 @@ class _LeaveApplyPageState extends ConsumerState<LeaveApplyPage> {
               onTap: () => _confirmCancel(leave),
               child: Container(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 12, vertical: 6),
+                  horizontal: 12,
+                  vertical: 6,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(
                     color: AppColors.error.withValues(alpha: 0.4),
@@ -743,12 +760,11 @@ class _MyLeavesState {
     List<LeaveApplication>? leaves,
     bool? isLoading,
     String? error,
-  }) =>
-      _MyLeavesState(
-        leaves: leaves ?? this.leaves,
-        isLoading: isLoading ?? this.isLoading,
-        error: error,
-      );
+  }) => _MyLeavesState(
+    leaves: leaves ?? this.leaves,
+    isLoading: isLoading ?? this.isLoading,
+    error: error,
+  );
 }
 
 class _MyLeavesNotifier extends StateNotifier<_MyLeavesState> {

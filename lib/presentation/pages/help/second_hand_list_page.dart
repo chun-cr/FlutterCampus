@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import '../../../core/services/second_hand_service.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 
 class SecondHandListPage extends ConsumerWidget {
@@ -33,9 +34,7 @@ class SecondHandListPage extends ConsumerWidget {
 
   Widget _buildBody(SecondHandState state, WidgetRef ref) {
     if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primary),
-      );
+      return const CampusLoading();
     }
 
     if (state.error != null) {

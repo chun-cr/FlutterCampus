@@ -53,12 +53,7 @@ class _MyLoansPageState extends ConsumerState<MyLoansPage> {
           ),
           Expanded(
             child: borrowsAsync.when(
-              loading: () => const Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  color: Color(0xFF333333),
-                ),
-              ),
+              loading: () => const CampusLoading(),
               error: (error, _) => _ErrorView(
                 message: error.toString().replaceFirst('Exception: ', ''),
                 onRetry: () => ref.invalidate(myBorrowsProvider),
@@ -124,8 +119,10 @@ class _TabBar extends StatelessWidget {
               child: AnimatedContainer(
                 duration: const Duration(milliseconds: 180),
                 margin: const EdgeInsets.only(right: 8),
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 7,
+                ),
                 decoration: BoxDecoration(
                   color: selected
                       ? const Color(0xFF1A1A1A)
@@ -141,11 +138,8 @@ class _TabBar extends StatelessWidget {
                 child: Text(
                   tabs[i],
                   style: AppTextStyles.bodySmall.copyWith(
-                    color: selected
-                        ? AppColors.white
-                        : AppColors.textSecondary,
-                    fontWeight:
-                        selected ? FontWeight.w600 : FontWeight.w400,
+                    color: selected ? AppColors.white : AppColors.textSecondary,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
               ),
@@ -161,10 +155,7 @@ class _TabBar extends StatelessWidget {
 // 单条借阅记录卡片（左封面 + 右内容）
 // ---------------------------------------------------------------------------
 class _LoanCard extends ConsumerWidget {
-  const _LoanCard({
-    required this.request,
-    required this.onActionSuccess,
-  });
+  const _LoanCard({required this.request, required this.onActionSuccess});
 
   final BorrowRequest request;
   final VoidCallback onActionSuccess;
@@ -253,8 +244,11 @@ class _LoanCard extends ConsumerWidget {
       errorBuilder: (_, __, ___) => Container(
         color: const Color(0xFFF0F0F0),
         child: const Center(
-          child: Icon(Icons.broken_image_outlined,
-              color: Color(0xFF999999), size: 24),
+          child: Icon(
+            Icons.broken_image_outlined,
+            color: Color(0xFF999999),
+            size: 24,
+          ),
         ),
       ),
     );
@@ -295,8 +289,11 @@ class _LoanCard extends ConsumerWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.location_on_outlined,
-                    size: 12, color: Color(0xFF999999)),
+                const Icon(
+                  Icons.location_on_outlined,
+                  size: 12,
+                  color: Color(0xFF999999),
+                ),
                 const SizedBox(width: 3),
                 Expanded(
                   child: Text(
@@ -691,8 +688,7 @@ class _ErrorView extends StatelessWidget {
           GestureDetector(
             onTap: onRetry,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(20),

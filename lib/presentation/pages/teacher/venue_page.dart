@@ -148,8 +148,9 @@ final mockVenues = [
 final venueTypeFilterProvider = StateProvider<String>((ref) => 'all');
 
 // 申请记录列表
-final venueApplicationsProvider =
-    FutureProvider<List<VenueApplication>>((ref) async {
+final venueApplicationsProvider = FutureProvider<List<VenueApplication>>((
+  ref,
+) async {
   final supabase = Supabase.instance.client;
   final currentUser = supabase.auth.currentUser;
   if (currentUser == null) return [];
@@ -159,9 +160,7 @@ final venueApplicationsProvider =
         .select()
         .eq('teacher_id', currentUser.id)
         .order('created_at', ascending: false);
-    return (response as List)
-        .map((e) => VenueApplication.fromJson(e))
-        .toList();
+    return (response as List).map((e) => VenueApplication.fromJson(e)).toList();
   } catch (e) {
     debugPrint('拉取场地申请记录失败: $e');
     return [];
@@ -169,8 +168,7 @@ final venueApplicationsProvider =
 });
 
 // 申请记录筛选
-final applicationStatusFilterProvider =
-    StateProvider<String>((ref) => 'all');
+final applicationStatusFilterProvider = StateProvider<String>((ref) => 'all');
 
 // BottomSheet 表单状态
 final selectedDateProvider = StateProvider<DateTime?>((ref) => null);
@@ -305,16 +303,18 @@ class _BrowseTab extends ConsumerWidget {
                   title: '暂无匹配场地',
                 )
               : ListView.separated(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 20,
+                    vertical: 16,
+                  ),
                   itemCount: filteredVenues.length,
                   separatorBuilder: (_, __) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     final venue = filteredVenues[index];
                     return _VenueCard(
                       venue: venue,
-                      onTap: () => _showApplySheet(
-                          context, ref, venue, tabController),
+                      onTap: () =>
+                          _showApplySheet(context, ref, venue, tabController),
                     );
                   },
                 ),
@@ -323,8 +323,12 @@ class _BrowseTab extends ConsumerWidget {
     );
   }
 
-  void _showApplySheet(BuildContext context, WidgetRef ref, Venue venue,
-      TabController tabController) {
+  void _showApplySheet(
+    BuildContext context,
+    WidgetRef ref,
+    Venue venue,
+    TabController tabController,
+  ) {
     // 重置表单状态
     ref.read(selectedDateProvider.notifier).state = null;
     ref.read(selectedTimeSlotProvider.notifier).state = null;
@@ -339,9 +343,7 @@ class _BrowseTab extends ConsumerWidget {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) => Padding(
-        padding: EdgeInsets.only(
-          bottom: MediaQuery.of(ctx).viewInsets.bottom,
-        ),
+        padding: EdgeInsets.only(bottom: MediaQuery.of(ctx).viewInsets.bottom),
         child: _ApplySheet(venue: venue, tabController: tabController),
       ),
     );
@@ -377,11 +379,12 @@ class _TypeFilterBar extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onChanged(item.$1),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
-                  color:
-                      isSelected ? AppColors.primary : AppColors.surface,
+                  color: isSelected ? AppColors.primary : AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                   border: isSelected
                       ? null
@@ -393,8 +396,9 @@ class _TypeFilterBar extends StatelessWidget {
                     color: isSelected
                         ? AppColors.white
                         : AppColors.textSecondary,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ),
@@ -436,7 +440,9 @@ class _VenueCard extends StatelessWidget {
               children: [
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 10, vertical: 4),
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
@@ -450,8 +456,11 @@ class _VenueCard extends StatelessWidget {
                   ),
                 ),
                 const Spacer(),
-                Icon(Icons.people_outline, size: 14,
-                    color: AppColors.textSecondary),
+                Icon(
+                  Icons.people_outline,
+                  size: 14,
+                  color: AppColors.textSecondary,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '${venue.capacity}人',
@@ -474,8 +483,11 @@ class _VenueCard extends StatelessWidget {
             const SizedBox(height: 4),
             Row(
               children: [
-                const Icon(Icons.location_on_outlined, size: 12,
-                    color: AppColors.textSecondary),
+                const Icon(
+                  Icons.location_on_outlined,
+                  size: 12,
+                  color: AppColors.textSecondary,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   venue.building,
@@ -494,8 +506,7 @@ class _VenueCard extends StatelessWidget {
               children: [
                 ...venue.facilities.take(3).map((f) => _FacilityTag(text: f)),
                 if (venue.facilities.length > 3)
-                  _FacilityTag(
-                      text: '+${venue.facilities.length - 3}'),
+                  _FacilityTag(text: '+${venue.facilities.length - 3}'),
               ],
             ),
           ],
@@ -522,9 +533,7 @@ class _FacilityTag extends StatelessWidget {
       ),
       child: Text(
         text,
-        style: AppTextStyles.caption.copyWith(
-          color: AppColors.textSecondary,
-        ),
+        style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
       ),
     );
   }
@@ -652,7 +661,7 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
 
   void _showSnackBar(String msg, {bool isError = false}) {
     if (!mounted) return;
-    CampusSnackBar.show(context, message: msg, isError: true);
+    CampusSnackBar.show(context, message: msg, isError: isError);
   }
 
   @override
@@ -705,16 +714,16 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                 ),
                 Container(
                   padding: const EdgeInsets.symmetric(
-                      horizontal: 8, vertical: 3),
+                    horizontal: 8,
+                    vertical: 3,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
                     typeLabel,
-                    style: AppTextStyles.labelSmall.copyWith(
-                      color: color,
-                    ),
+                    style: AppTextStyles.labelSmall.copyWith(color: color),
                   ),
                 ),
               ],
@@ -730,7 +739,9 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                   ? Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.surface,
                         borderRadius: BorderRadius.circular(12),
@@ -738,8 +749,11 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.calendar_today_outlined,
-                              size: 16, color: AppColors.textSecondary),
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 16,
+                            color: AppColors.textSecondary,
+                          ),
                           const SizedBox(width: 8),
                           Text(
                             '点击选择日期',
@@ -753,13 +767,14 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                   : Container(
                       width: double.infinity,
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 14),
+                        horizontal: 16,
+                        vertical: 14,
+                      ),
                       decoration: BoxDecoration(
                         color: AppColors.primary.withValues(alpha: 0.05),
                         borderRadius: BorderRadius.circular(12),
                         border: Border(
-                          left: BorderSide(
-                              color: AppColors.primary, width: 3),
+                          left: BorderSide(color: AppColors.primary, width: 3),
                         ),
                       ),
                       child: Text(
@@ -813,21 +828,20 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                 filled: true,
                 fillColor: AppColors.surface,
                 contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 12),
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      const BorderSide(color: AppColors.greyLight),
+                  borderSide: const BorderSide(color: AppColors.greyLight),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      const BorderSide(color: AppColors.greyLight),
+                  borderSide: const BorderSide(color: AppColors.greyLight),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide:
-                      const BorderSide(color: AppColors.primary),
+                  borderSide: const BorderSide(color: AppColors.primary),
                 ),
                 counterText: '',
               ),
@@ -844,8 +858,9 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                     controller: _attendeesController,
                     keyboardType: TextInputType.number,
                     onChanged: (val) {
-                      ref.read(attendeesProvider.notifier).state =
-                          int.tryParse(val);
+                      ref.read(attendeesProvider.notifier).state = int.tryParse(
+                        val,
+                      );
                     },
                     style: AppTextStyles.bodyMedium,
                     decoration: InputDecoration(
@@ -856,21 +871,24 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
                       filled: true,
                       fillColor: AppColors.surface,
                       contentPadding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 12),
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: AppColors.greyLight),
+                        borderSide: const BorderSide(
+                          color: AppColors.greyLight,
+                        ),
                       ),
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: AppColors.greyLight),
+                        borderSide: const BorderSide(
+                          color: AppColors.greyLight,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
-                        borderSide:
-                            const BorderSide(color: AppColors.primary),
+                        borderSide: const BorderSide(color: AppColors.primary),
                       ),
                     ),
                   ),
@@ -888,9 +906,7 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
               const SizedBox(height: 4),
               Text(
                 '超出场地容量',
-                style: AppTextStyles.caption.copyWith(
-                  color: AppColors.error,
-                ),
+                style: AppTextStyles.caption.copyWith(color: AppColors.error),
               ),
             ],
             const SizedBox(height: 32),
@@ -899,11 +915,11 @@ class _ApplySheetState extends ConsumerState<_ApplySheet> {
             SizedBox(
               width: double.infinity,
               child: FilledButton(
-                onPressed:
-                    isFormValid && !isOverCapacity ? _submit : null,
+                onPressed: isFormValid && !isOverCapacity ? _submit : null,
                 style: FilledButton.styleFrom(
-                  backgroundColor:
-                      isOverCapacity ? AppColors.error : AppColors.primary,
+                  backgroundColor: isOverCapacity
+                      ? AppColors.error
+                      : AppColors.primary,
                   disabledBackgroundColor: AppColors.greyLight,
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
@@ -947,8 +963,7 @@ class _TimeSlotSelector extends StatelessWidget {
         return GestureDetector(
           onTap: () => onChanged(slot),
           child: Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               color: isSelected
                   ? AppColors.primary
@@ -958,10 +973,8 @@ class _TimeSlotSelector extends StatelessWidget {
             child: Text(
               slot,
               style: AppTextStyles.labelSmall.copyWith(
-                color:
-                    isSelected ? AppColors.white : AppColors.textSecondary,
-                fontWeight:
-                    isSelected ? FontWeight.w600 : FontWeight.normal,
+                color: isSelected ? AppColors.white : AppColors.textSecondary,
+                fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
               ),
             ),
           ),
@@ -992,17 +1005,18 @@ class _MyApplicationsTab extends ConsumerWidget {
         ),
         const SizedBox(height: 8),
         Expanded(
-          child: ref.watch(venueApplicationsProvider).when(
+          child: ref
+              .watch(venueApplicationsProvider)
+              .when(
                 loading: () => const Center(child: CampusLoading()),
-                error: (err, _) =>
-                    Center(child: Text('加载失败: $err')),
+                error: (err, _) => Center(child: Text('加载失败: $err')),
                 data: (applications) {
                   // 按状态筛选
                   final filtered = statusFilter == 'all'
                       ? applications
                       : applications
-                          .where((a) => a.status == statusFilter)
-                          .toList();
+                            .where((a) => a.status == statusFilter)
+                            .toList();
 
                   if (filtered.isEmpty) {
                     return const Center(
@@ -1020,13 +1034,13 @@ class _MyApplicationsTab extends ConsumerWidget {
                     },
                     child: ListView.separated(
                       padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 16),
+                        horizontal: 20,
+                        vertical: 16,
+                      ),
                       itemCount: filtered.length,
-                      separatorBuilder: (_, __) =>
-                          const SizedBox(height: 12),
+                      separatorBuilder: (_, __) => const SizedBox(height: 12),
                       itemBuilder: (context, index) {
-                        return _ApplicationCard(
-                            application: filtered[index]);
+                        return _ApplicationCard(application: filtered[index]);
                       },
                     ),
                   );
@@ -1066,11 +1080,12 @@ class _StatusFilterBar extends StatelessWidget {
             child: GestureDetector(
               onTap: () => onChanged(item.$1),
               child: Container(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 8,
+                ),
                 decoration: BoxDecoration(
-                  color:
-                      isSelected ? AppColors.primary : AppColors.surface,
+                  color: isSelected ? AppColors.primary : AppColors.surface,
                   borderRadius: BorderRadius.circular(20),
                   border: isSelected
                       ? null
@@ -1082,8 +1097,9 @@ class _StatusFilterBar extends StatelessWidget {
                     color: isSelected
                         ? AppColors.white
                         : AppColors.textSecondary,
-                    fontWeight:
-                        isSelected ? FontWeight.w600 : FontWeight.normal,
+                    fontWeight: isSelected
+                        ? FontWeight.w600
+                        : FontWeight.normal,
                   ),
                 ),
               ),
@@ -1144,19 +1160,28 @@ class _ApplicationCard extends StatelessWidget {
           const SizedBox(height: 12),
 
           // 信息行
-          _buildInfoRow(Icons.calendar_today_outlined,
-              _formatDateSimple(application.useDate)),
+          _buildInfoRow(
+            Icons.calendar_today_outlined,
+            _formatDateSimple(application.useDate),
+          ),
           const SizedBox(height: 6),
-          _buildInfoRow(Icons.access_time_outlined,
-              '${application.startTime} - ${application.endTime}'),
+          _buildInfoRow(
+            Icons.access_time_outlined,
+            '${application.startTime} - ${application.endTime}',
+          ),
           const SizedBox(height: 6),
-          _buildInfoRow(Icons.description_outlined, application.purpose,
-              isCaption: true),
+          _buildInfoRow(
+            Icons.description_outlined,
+            application.purpose,
+            isCaption: true,
+          ),
           if (application.attendees != null) ...[
             const SizedBox(height: 6),
-            _buildInfoRow(Icons.people_outline,
-                '预计${application.attendees}人',
-                isCaption: true),
+            _buildInfoRow(
+              Icons.people_outline,
+              '预计${application.attendees}人',
+              isCaption: true,
+            ),
           ],
 
           // 申请时间（右对齐）
@@ -1180,8 +1205,7 @@ class _ApplicationCard extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String text,
-      {bool isCaption = false}) {
+  Widget _buildInfoRow(IconData icon, String text, {bool isCaption = false}) {
     return Row(
       children: [
         Icon(icon, size: 14, color: AppColors.textSecondary),
@@ -1190,9 +1214,7 @@ class _ApplicationCard extends StatelessWidget {
           child: Text(
             text,
             style: isCaption
-                ? AppTextStyles.caption.copyWith(
-                    color: AppColors.textSecondary,
-                  )
+                ? AppTextStyles.caption.copyWith(color: AppColors.textSecondary)
                 : AppTextStyles.labelMedium,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
@@ -1258,8 +1280,7 @@ class _ReviewResult extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 12),
-        const Divider(
-            height: 1, thickness: 0.5, color: AppColors.greyLight),
+        const Divider(height: 1, thickness: 0.5, color: AppColors.greyLight),
         const SizedBox(height: 12),
         Row(
           children: [

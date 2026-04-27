@@ -1,6 +1,7 @@
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
+import '../components/campus_loading.dart';
 import '../pages/auth/splash_screen.dart';
 import '../pages/auth/login_page.dart';
 import '../pages/auth/register_page.dart';
@@ -267,8 +268,7 @@ class _GradeRouterPageState extends State<_GradeRouterPage> {
   }
 
   Future<Widget> _resolveGradePage() async {
-    final currentUserId =
-        Supabase.instance.client.auth.currentUser?.id;
+    final currentUserId = Supabase.instance.client.auth.currentUser?.id;
     if (currentUserId == null) return const GradesPage();
     try {
       final response = await Supabase.instance.client
@@ -288,9 +288,7 @@ class _GradeRouterPageState extends State<_GradeRouterPage> {
       future: _pageFuture,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
-          return const Scaffold(
-            body: Center(child: CircularProgressIndicator()),
-          );
+          return const Scaffold(body: CampusLoading());
         }
         return snapshot.data ?? const GradesPage();
       },

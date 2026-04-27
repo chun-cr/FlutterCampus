@@ -205,16 +205,17 @@ enum AttendanceFlowState { idle, active, result }
 // ---------------------------------------------------------------------------
 
 /// 签到流程状态
-final _attendanceFlowProvider =
-    StateProvider<AttendanceFlowState>((ref) => AttendanceFlowState.idle);
+final _attendanceFlowProvider = StateProvider<AttendanceFlowState>(
+  (ref) => AttendanceFlowState.idle,
+);
 
 /// 当前进行中的签到会话
-final _activeSessionProvider =
-    StateProvider<AttendanceSession?>((ref) => null);
+final _activeSessionProvider = StateProvider<AttendanceSession?>((ref) => null);
 
 /// 已签到记录列表（实时轮询更新）
-final _checkedInRecordsProvider =
-    StateProvider<List<AttendanceRecord>>((ref) => []);
+final _checkedInRecordsProvider = StateProvider<List<AttendanceRecord>>(
+  (ref) => [],
+);
 
 /// 选中的课程索引
 final _selectedCourseIndexProvider = StateProvider<int?>((ref) => null);
@@ -223,12 +224,14 @@ final _selectedCourseIndexProvider = StateProvider<int?>((ref) => null);
 final _selectedDurationProvider = StateProvider<int>((ref) => 5);
 
 /// 当前进行的签到的全部学生（从数据库拉取）
-final _currentSessionStudentsProvider =
-    StateProvider<List<_MockStudent>>((ref) => []);
+final _currentSessionStudentsProvider = StateProvider<List<_MockStudent>>(
+  (ref) => [],
+);
 
 /// 历史签到列表
-final _attendanceHistoryProvider =
-    FutureProvider<List<AttendanceSession>>((ref) async {
+final _attendanceHistoryProvider = FutureProvider<List<AttendanceSession>>((
+  ref,
+) async {
   final supabase = Supabase.instance.client;
   final currentUser = supabase.auth.currentUser;
   if (currentUser == null) return [];
@@ -241,8 +244,7 @@ final _attendanceHistoryProvider =
         .order('started_at', ascending: false);
 
     return (response as List)
-        .map((item) =>
-            AttendanceSession.fromJson(item as Map<String, dynamic>))
+        .map((item) => AttendanceSession.fromJson(item as Map<String, dynamic>))
         .toList();
   } catch (e) {
     debugPrint('拉取签到历史失败: $e');
@@ -370,8 +372,9 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
           .order('checked_in_at', ascending: true);
 
       final records = (response as List)
-          .map((item) =>
-              AttendanceRecord.fromJson(item as Map<String, dynamic>))
+          .map(
+            (item) => AttendanceRecord.fromJson(item as Map<String, dynamic>),
+          )
           .toList();
 
       if (mounted) {
@@ -399,19 +402,22 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
         return;
       }
 
-      final response = await supabase.from('attendance_sessions').insert({
-        'teacher_id': currentUser.id,
-        'course_name': course.courseName,
-        'course_code': course.courseCode,
-        'class_names': course.classNames,
-        'check_in_code': code,
-        'status': 'active',
-        'duration_minutes': duration,
-        'started_at': DateTime.now().toUtc().toIso8601String(),
-      }).select().single();
+      final response = await supabase
+          .from('attendance_sessions')
+          .insert({
+            'teacher_id': currentUser.id,
+            'course_name': course.courseName,
+            'course_code': course.courseCode,
+            'class_names': course.classNames,
+            'check_in_code': code,
+            'status': 'active',
+            'duration_minutes': duration,
+            'started_at': DateTime.now().toUtc().toIso8601String(),
+          })
+          .select()
+          .single();
 
-      final session =
-          AttendanceSession.fromJson(response);
+      final session = AttendanceSession.fromJson(response);
 
       // 更新状态
       ref.read(_activeSessionProvider.notifier).state = session;
@@ -426,14 +432,16 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
             .select()
             .eq('class_id', course.classId)
             .order('student_no');
-        
+
         final studentList = (res as List)
-            .map((item) => _MockStudent(
-                  item['name']?.toString() ?? '未知',
-                  item['student_no']?.toString() ?? '未知',
-                ))
+            .map(
+              (item) => _MockStudent(
+                item['name']?.toString() ?? '未知',
+                item['student_no']?.toString() ?? '未知',
+              ),
+            )
             .toList();
-        
+
         ref.read(_currentSessionStudentsProvider.notifier).state = studentList;
       } catch (e) {
         debugPrint('获取班级名册数据失败: $e');
@@ -460,10 +468,13 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
 
     try {
       final supabase = Supabase.instance.client;
-      await supabase.from('attendance_sessions').update({
-        'status': 'ended',
-        'ended_at': DateTime.now().toUtc().toIso8601String(),
-      }).eq('id', session.id);
+      await supabase
+          .from('attendance_sessions')
+          .update({
+            'status': 'ended',
+            'ended_at': DateTime.now().toUtc().toIso8601String(),
+          })
+          .eq('id', session.id);
 
       // 最后拉取一次签到记录确保数据最新
       await _fetchRecords(session.id);
@@ -480,8 +491,7 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
 
   // ---- 完成并回到 idle ----
   void _finishAndReset() {
-    ref.read(_attendanceFlowProvider.notifier).state =
-        AttendanceFlowState.idle;
+    ref.read(_attendanceFlowProvider.notifier).state = AttendanceFlowState.idle;
     ref.read(_activeSessionProvider.notifier).state = null;
     ref.read(_checkedInRecordsProvider.notifier).state = [];
     ref.read(_selectedCourseIndexProvider.notifier).state = null;
@@ -492,7 +502,7 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
 
   void _showSnackBar(String message, {bool isSuccess = false}) {
     if (!mounted) return;
-    CampusSnackBar.show(context, message: message, isError: true);
+    CampusSnackBar.show(context, message: message, isError: !isSuccess);
   }
 
   @override
@@ -710,8 +720,7 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
   Widget _buildResultView() {
     final records = ref.watch(_checkedInRecordsProvider);
     final allStudents = ref.watch(_currentSessionStudentsProvider);
-    final checkedNos =
-        records.map((r) => r.studentNo).toSet();
+    final checkedNos = records.map((r) => r.studentNo).toSet();
     final totalStudents = allStudents.length;
     final checkedCount = records.length;
     final uncheckedCount = totalStudents - checkedCount;
@@ -921,18 +930,16 @@ class _CheckInTabState extends ConsumerState<_CheckInTab> {
 // 课程选择器
 // ===========================================================================
 class _CourseSelector extends StatelessWidget {
-  const _CourseSelector({
-    required this.selectedIndex,
-    required this.onSelect,
-  });
+  const _CourseSelector({required this.selectedIndex, required this.onSelect});
 
   final int? selectedIndex;
   final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
-    final selected =
-        selectedIndex != null ? _mockCourses[selectedIndex!] : null;
+    final selected = selectedIndex != null
+        ? _mockCourses[selectedIndex!]
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -1035,10 +1042,7 @@ class _CourseSelector extends StatelessWidget {
 // 签到时限选择器
 // ===========================================================================
 class _DurationSelector extends StatelessWidget {
-  const _DurationSelector({
-    required this.selected,
-    required this.onSelect,
-  });
+  const _DurationSelector({required this.selected, required this.onSelect});
 
   final int selected;
   final ValueChanged<int> onSelect;
@@ -1051,17 +1055,12 @@ class _DurationSelector extends StatelessWidget {
       children: _options.map((minutes) {
         final isActive = selected == minutes;
         return Padding(
-          padding: EdgeInsets.only(
-            right: minutes == _options.last ? 0 : 8,
-          ),
+          padding: EdgeInsets.only(right: minutes == _options.last ? 0 : 8),
           child: GestureDetector(
             onTap: () => onSelect(minutes),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 10,
-              ),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
               decoration: BoxDecoration(
                 color: isActive ? AppColors.primary : AppColors.greyLight,
                 borderRadius: BorderRadius.circular(999),
@@ -1069,9 +1068,7 @@ class _DurationSelector extends StatelessWidget {
               child: Text(
                 '$minutes分钟',
                 style: AppTextStyles.labelMedium.copyWith(
-                  color: isActive
-                      ? AppColors.white
-                      : AppColors.textSecondary,
+                  color: isActive ? AppColors.white : AppColors.textSecondary,
                   fontWeight: FontWeight.w600,
                 ),
               ),
@@ -1161,7 +1158,8 @@ class _CountdownRing extends StatelessWidget {
     // 格式化分:秒
     final minutes = remainingSeconds ~/ 60;
     final seconds = remainingSeconds % 60;
-    final timeStr = '${minutes.toString().padLeft(2, '0')}:'
+    final timeStr =
+        '${minutes.toString().padLeft(2, '0')}:'
         '${seconds.toString().padLeft(2, '0')}';
 
     return SizedBox(
@@ -1401,8 +1399,9 @@ class _HistoryCardState extends ConsumerState<_HistoryCard> {
             .order('checked_in_at', ascending: true);
 
         _records = (response as List)
-            .map((item) =>
-                AttendanceRecord.fromJson(item as Map<String, dynamic>))
+            .map(
+              (item) => AttendanceRecord.fromJson(item as Map<String, dynamic>),
+            )
             .toList();
       } catch (e) {
         debugPrint('拉取签到记录详情失败: $e');
@@ -1542,8 +1541,9 @@ class _HistoryCardState extends ConsumerState<_HistoryCard> {
                       children: [
                         CircleAvatar(
                           radius: 14,
-                          backgroundColor:
-                              AppColors.primary.withValues(alpha: 0.1),
+                          backgroundColor: AppColors.primary.withValues(
+                            alpha: 0.1,
+                          ),
                           child: Text(
                             record.studentName.isNotEmpty
                                 ? record.studentName.characters.first

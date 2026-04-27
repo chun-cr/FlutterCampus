@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 import '../../../core/services/grade_service.dart';
 import '../../../domain/models/grade.dart';
@@ -27,7 +28,7 @@ class _GradesPageState extends ConsumerState<GradesPage> {
         elevation: 0,
       ),
       body: gradesState.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const CampusLoading()
           : gradesState.error != null
           ? _buildErrorState(gradesState.error!)
           : gradesState.grades.isEmpty

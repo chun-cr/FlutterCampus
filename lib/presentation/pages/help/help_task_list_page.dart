@@ -42,7 +42,9 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
           labelColor: AppColors.primary,
           unselectedLabelColor: AppColors.textSecondary,
           indicatorColor: AppColors.primary,
-          labelStyle: AppTextStyles.labelLarge.copyWith(fontWeight: FontWeight.w600),
+          labelStyle: AppTextStyles.labelLarge.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
           tabs: const [
             Tab(text: '火热寻搭'),
             Tab(text: '已找到/完成'),
@@ -50,16 +52,19 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
         ),
       ),
       body: state.isLoading
-          ? const Center(child: CircularProgressIndicator(color: AppColors.primary))
+          ? const CampusLoading()
           : state.error != null
-              ? Center(child: Text(state.error!))
-              : TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildList(state.tasks.where((t) => !t.isCompleted).toList()),
-                    _buildList(state.tasks.where((t) => t.isCompleted).toList(), isCompletedTab: true),
-                  ],
+          ? Center(child: Text(state.error!))
+          : TabBarView(
+              controller: _tabController,
+              children: [
+                _buildList(state.tasks.where((t) => !t.isCompleted).toList()),
+                _buildList(
+                  state.tasks.where((t) => t.isCompleted).toList(),
+                  isCompletedTab: true,
                 ),
+              ],
+            ),
     );
   }
 
@@ -68,7 +73,9 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
       return Center(
         child: Text(
           '暂无请求',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
       );
     }
@@ -132,18 +139,25 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
                   children: [
                     Text(
                       task.title,
-                      style: AppTextStyles.titleMedium.copyWith(fontWeight: FontWeight.w600),
+                      style: AppTextStyles.titleMedium.copyWith(
+                        fontWeight: FontWeight.w600,
+                      ),
                     ),
                     const SizedBox(height: 4),
                     Text(
                       task.relativeTime,
-                      style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
+                      style: AppTextStyles.caption.copyWith(
+                        color: AppColors.textSecondary,
+                      ),
                     ),
                   ],
                 ),
               ),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 4,
+                ),
                 decoration: BoxDecoration(
                   color: task.isCompleted
                       ? AppColors.greyLight.withValues(alpha: 0.3)
@@ -153,7 +167,9 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
                 child: Text(
                   task.isCompleted ? '已解决' : task.type.label,
                   style: AppTextStyles.caption.copyWith(
-                    color: task.isCompleted ? AppColors.textSecondary : AppColors.primary,
+                    color: task.isCompleted
+                        ? AppColors.textSecondary
+                        : AppColors.primary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -174,11 +190,17 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
             const SizedBox(height: 12),
             Row(
               children: [
-                const Icon(Icons.monetization_on_outlined, size: 16, color: AppColors.warning),
+                const Icon(
+                  Icons.monetization_on_outlined,
+                  size: 16,
+                  color: AppColors.warning,
+                ),
                 const SizedBox(width: 4),
                 Text(
                   '悬赏: ¥${task.reward!.toStringAsFixed(0)}',
-                  style: AppTextStyles.labelMedium.copyWith(color: AppColors.warning),
+                  style: AppTextStyles.labelMedium.copyWith(
+                    color: AppColors.warning,
+                  ),
                 ),
               ],
             ),
@@ -191,21 +213,32 @@ class _HelpTaskListPageState extends ConsumerState<HelpTaskListPage>
             children: [
               if (!task.isCompleted && !isMe)
                 _buildActionBtn('去咨询', AppColors.primary, () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('已复制发布者联系方式')),
+                  CampusSnackBar.show(
+                    context,
+                    message: '已复制发布者联系方式',
+                    isError: false,
                   );
                 }),
               if (!task.isCompleted && isMe)
                 _buildActionBtn('已找到搭子/跑腿', AppColors.success, () async {
-                  await ref.read(allHelpTaskStateProvider.notifier).completeTask(task.id);
+                  await ref
+                      .read(allHelpTaskStateProvider.notifier)
+                      .completeTask(task.id);
                   if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('操作成功，已标记完成')),
+                    CampusSnackBar.show(
+                      context,
+                      message: '操作成功，已标记完成',
+                      isError: false,
                     );
                   }
                 }),
               if (task.isCompleted)
-                Text('此互助已完成', style: AppTextStyles.caption.copyWith(color: AppColors.textDisabled)),
+                Text(
+                  '此互助已完成',
+                  style: AppTextStyles.caption.copyWith(
+                    color: AppColors.textDisabled,
+                  ),
+                ),
             ],
           ),
         ],

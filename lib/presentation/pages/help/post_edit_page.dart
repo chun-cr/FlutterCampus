@@ -151,10 +151,11 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
   Future<void> _switchSubType(LostFoundSubType newType) async {
     if (_subType == newType) return;
 
-    final hasContent = _titleController.text.isNotEmpty ||
-                       _descriptionController.text.isNotEmpty ||
-                       _locationController.text.isNotEmpty ||
-                       _contactController.text.isNotEmpty;
+    final hasContent =
+        _titleController.text.isNotEmpty ||
+        _descriptionController.text.isNotEmpty ||
+        _locationController.text.isNotEmpty ||
+        _contactController.text.isNotEmpty;
 
     if (hasContent) {
       final shouldSave = await showDialog<bool>(
@@ -162,11 +163,18 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
         builder: (ctx) => AlertDialog(
           title: Text('提示', style: AppTextStyles.titleMedium),
           content: Text('是否保存当前填写的信息为草稿？', style: AppTextStyles.bodyMedium),
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(16),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx, false),
-              child: Text('不保存', style: AppTextStyles.labelLarge.copyWith(color: AppColors.error)),
+              child: Text(
+                '不保存',
+                style: AppTextStyles.labelLarge.copyWith(
+                  color: AppColors.error,
+                ),
+              ),
             ),
             FilledButton(
               onPressed: () => Navigator.pop(ctx, true),
@@ -228,7 +236,9 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
             title: _titleController.text.trim(),
             description: _descriptionController.text.trim(),
             location: _locationController.text.trim(),
-            type: _subType == LostFoundSubType.found ? LostFoundType.found : LostFoundType.lost,
+            type: _subType == LostFoundSubType.found
+                ? LostFoundType.found
+                : LostFoundType.lost,
             publisherId: '', // Added by service
             contactInfo: _contactController.text.trim(),
             createdAt: DateTime.now(),
@@ -237,12 +247,12 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
         } else if (widget.type == PostType.secondHand) {
           final price = double.tryParse(_priceController.text.trim()) ?? 0;
           final item = SecondHandItem(
-             id: '',
-             title: _titleController.text.trim(),
-             description: _descriptionController.text.trim(),
-             price: price,
-             sellerId: '',
-             createdAt: DateTime.now(),
+            id: '',
+            title: _titleController.text.trim(),
+            description: _descriptionController.text.trim(),
+            price: price,
+            sellerId: '',
+            createdAt: DateTime.now(),
           );
           await ref.read(helpSecondHandStateProvider.notifier).addItem(item);
         } else {
@@ -252,7 +262,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
           final loc = _locationController.text.trim();
           final contact = _contactController.text.trim();
           final fullDesc = '集合地点: $loc\n联系方式: $contact\n\n活动说明:\n$desc';
-          
+
           final task = HelpTask(
             id: '',
             title: title,
@@ -265,43 +275,16 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
         }
 
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.check_circle_rounded, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Text(_copy.successText, style: AppTextStyles.labelLarge.copyWith(color: Colors.white, fontWeight: FontWeight.w600)),
-                ],
-              ),
-              backgroundColor: AppColors.success,
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-              duration: const Duration(seconds: 2),
-            ),
+          CampusSnackBar.show(
+            context,
+            message: _copy.successText,
+            isError: false,
           );
           context.pop();
         }
       } catch (e) {
         if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Row(
-                children: [
-                  const Icon(Icons.error_outline_rounded, color: Colors.white),
-                  const SizedBox(width: 12),
-                  Expanded(child: Text('发布失败: $e', style: AppTextStyles.labelMedium.copyWith(color: Colors.white))),
-                ],
-              ),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.only(bottom: 24, left: 24, right: 24),
-              elevation: 4,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            ),
-          );
+          CampusSnackBar.show(context, message: '发布失败: $e', isError: true);
         }
       } finally {
         if (mounted) setState(() => _isSubmitting = false);
@@ -389,7 +372,10 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
                       ? const SizedBox(
                           height: 20,
                           width: 20,
-                          child: CircularProgressIndicator(color: AppColors.white, strokeWidth: 2),
+                          child: CircularProgressIndicator(
+                            color: AppColors.white,
+                            strokeWidth: 2,
+                          ),
                         )
                       : Text(
                           copy.submitLabel,
@@ -469,18 +455,14 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               Icon(
                 icon,
                 size: 15,
-                color:
-                isSelected ? AppColors.white : AppColors.textSecondary,
+                color: isSelected ? AppColors.white : AppColors.textSecondary,
               ),
               const SizedBox(width: 5),
               Text(
                 label,
                 style: AppTextStyles.labelMedium.copyWith(
-                  color: isSelected
-                      ? AppColors.white
-                      : AppColors.textSecondary,
-                  fontWeight:
-                  isSelected ? FontWeight.w600 : FontWeight.normal,
+                  color: isSelected ? AppColors.white : AppColors.textSecondary,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
                 ),
               ),
             ],
@@ -525,8 +507,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
                   decoration: BoxDecoration(
                     color: AppColors.surface,
                     borderRadius: BorderRadius.circular(16),
-                    border:
-                    Border.all(color: AppColors.greyLight, width: 1),
+                    border: Border.all(color: AppColors.greyLight, width: 1),
                     boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.02),
@@ -558,7 +539,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               const SizedBox(width: 10),
               ...List.generate(
                 3,
-                    (i) => Padding(
+                (i) => Padding(
                   padding: const EdgeInsets.only(right: 10),
                   child: Container(
                     width: 88,
@@ -566,8 +547,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
                     decoration: BoxDecoration(
                       color: AppColors.surface,
                       borderRadius: BorderRadius.circular(16),
-                      border: Border.all(
-                          color: AppColors.greyLight, width: 1),
+                      border: Border.all(color: AppColors.greyLight, width: 1),
                     ),
                   ),
                 ),
@@ -605,7 +585,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               controller: _titleController,
               decoration: _buildInputDecoration(copy.titleHint),
               validator: (v) =>
-              v?.isEmpty ?? true ? '请输入${copy.titleLabel}' : null,
+                  v?.isEmpty ?? true ? '请输入${copy.titleLabel}' : null,
               style: AppTextStyles.bodyMedium,
             ),
           ),
@@ -620,7 +600,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               maxLines: 4,
               decoration: _buildInputDecoration(copy.descHint),
               validator: (v) =>
-              v?.isEmpty ?? true ? '请输入${copy.descLabel}' : null,
+                  v?.isEmpty ?? true ? '请输入${copy.descLabel}' : null,
               style: AppTextStyles.bodyMedium,
             ),
           ),
@@ -643,20 +623,31 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
                     },
                     child: AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 8,
+                      ),
                       decoration: BoxDecoration(
-                        color: isSelected ? AppColors.primary.withValues(alpha: 0.1) : Colors.transparent,
+                        color: isSelected
+                            ? AppColors.primary.withValues(alpha: 0.1)
+                            : Colors.transparent,
                         borderRadius: BorderRadius.circular(20),
                         border: Border.all(
-                          color: isSelected ? AppColors.primary : AppColors.greyLight.withValues(alpha: 0.8),
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.greyLight.withValues(alpha: 0.8),
                           width: 1,
                         ),
                       ),
                       child: Text(
                         type.label,
                         style: AppTextStyles.labelMedium.copyWith(
-                          color: isSelected ? AppColors.primary : AppColors.textSecondary,
-                          fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                          color: isSelected
+                              ? AppColors.primary
+                              : AppColors.textSecondary,
+                          fontWeight: isSelected
+                              ? FontWeight.w600
+                              : FontWeight.normal,
                         ),
                       ),
                     ),
@@ -690,7 +681,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               controller: _locationController,
               decoration: _buildInputDecoration(copy.locationHint),
               validator: (v) =>
-              v?.isEmpty ?? true ? '请输入${copy.locationLabel}' : null,
+                  v?.isEmpty ?? true ? '请输入${copy.locationLabel}' : null,
               style: AppTextStyles.bodyMedium,
             ),
           ),
@@ -705,7 +696,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
               controller: _contactController,
               decoration: _buildInputDecoration(copy.contactHint),
               validator: (v) =>
-              v?.isEmpty ?? true ? '请输入${copy.contactLabel}' : null,
+                  v?.isEmpty ?? true ? '请输入${copy.contactLabel}' : null,
               style: AppTextStyles.bodyMedium,
             ),
           ),
@@ -783,8 +774,7 @@ class _PostEditPageState extends ConsumerState<PostEditPage> {
         borderRadius: BorderRadius.circular(12),
         borderSide: const BorderSide(color: AppColors.error),
       ),
-      contentPadding:
-      const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
       isDense: true,
     );
   }

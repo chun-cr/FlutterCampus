@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 import '../../../ui/components/date_picker_sheet.dart';
 import '../../../core/services/exam_countdown_service.dart';
@@ -30,7 +31,7 @@ class _ExamCountdownPageState extends ConsumerState<ExamCountdownPage> {
         elevation: 0,
       ),
       body: examState.isLoading
-          ? const Center(child: CircularProgressIndicator())
+          ? const CampusLoading()
           : examState.error != null
           ? _buildErrorState(examState.error!)
           : examState.exams.isEmpty

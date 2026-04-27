@@ -18,10 +18,7 @@ class BookDetailPage extends ConsumerWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFF5F5F5),
-      appBar: CampusAppBar(
-        title: '图书详情',
-        showBackButton: true,
-      ),
+      appBar: CampusAppBar(title: '图书详情', showBackButton: true),
       body: bookAsync.when(
         loading: () => const _LoadingBody(),
         error: (error, _) => _ErrorBody(
@@ -41,12 +38,7 @@ class _LoadingBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: CircularProgressIndicator(
-        strokeWidth: 2,
-        color: Color(0xFF333333),
-      ),
-    );
+    return const CampusLoading();
   }
 }
 
@@ -76,8 +68,7 @@ class _ErrorBody extends StatelessWidget {
           GestureDetector(
             onTap: onRetry,
             child: Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 10),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(20),
@@ -115,8 +106,8 @@ class _BookDetailBodyState extends ConsumerState<_BookDetailBody> {
   Widget build(BuildContext context) {
     final reservationState = ref.watch(reservationNotifierProvider);
     final activeAsync = ref.watch(myActiveReservationProvider(widget.bookId));
-    final isLoading = reservationState is AsyncLoading ||
-        activeAsync is AsyncLoading;
+    final isLoading =
+        reservationState is AsyncLoading || activeAsync is AsyncLoading;
 
     return Column(
       children: [
@@ -142,10 +133,8 @@ class _BookDetailBodyState extends ConsumerState<_BookDetailBody> {
         ),
         // 底部固定借阅按钮
         activeAsync.when(
-          loading: () => _BorrowButton(
-            buttonState: _ButtonState.loading,
-            onTap: null,
-          ),
+          loading: () =>
+              _BorrowButton(buttonState: _ButtonState.loading, onTap: null),
           error: (_, __) => _BorrowButton(
             buttonState: _ButtonState.canBorrow,
             onTap: widget.book.isAvailable ? _handleBorrow : null,
@@ -216,10 +205,8 @@ class _BookDetailBodyState extends ConsumerState<_BookDetailBody> {
       context: context,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
-      builder: (_) => _ReservationSuccessSheet(
-        code: code,
-        location: widget.book.location,
-      ),
+      builder: (_) =>
+          _ReservationSuccessSheet(code: code, location: widget.book.location),
     );
   }
 }
@@ -228,10 +215,7 @@ class _BookDetailBodyState extends ConsumerState<_BookDetailBody> {
 // 预约成功底部弹窗
 // ---------------------------------------------------------------------------
 class _ReservationSuccessSheet extends StatelessWidget {
-  const _ReservationSuccessSheet({
-    required this.code,
-    required this.location,
-  });
+  const _ReservationSuccessSheet({required this.code, required this.location});
 
   final String code;
   final String location;
@@ -394,11 +378,7 @@ class _CoverCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: SizedBox(
-              width: 160,
-              height: 220,
-              child: _buildCoverImage(),
-            ),
+            child: SizedBox(width: 160, height: 220, child: _buildCoverImage()),
           ),
           const SizedBox(height: 20),
           Text(
@@ -424,8 +404,7 @@ class _CoverCard extends StatelessWidget {
           if (book.category != null && book.category!.isNotEmpty) ...[
             const SizedBox(height: 12),
             Container(
-              padding:
-                  const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
               decoration: BoxDecoration(
                 color: const Color(0xFFF0F0F0),
                 borderRadius: BorderRadius.circular(6),
@@ -561,7 +540,8 @@ class _InfoRow extends StatelessWidget {
           ),
           const SizedBox(width: 12),
           Expanded(
-            child: valueWidget ??
+            child:
+                valueWidget ??
                 Text(
                   value ?? '-',
                   style: AppTextStyles.bodySmall.copyWith(
@@ -641,18 +621,15 @@ class _SummaryCard extends StatelessWidget {
 
 /// 按钮状态枚举
 enum _ButtonState {
-  canBorrow,          // 可借阅，深色按钮
-  loading,            // 操作中
-  alreadyReserved,    // 已预约待取书（pending）
-  currentlyBorrowed,  // 借阅中（borrowed）
-  unavailable,        // 暂不可借（他人已借完）
+  canBorrow, // 可借阅，深色按钮
+  loading, // 操作中
+  alreadyReserved, // 已预约待取书（pending）
+  currentlyBorrowed, // 借阅中（borrowed）
+  unavailable, // 暂不可借（他人已借完）
 }
 
 class _BorrowButton extends StatelessWidget {
-  const _BorrowButton({
-    required this.buttonState,
-    required this.onTap,
-  });
+  const _BorrowButton({required this.buttonState, required this.onTap});
 
   final _ButtonState buttonState;
   final VoidCallback? onTap;
@@ -699,9 +676,7 @@ class _BorrowButton extends StatelessWidget {
         24,
         12 + MediaQuery.of(context).padding.bottom,
       ),
-      decoration: const BoxDecoration(
-        color: Color(0xFFF5F5F5),
-      ),
+      decoration: const BoxDecoration(color: Color(0xFFF5F5F5)),
       child: GestureDetector(
         onTap: onTap,
         child: Container(

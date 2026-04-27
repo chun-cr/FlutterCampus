@@ -3,6 +3,7 @@ import '../../components/campus_snackbar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../core/services/lost_and_found_service.dart';
 import '../../../domain/models/community.dart';
+import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
 
 class LostAndFoundPage extends ConsumerStatefulWidget {
@@ -71,9 +72,7 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
 
   Widget _buildItemList(LostAndFoundState state, {required bool resolved}) {
     if (state.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator(color: AppColors.primaryBrand),
-      );
+      return const CampusLoading();
     }
 
     final filteredItems = state.items
@@ -244,32 +243,67 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
                       children: [
                         _buildTypeBadge(item),
                         const Spacer(),
-                        Text(item.relativeTime, style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary)),
+                        Text(
+                          item.relativeTime,
+                          style: AppTextStyles.caption.copyWith(
+                            color: AppColors.textSecondary,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 16),
-                    Text(item.title, style: AppTextStyles.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+                    Text(
+                      item.title,
+                      style: AppTextStyles.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     const SizedBox(height: 16),
                     if (item.description.isNotEmpty) ...[
-                      Text('详情描述', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+                      Text(
+                        '详情描述',
+                        style: AppTextStyles.labelLarge.copyWith(
+                          color: AppColors.textSecondary,
+                        ),
+                      ),
                       const SizedBox(height: 8),
                       Text(item.description, style: AppTextStyles.bodyMedium),
                       const SizedBox(height: 20),
                     ],
                     Row(
                       children: [
-                        const Icon(Icons.location_on_outlined, size: 20, color: AppColors.primaryBrand),
+                        const Icon(
+                          Icons.location_on_outlined,
+                          size: 20,
+                          color: AppColors.primaryBrand,
+                        ),
                         const SizedBox(width: 8),
-                        Expanded(child: Text(item.location, style: AppTextStyles.bodyMedium)),
+                        Expanded(
+                          child: Text(
+                            item.location,
+                            style: AppTextStyles.bodyMedium,
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: 12),
-                    if (!item.isResolved && item.contactInfo != null && item.contactInfo!.isNotEmpty)
+                    if (!item.isResolved &&
+                        item.contactInfo != null &&
+                        item.contactInfo!.isNotEmpty)
                       Row(
                         children: [
-                          const Icon(Icons.phone_outlined, size: 20, color: AppColors.primaryBrand),
+                          const Icon(
+                            Icons.phone_outlined,
+                            size: 20,
+                            color: AppColors.primaryBrand,
+                          ),
                           const SizedBox(width: 8),
-                          Expanded(child: Text('联系方式: ${item.contactInfo}', style: AppTextStyles.bodyMedium)),
+                          Expanded(
+                            child: Text(
+                              '联系方式: ${item.contactInfo}',
+                              style: AppTextStyles.bodyMedium,
+                            ),
+                          ),
                         ],
                       ),
                     const SizedBox(height: 24),
@@ -283,7 +317,11 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
                 decoration: BoxDecoration(
                   color: AppColors.surface,
                   boxShadow: [
-                    BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 10, offset: const Offset(0, -4)),
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 10,
+                      offset: const Offset(0, -4),
+                    ),
                   ],
                 ),
                 child: Row(
@@ -292,14 +330,25 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
                       child: OutlinedButton(
                         onPressed: () {
                           Navigator.pop(context);
-                          CampusSnackBar.show(context, message: '发布者联系方式：${item.contactInfo ?? "暂未提供"}', isError: false);
+                          CampusSnackBar.show(
+                            context,
+                            message: '发布者联系方式：${item.contactInfo ?? "暂未提供"}',
+                            isError: false,
+                          );
                         },
                         style: OutlinedButton.styleFrom(
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                           side: const BorderSide(color: AppColors.primaryBrand),
                         ),
-                        child: Text('去联系', style: AppTextStyles.button.copyWith(color: AppColors.primaryBrand)),
+                        child: Text(
+                          '去联系',
+                          style: AppTextStyles.button.copyWith(
+                            color: AppColors.primaryBrand,
+                          ),
+                        ),
                       ),
                     ),
                     const SizedBox(width: 16),
@@ -312,11 +361,15 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
                         style: FilledButton.styleFrom(
                           backgroundColor: AppColors.primaryBrand,
                           padding: const EdgeInsets.symmetric(vertical: 16),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(12),
+                          ),
                         ),
                         child: Text(
                           item.type == LostFoundType.lost ? '我捡到了' : '认领物品',
-                          style: AppTextStyles.button.copyWith(color: Colors.white),
+                          style: AppTextStyles.button.copyWith(
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -336,7 +389,7 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
 
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: Text('确认寻回/认领', style: AppTextStyles.titleLarge),
         content: Form(
@@ -376,7 +429,7 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
+            onPressed: () => Navigator.pop(dialogContext),
             child: Text(
               '取消',
               style: AppTextStyles.labelMedium.copyWith(
@@ -401,12 +454,13 @@ class _LostAndFoundPageState extends ConsumerState<LostAndFoundPage>
                       nameController.text,
                       idController.text,
                     );
-                if (success && mounted) {
-                  Navigator.pop(context);
-                  ScaffoldMessenger.of(
-                    context,
-                  ).showSnackBar(const SnackBar(content: Text('已确认寻回状态，谢谢！')));
-                }
+                if (!success || !dialogContext.mounted || !mounted) return;
+                Navigator.pop(dialogContext);
+                CampusSnackBar.show(
+                  context,
+                  message: '已确认寻回状态，谢谢！',
+                  isError: false,
+                );
               }
             },
             child: const Text('确认提交'),

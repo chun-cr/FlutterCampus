@@ -52,7 +52,15 @@ class DatePickerSheet {
     DateTime? maxDate,
     required String title,
   }) async {
-    DateTime tempDate = _alignToInterval(initialDate ?? DateTime.now(), minuteInterval);
+    final fallbackDate = DateTime.now();
+    final normalizedInitialDate = normalizeInitialDateTime(
+      initialDate: initialDate,
+      minDate: minDate,
+      maxDate: maxDate,
+      fallbackDate: fallbackDate,
+      minuteInterval: minuteInterval,
+    );
+    DateTime tempDate = normalizedInitialDate;
     DateTime? result;
 
     await showModalBottomSheet<void>(
@@ -123,7 +131,7 @@ class DatePickerSheet {
                 child: CupertinoDatePicker(
                   mode: mode,
                   minuteInterval: minuteInterval,
-                  initialDateTime: _alignToInterval(initialDate ?? DateTime.now(), minuteInterval),
+                  initialDateTime: normalizedInitialDate,
                   minimumDate: minDate,
                   maximumDate: maxDate ??
                       DateTime.now()
@@ -141,10 +149,59 @@ class DatePickerSheet {
     return result;
   }
 
-  /// 把分钟对齐到 interval 的整数倍，避免 CupertinoDatePicker 报错
-  static DateTime _alignToInterval(DateTime dt, int interval) {
-    if (interval <= 1) return dt;
-    final minute = (dt.minute ~/ interval) * interval;
-    return DateTime(dt.year, dt.month, dt.day, dt.hour, minute);
+  /// 计算可安全用于 CupertinoDatePicker 的初始时间，避免超出范围或分钟未对齐导致报错。
+  @visibleForTesting
+  static DateTime normalizeInitialDateTime({
+    DateTime? initialDate,
+    DateTime? minDate,
+    DateTime? maxDate,
+    required DateTime fallbackDate,
+    int minuteInterval = 1,
+  }) {
+    var normalizedDate = _alignToInterval(
+      initialDate ?? fallbackDate,
+      minuteInterval,
+    );
+
+    if (minDate != null && normalizedDate.isBefore(minDate)) {
+      normalizedDate = _alignToInterval(
+        minDate,
+        minuteInterval,
+        roundUp: true,
+      );
+    }
+
+    if (maxDate != null && normalizedDate.isAfter(maxDate)) {
+      normalizedDate = _alignToInterval(maxDate, minuteInterval);
+    }
+
+    if (minDate != null && normalizedDate.isBefore(minDate)) {
+      normalizedDate = _alignToInterval(
+        minDate,
+        minuteInterval,
+        roundUp: true,
+      );
+    }
+
+    return normalizedDate;
+  }
+
+  /// 把分钟对齐到 interval 的整数倍，避免 CupertinoDatePicker 报错。
+  static DateTime _alignToInterval(
+    DateTime dt,
+    int interval, {
+    bool roundUp = false,
+  }) {
+    final normalized = DateTime(dt.year, dt.month, dt.day, dt.hour, dt.minute);
+    if (interval <= 1) return normalized;
+
+    final remainder = normalized.minute % interval;
+    if (remainder == 0) return normalized;
+
+    if (!roundUp) {
+      return normalized.subtract(Duration(minutes: remainder));
+    }
+
+    return normalized.add(Duration(minutes: interval - remainder));
   }
 }

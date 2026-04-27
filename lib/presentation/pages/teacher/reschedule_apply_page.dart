@@ -207,8 +207,9 @@ final _selectedPeriodProvider = StateProvider<String?>((ref) => null);
 final _recordFilterProvider = StateProvider<String>((ref) => 'all');
 
 /// 调课申请记录列表（从 Supabase 拉取）
-final _rescheduleListProvider =
-    FutureProvider<List<RescheduleApplication>>((ref) async {
+final _rescheduleListProvider = FutureProvider<List<RescheduleApplication>>((
+  ref,
+) async {
   final supabase = Supabase.instance.client;
   final currentUser = supabase.auth.currentUser;
   if (currentUser == null) return [];
@@ -221,8 +222,10 @@ final _rescheduleListProvider =
         .order('created_at', ascending: false);
 
     return (response as List)
-        .map((item) =>
-            RescheduleApplication.fromJson(item as Map<String, dynamic>))
+        .map(
+          (item) =>
+              RescheduleApplication.fromJson(item as Map<String, dynamic>),
+        )
         .toList();
   } catch (e) {
     debugPrint('拉取调课申请列表失败: $e');
@@ -423,9 +426,7 @@ class _ApplyFormTabState extends ConsumerState<_ApplyFormTab> {
         controller: _reasonController,
         maxLines: 4,
         maxLength: 150,
-        style: AppTextStyles.bodyMedium.copyWith(
-          color: AppColors.textPrimary,
-        ),
+        style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textPrimary),
         decoration: InputDecoration(
           hintText: '请简要说明调课原因（选填）',
           hintStyle: AppTextStyles.bodyMedium.copyWith(
@@ -580,7 +581,7 @@ class _ApplyFormTabState extends ConsumerState<_ApplyFormTab> {
   }
 
   void _showSnackBar(String message, {bool isSuccess = false}) {
-    CampusSnackBar.show(context, message: message, isError: true);
+    CampusSnackBar.show(context, message: message, isError: !isSuccess);
   }
 }
 
@@ -588,18 +589,16 @@ class _ApplyFormTabState extends ConsumerState<_ApplyFormTab> {
 // 课程选择器
 // ===========================================================================
 class _CourseSelector extends StatelessWidget {
-  const _CourseSelector({
-    required this.selectedIndex,
-    required this.onSelect,
-  });
+  const _CourseSelector({required this.selectedIndex, required this.onSelect});
 
   final int? selectedIndex;
   final ValueChanged<int> onSelect;
 
   @override
   Widget build(BuildContext context) {
-    final selected =
-        selectedIndex != null ? _mockCourses[selectedIndex!] : null;
+    final selected = selectedIndex != null
+        ? _mockCourses[selectedIndex!]
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -675,11 +674,7 @@ class _CourseSelector extends StatelessWidget {
               '${selected.courseName}（${selected.courseCode}）',
             ),
             const SizedBox(height: 12),
-            _buildInfoRow(
-              Icons.location_on_outlined,
-              '教室',
-              selected.location,
-            ),
+            _buildInfoRow(Icons.location_on_outlined, '教室', selected.location),
             const SizedBox(height: 12),
             _buildInfoRow(
               Icons.access_time_rounded,
@@ -700,9 +695,7 @@ class _CourseSelector extends StatelessWidget {
         const SizedBox(width: 8),
         Text(
           '$label：',
-          style: AppTextStyles.caption.copyWith(
-            color: AppColors.textSecondary,
-          ),
+          style: AppTextStyles.caption.copyWith(color: AppColors.textSecondary),
         ),
         Expanded(
           child: Text(
@@ -721,10 +714,7 @@ class _CourseSelector extends StatelessWidget {
 // 申请类型选择栏
 // ===========================================================================
 class _ApplyTypeBar extends StatelessWidget {
-  const _ApplyTypeBar({
-    required this.selected,
-    required this.onSelect,
-  });
+  const _ApplyTypeBar({required this.selected, required this.onSelect});
 
   final String selected;
   final ValueChanged<String> onSelect;
@@ -788,7 +778,9 @@ class _TimeAdjustForm extends ConsumerWidget {
     final selectedPeriod = ref.watch(_selectedPeriodProvider);
 
     // 自动推算时间
-    final autoTime = selectedPeriod != null ? _periodTimeMap[selectedPeriod] : null;
+    final autoTime = selectedPeriod != null
+        ? _periodTimeMap[selectedPeriod]
+        : null;
 
     return Container(
       padding: const EdgeInsets.all(20),
@@ -902,9 +894,7 @@ class _TimeAdjustForm extends ConsumerWidget {
                     vertical: 10,
                   ),
                   decoration: BoxDecoration(
-                    color: isActive
-                        ? AppColors.primary
-                        : AppColors.background,
+                    color: isActive ? AppColors.primary : AppColors.background,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Text(
@@ -1233,7 +1223,7 @@ class _RecordCard extends StatelessWidget {
                     Text(
                       record.applyType == 'time'
                           ? '${record.newWeekday != null ? _weekdayText(record.newWeekday!) : '-'} '
-                              '第${record.newPeriod ?? '-'}节'
+                                '第${record.newPeriod ?? '-'}节'
                           : record.newLocation ?? '-',
                       style: AppTextStyles.bodyMedium.copyWith(
                         color: AppColors.primary,
