@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
-import '../../../presentation/components/components.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../features/library/models/seat_reservation.dart';
-import '../../../features/library/providers/seat_provider.dart';
+import '../../../presentation/components/components.dart';
 import '../../../presentation/theme/theme.dart';
+import '../models/seat_reservation.dart';
+import '../providers/seat_provider.dart';
 
 // ---------------------------------------------------------------------------
 // 我的座位预约页（Tab 筛选 + 卡片 + 操作按钮 + 二次确认弹窗）
 // ---------------------------------------------------------------------------
-class MyReservationsPage extends ConsumerStatefulWidget {
-  const MyReservationsPage({super.key});
+class SeatReservationsPage extends ConsumerStatefulWidget {
+  const SeatReservationsPage({super.key});
 
   @override
-  ConsumerState<MyReservationsPage> createState() => _MyReservationsPageState();
+  ConsumerState<SeatReservationsPage> createState() =>
+      _SeatReservationsPageState();
 }
 
-class _MyReservationsPageState extends ConsumerState<MyReservationsPage> {
+class _SeatReservationsPageState extends ConsumerState<SeatReservationsPage> {
   /// 当前选中的 tab index：0=全部 1=待签到 2=使用中 3=已完成
   int _selectedTab = 0;
 

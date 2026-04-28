@@ -4,7 +4,7 @@ import 'package:uuid/uuid.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../components/campus_loading.dart';
 import '../../theme/theme.dart';
-import '../../../ui/components/date_picker_sheet.dart';
+import '../../components/date_picker_sheet.dart';
 import '../../../core/services/exam_countdown_service.dart';
 import '../../../domain/models/exam_countdown.dart';
 

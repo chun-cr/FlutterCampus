@@ -4,14 +4,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../domain/models/book.dart';
-import '../../../features/library/providers/book_provider.dart';
-import '../../components/components.dart';
-import '../../../features/library/models/announcement.dart';
-import '../../../features/library/providers/announcement_provider.dart';
-import '../../../features/library/providers/borrow_provider.dart';
-import '../../../features/library/providers/reservation_provider.dart';
-import '../../../features/library/providers/seat_provider.dart';
-import '../../theme/theme.dart';
+import '../../../presentation/components/components.dart';
+import '../../../presentation/theme/theme.dart';
+import '../providers/announcement_provider.dart';
+import '../providers/book_provider.dart';
+import '../providers/borrow_provider.dart';
+import '../providers/reservation_provider.dart';
+import '../providers/seat_provider.dart';
 
 class LibraryHomePage extends ConsumerWidget {
   const LibraryHomePage({super.key});
@@ -26,7 +25,10 @@ class LibraryHomePage extends ConsumerWidget {
         actions: [
           IconButton(
             // 线性风格二维码扫描图标
-            icon: const Icon(Icons.qr_code_scanner_outlined, color: AppColors.white),
+            icon: const Icon(
+              Icons.qr_code_scanner_outlined,
+              color: AppColors.white,
+            ),
             onPressed: () {
               // TODO: Implement scanner
             },
@@ -188,7 +190,11 @@ class LibraryHomePage extends ConsumerWidget {
             const SizedBox(height: 40),
 
             // 3. 馆内公告
-            _buildSectionHeader('馆内公告', subtitle: 'ANNOUNCEMENTS', onTap: () {}),
+            _buildSectionHeader(
+              '馆内公告',
+              subtitle: 'ANNOUNCEMENTS',
+              onTap: () {},
+            ),
             const _AnnouncementBanner(),
             const SizedBox(height: 40),
 
@@ -234,11 +240,7 @@ class LibraryHomePage extends ConsumerWidget {
               ),
             ),
             const Spacer(),
-            Container(
-              width: 1,
-              height: 16,
-              color: AppColors.greyLight,
-            ),
+            Container(width: 1, height: 16, color: AppColors.greyLight),
             const SizedBox(width: 12),
             const Icon(Icons.history_outlined, color: AppColors.grey, size: 18),
           ],
@@ -249,7 +251,11 @@ class LibraryHomePage extends ConsumerWidget {
 
   /// 模块标题：中文粗体 + 英文全大写副标题 + 右侧"查看全部"（灰色）
   /// 与 study_page.dart 的 _buildSectionHeader 风格保持一致
-  Widget _buildSectionHeader(String title, {String? subtitle, required VoidCallback onTap}) {
+  Widget _buildSectionHeader(
+    String title, {
+    String? subtitle,
+    required VoidCallback onTap,
+  }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16, left: 4),
       child: Row(
@@ -315,11 +321,12 @@ class _QuickFeatureCard extends StatelessWidget {
   final String count;
   final String badge;
   final String route;
+
   /// badge 背景色（默认 0xFFF0F0F0 浅灰）
   final Color? badgeColor;
+
   /// badge 文字色（默认 0xFF666666 深灰）
   final Color? badgeTextColor;
-
 
   @override
   Widget build(BuildContext context) {
@@ -468,11 +475,7 @@ class _LibraryAnnouncementCard extends StatelessWidget {
             ),
           ),
           // 右箭头指示器
-          const Icon(
-            Icons.chevron_right,
-            color: AppColors.grey,
-            size: 16,
-          ),
+          const Icon(Icons.chevron_right, color: AppColors.grey, size: 16),
         ],
       ),
     );
@@ -546,45 +549,45 @@ class _RecommendedBookCard extends StatelessWidget {
     return GestureDetector(
       onTap: () => context.push('/library/books/${book.id}'),
       child: Container(
-      width: 100,
-      margin: const EdgeInsets.only(right: 16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 封面图：有封面显示网络图片，无封面显示灰色占位
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: SizedBox(
-              height: 130,
-              width: 100,
-              child: _buildCoverImage(),
+        width: 100,
+        margin: const EdgeInsets.only(right: 16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 封面图：有封面显示网络图片，无封面显示灰色占位
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: SizedBox(
+                height: 130,
+                width: 100,
+                child: _buildCoverImage(),
+              ),
             ),
-          ),
-          const SizedBox(height: 6),
-          // 书名
-          Text(
-            book.title,
-            style: AppTextStyles.bodySmall.copyWith(
-              fontWeight: FontWeight.w600,
-              color: AppColors.textPrimary,
+            const SizedBox(height: 6),
+            // 书名
+            Text(
+              book.title,
+              style: AppTextStyles.bodySmall.copyWith(
+                fontWeight: FontWeight.w600,
+                color: AppColors.textPrimary,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-          const SizedBox(height: 2),
-          // 作者
-          Text(
-            book.author,
-            style: AppTextStyles.overline.copyWith(
-              color: AppColors.textDisabled,
+            const SizedBox(height: 2),
+            // 作者
+            Text(
+              book.author,
+              style: AppTextStyles.overline.copyWith(
+                color: AppColors.textDisabled,
+              ),
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
             ),
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-          ),
-        ],
-      ),    // Column closes
-    ),      // Container closes (child of GestureDetector)
-    );      // GestureDetector closes
+          ],
+        ), // Column closes
+      ), // Container closes (child of GestureDetector)
+    ); // GestureDetector closes
   }
 
   /// 封面图片：有 coverUrl 则加载网络图，否则灰色占位
@@ -593,11 +596,7 @@ class _RecommendedBookCard extends StatelessWidget {
       return Container(
         color: const Color(0xFFF0F0F0),
         child: const Center(
-          child: Icon(
-            Icons.book_outlined,
-            color: Color(0xFF999999),
-            size: 32,
-          ),
+          child: Icon(Icons.book_outlined, color: Color(0xFF999999), size: 32),
         ),
       );
     }
@@ -646,25 +645,16 @@ class _SkeletonBookCard extends StatelessWidget {
             ),
             const SizedBox(height: 6),
             // 书名占位
-            Container(
-              height: 12,
-              width: 80,
-              color: Colors.white,
-            ),
+            Container(height: 12, width: 80, color: Colors.white),
             const SizedBox(height: 4),
             // 作者占位
-            Container(
-              height: 10,
-              width: 55,
-              color: Colors.white,
-            ),
+            Container(height: 10, width: 55, color: Colors.white),
           ],
         ),
       ),
     );
   }
 }
-
 
 // ---------------------------------------------------------------------------
 // 公告轮播 Banner：ListView + ScrollController 逐条上滚，无限循环
@@ -673,7 +663,8 @@ class _AnnouncementBanner extends ConsumerStatefulWidget {
   const _AnnouncementBanner();
 
   @override
-  ConsumerState<_AnnouncementBanner> createState() => _AnnouncementBannerState();
+  ConsumerState<_AnnouncementBanner> createState() =>
+      _AnnouncementBannerState();
 }
 
 class _AnnouncementBannerState extends ConsumerState<_AnnouncementBanner> {
@@ -783,11 +774,13 @@ class _AnnouncementBannerState extends ConsumerState<_AnnouncementBanner> {
         if (announcements.length <= 2) {
           return Column(
             children: announcements
-                .map((a) => _LibraryAnnouncementCard(
-                      title: a.title,
-                      date: a.date,
-                      type: a.type,
-                    ))
+                .map(
+                  (a) => _LibraryAnnouncementCard(
+                    title: a.title,
+                    date: a.date,
+                    type: a.type,
+                  ),
+                )
                 .toList(),
           );
         }

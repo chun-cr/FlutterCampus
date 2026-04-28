@@ -1,6 +1,14 @@
 import 'package:go_router/go_router.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:flutter/material.dart';
+import '../../features/library/pages/all_books_page.dart';
+import '../../features/library/pages/book_detail_page.dart';
+import '../../features/library/pages/book_reservations_page.dart';
+import '../../features/library/pages/library_home_page.dart';
+import '../../features/library/pages/seat_reservations_page.dart';
+import '../../features/life/pages/map_detail_page.dart';
+import '../../features/office/pages/leave_approval_page.dart';
+import '../../features/study/pages/leave_apply_page.dart';
 import '../components/campus_loading.dart';
 import '../pages/auth/splash_screen.dart';
 import '../pages/auth/login_page.dart';
@@ -8,24 +16,16 @@ import '../pages/auth/register_page.dart';
 import '../pages/auth/forgot_password_page.dart';
 import '../pages/home/home_page.dart';
 import '../pages/profile/profile_page.dart';
-import '../pages/study/library_home_page.dart';
 import '../pages/study/book_search_page.dart';
 import '../pages/study/seat_reservation_page.dart';
 import '../pages/study/my_loans_page.dart';
 import '../pages/study/library_stats_page.dart';
-import '../pages/library/reservations_page.dart';
 import '../pages/study/grades_page.dart';
 import '../pages/study/exam_countdown_page.dart';
 import '../pages/help/post_edit_page.dart';
 import '../pages/help/second_hand_list_page.dart';
 import '../pages/study/schedule_page.dart';
 import '../pages/teacher/teacher_grade_page.dart';
-import '../../features/office/pages/leave_approval_page.dart';
-import '../../features/study/pages/leave_apply_page.dart';
-import '../../features/library/pages/all_books_page.dart';
-import '../../features/library/pages/book_detail_page.dart';
-import '../../features/library/pages/my_reservations_page.dart';
-import '../../features/life/pages/map_detail_page.dart';
 import '../pages/study/find_room_page.dart';
 import '../pages/teacher/class_roster_page.dart';
 import '../pages/teacher/teacher_weekly_schedule_page.dart';
@@ -116,7 +116,7 @@ final GoRouter appRouter = GoRouter(
         ),
         GoRoute(
           path: 'reservations',
-          builder: (context, state) => const ReservationsPage(),
+          builder: (context, state) => const BookReservationsPage(),
         ),
         GoRoute(
           path: 'stats',
@@ -135,7 +135,7 @@ final GoRouter appRouter = GoRouter(
         ),
         GoRoute(
           path: 'seat-reservations',
-          builder: (context, state) => const MyReservationsPage(),
+          builder: (context, state) => const SeatReservationsPage(),
         ),
       ],
     ),

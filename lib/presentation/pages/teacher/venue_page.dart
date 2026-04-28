@@ -6,7 +6,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 
 import '../../components/campus_empty_state.dart';
 import '../../components/campus_loading.dart';
-import '../../../ui/components/date_picker_sheet.dart';
+import '../../components/date_picker_sheet.dart';
 import '../../theme/app_colors.dart';
 import '../../theme/app_text_styles.dart';
 

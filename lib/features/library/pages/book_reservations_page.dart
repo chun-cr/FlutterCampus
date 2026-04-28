@@ -1,21 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../components/components.dart';
-import '../../theme/theme.dart';
-import '../../../features/library/models/book_reservation.dart';
-import '../../../features/library/providers/reservation_provider.dart';
+import '../../../presentation/components/components.dart';
+import '../../../presentation/theme/theme.dart';
+import '../models/book_reservation.dart';
+import '../providers/reservation_provider.dart';
 
 // ---------------------------------------------------------------------------
 // 图书预定页（Tab 筛选 + 状态卡片 + 操作按钮 + 二次确认弹窗）
 // ---------------------------------------------------------------------------
-class ReservationsPage extends ConsumerStatefulWidget {
-  const ReservationsPage({super.key});
+class BookReservationsPage extends ConsumerStatefulWidget {
+  const BookReservationsPage({super.key});
 
   @override
-  ConsumerState<ReservationsPage> createState() => _ReservationsPageState();
+  ConsumerState<BookReservationsPage> createState() =>
+      _BookReservationsPageState();
 }
 
-class _ReservationsPageState extends ConsumerState<ReservationsPage> {
+class _BookReservationsPageState extends ConsumerState<BookReservationsPage> {
   /// 当前选中的 tab index：0=全部 1=预约中 2=可借阅 3=已失效
   int _selectedTab = 0;
 

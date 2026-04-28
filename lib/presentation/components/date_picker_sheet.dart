@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import '../../presentation/theme/theme.dart';
+import '../theme/theme.dart';
 
 class DatePickerSheet {
   /// 显示底部滚动日期选择器（仅日期，无时间）
@@ -12,15 +12,14 @@ class DatePickerSheet {
     DateTime? minDate,
     DateTime? maxDate,
     String title = '选择日期',
-  }) =>
-      _show(
-        context,
-        mode: CupertinoDatePickerMode.date,
-        initialDate: initialDate,
-        minDate: minDate,
-        maxDate: maxDate,
-        title: title,
-      );
+  }) => _show(
+    context,
+    mode: CupertinoDatePickerMode.date,
+    initialDate: initialDate,
+    minDate: minDate,
+    maxDate: maxDate,
+    title: title,
+  );
 
   /// 显示底部滚动日期+时间选择器（精确到分钟）
   /// 返回用户选择的 DateTime，点取消返回 null
@@ -30,16 +29,15 @@ class DatePickerSheet {
     DateTime? minDate,
     DateTime? maxDate,
     String title = '选择时间',
-  }) =>
-      _show(
-        context,
-        mode: CupertinoDatePickerMode.dateAndTime,
-        minuteInterval: 5,
-        initialDate: initialDate,
-        minDate: minDate,
-        maxDate: maxDate,
-        title: title,
-      );
+  }) => _show(
+    context,
+    mode: CupertinoDatePickerMode.dateAndTime,
+    minuteInterval: 5,
+    initialDate: initialDate,
+    minDate: minDate,
+    maxDate: maxDate,
+    title: title,
+  );
 
   // ── 内部实现 ───────────────────────────────────────────────────────────
 
@@ -94,7 +92,9 @@ class DatePickerSheet {
               // 标题行
               Padding(
                 padding: const EdgeInsets.symmetric(
-                    horizontal: 16, vertical: 12),
+                  horizontal: 16,
+                  vertical: 12,
+                ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -125,17 +125,15 @@ class DatePickerSheet {
               ),
               // Cupertino 滚轮
               SizedBox(
-                height: mode == CupertinoDatePickerMode.dateAndTime
-                    ? 220
-                    : 200,
+                height: mode == CupertinoDatePickerMode.dateAndTime ? 220 : 200,
                 child: CupertinoDatePicker(
                   mode: mode,
                   minuteInterval: minuteInterval,
                   initialDateTime: normalizedInitialDate,
                   minimumDate: minDate,
-                  maximumDate: maxDate ??
-                      DateTime.now()
-                          .add(const Duration(days: 365 * 4)),
+                  maximumDate:
+                      maxDate ??
+                      DateTime.now().add(const Duration(days: 365 * 4)),
                   onDateTimeChanged: (date) => tempDate = date,
                 ),
               ),
@@ -164,11 +162,7 @@ class DatePickerSheet {
     );
 
     if (minDate != null && normalizedDate.isBefore(minDate)) {
-      normalizedDate = _alignToInterval(
-        minDate,
-        minuteInterval,
-        roundUp: true,
-      );
+      normalizedDate = _alignToInterval(minDate, minuteInterval, roundUp: true);
     }
 
     if (maxDate != null && normalizedDate.isAfter(maxDate)) {
@@ -176,11 +170,7 @@ class DatePickerSheet {
     }
 
     if (minDate != null && normalizedDate.isBefore(minDate)) {
-      normalizedDate = _alignToInterval(
-        minDate,
-        minuteInterval,
-        roundUp: true,
-      );
+      normalizedDate = _alignToInterval(minDate, minuteInterval, roundUp: true);
     }
 
     return normalizedDate;
