@@ -1,0 +1,77 @@
+<mxGraphModel dx="1422" dy="762" grid="0" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="800" pageHeight="520" math="0" shadow="0">
+  <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+
+    <!-- 标题 -->
+    <mxCell id="title" value="图6-1 功能测试结果统计图" style="text;html=1;fontSize=15;fontStyle=1;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1">
+      <mxGeometry x="150" y="20" width="500" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- Y轴标签 -->
+    <mxCell id="ylabel" value="通过项数量" style="text;html=1;fontSize=12;align=center;fillColor=none;strokeColor=none;rotation=-90;" vertex="1" parent="1">
+      <mxGeometry x="10" y="200" width="80" height="30" as="geometry"/>
+    </mxCell>
+
+    <!-- Y轴刻度 -->
+    <mxCell id="y0" value="0" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="398" width="30" height="20" as="geometry"/></mxCell>
+    <mxCell id="y1" value="1" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="338" width="30" height="20" as="geometry"/></mxCell>
+    <mxCell id="y2" value="2" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="278" width="30" height="20" as="geometry"/></mxCell>
+    <mxCell id="y3" value="3" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="218" width="30" height="20" as="geometry"/></mxCell>
+    <mxCell id="y4" value="4" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="158" width="30" height="20" as="geometry"/></mxCell>
+    <mxCell id="y5" value="5" style="text;html=1;fontSize=11;align=right;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="55" y="98" width="30" height="20" as="geometry"/></mxCell>
+
+    <!-- Y轴刻度线 -->
+    <mxCell id="gl0" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="408" width="620" height="2" as="geometry"/></mxCell>
+    <mxCell id="gl1" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="348" width="620" height="2" as="geometry"/></mxCell>
+    <mxCell id="gl2" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="288" width="620" height="2" as="geometry"/></mxCell>
+    <mxCell id="gl3" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="228" width="620" height="2" as="geometry"/></mxCell>
+    <mxCell id="gl4" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="168" width="620" height="2" as="geometry"/></mxCell>
+    <mxCell id="gl5" value="" style="line;strokeColor=#dddddd;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="108" width="620" height="2" as="geometry"/></mxCell>
+
+    <!-- 坐标轴 -->
+    <mxCell id="yaxis" value="" style="line;strokeColor=#333333;strokeWidth=2;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="108" width="2" height="302" as="geometry"/></mxCell>
+    <mxCell id="xaxis" value="" style="line;strokeColor=#333333;strokeWidth=2;fillColor=none;" vertex="1" parent="1"><mxGeometry x="90" y="408" width="620" height="2" as="geometry"/></mxCell>
+
+    <!-- 柱子：每格60px = 1个单位，底部y=408，每单位高度60px -->
+    <!-- 认证模块：4 → 高240，y=168 -->
+    <mxCell id="bar1" value="4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1e4d8c;strokeColor=#1e4d8c;fontColor=#ffffff;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="115" y="168" width="80" height="240" as="geometry"/>
+    </mxCell>
+
+    <!-- 学习服务：5 → 高300，y=108 -->
+    <mxCell id="bar2" value="5" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#1a5c2a;strokeColor=#1a5c2a;fontColor=#ffffff;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="225" y="108" width="80" height="300" as="geometry"/>
+    </mxCell>
+
+    <!-- 图书馆服务：4 → 高240，y=168 -->
+    <mxCell id="bar3" value="4" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#7b3f00;strokeColor=#7b3f00;fontColor=#ffffff;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="335" y="168" width="80" height="240" as="geometry"/>
+    </mxCell>
+
+    <!-- 校园互助：3 → 高180，y=228 -->
+    <mxCell id="bar4" value="3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#6a1a6a;strokeColor=#6a1a6a;fontColor=#ffffff;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="445" y="228" width="80" height="180" as="geometry"/>
+    </mxCell>
+
+    <!-- 教师端功能：3 → 高180，y=228 -->
+    <mxCell id="bar5" value="3" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#8a1a1a;strokeColor=#8a1a1a;fontColor=#ffffff;fontSize=12;fontStyle=1;verticalAlign=top;" vertex="1" parent="1">
+      <mxGeometry x="555" y="228" width="80" height="180" as="geometry"/>
+    </mxCell>
+
+    <!-- X轴标签 -->
+    <mxCell id="x1" value="认证模块" style="text;html=1;fontSize=11;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="105" y="418" width="100" height="30" as="geometry"/></mxCell>
+    <mxCell id="x2" value="学习服务" style="text;html=1;fontSize=11;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="215" y="418" width="100" height="30" as="geometry"/></mxCell>
+    <mxCell id="x3" value="图书馆服务" style="text;html=1;fontSize=11;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="320" y="418" width="110" height="30" as="geometry"/></mxCell>
+    <mxCell id="x4" value="校园互助" style="text;html=1;fontSize=11;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="430" y="418" width="100" height="30" as="geometry"/></mxCell>
+    <mxCell id="x5" value="教师端功能" style="text;html=1;fontSize=11;align=center;fillColor=none;strokeColor=none;" vertex="1" parent="1"><mxGeometry x="540" y="418" width="100" height="30" as="geometry"/></mxCell>
+
+    <!-- 通过率标注 -->
+    <mxCell id="r1" value="100%" style="text;html=1;fontSize=10;align=center;fillColor=none;strokeColor=none;fontColor=#1e4d8c;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="105" y="143" width="100" height="20" as="geometry"/></mxCell>
+    <mxCell id="r2" value="100%" style="text;html=1;fontSize=10;align=center;fillColor=none;strokeColor=none;fontColor=#1a5c2a;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="215" y="83" width="100" height="20" as="geometry"/></mxCell>
+    <mxCell id="r3" value="100%" style="text;html=1;fontSize=10;align=center;fillColor=none;strokeColor=none;fontColor=#7b3f00;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="320" y="143" width="110" height="20" as="geometry"/></mxCell>
+    <mxCell id="r4" value="100%" style="text;html=1;fontSize=10;align=center;fillColor=none;strokeColor=none;fontColor=#6a1a6a;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="430" y="203" width="100" height="20" as="geometry"/></mxCell>
+    <mxCell id="r5" value="100%" style="text;html=1;fontSize=10;align=center;fillColor=none;strokeColor=none;fontColor=#8a1a1a;fontStyle=1;" vertex="1" parent="1"><mxGeometry x="540" y="203" width="100" height="20" as="geometry"/></mxCell>
+
+  </root>
+</mxGraphModel>
