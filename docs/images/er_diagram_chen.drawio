@@ -1,0 +1,406 @@
+<mxfile host="app.diagrams.net">
+  <diagram id="sQv5rHB8ihHkkfNZR86W" name="第 1 页">
+    <mxGraphModel dx="2812" dy="1560" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3300" pageHeight="2340" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="e_users" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;" value="USERS" vertex="1">
+          <mxGeometry height="60" width="160" x="1300" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="e_grades" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="GRADES" vertex="1">
+          <mxGeometry height="60" width="160" x="400" y="570" as="geometry" />
+        </mxCell>
+        <mxCell id="e_exams" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="EXAMS" vertex="1">
+          <mxGeometry height="60" width="160" x="880" y="370" as="geometry" />
+        </mxCell>
+        <mxCell id="e_leave" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="LEAVE_APPLICATIONS" vertex="1">
+          <mxGeometry height="60" width="200" x="1100" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_books" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontStyle=1;fontSize=13;" value="BOOKS" vertex="1">
+          <mxGeometry height="60" width="160" x="1600" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_bookreserv" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="BOOK_RESERVATIONS" vertex="1">
+          <mxGeometry height="60" width="200" x="1550" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e_seats" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontStyle=1;fontSize=13;" value="SEATS" vertex="1">
+          <mxGeometry height="60" width="160" x="2100" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="e_seatreserv" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="SEAT_RESERVATIONS" vertex="1">
+          <mxGeometry height="60" width="200" x="2050" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="e_lostfound" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="LOST_FOUND" vertex="1">
+          <mxGeometry height="60" width="160" x="300" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="e_secondhand" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="SECOND_HAND" vertex="1">
+          <mxGeometry height="60" width="160" x="700" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="e_helptasks" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="HELP_TASKS" vertex="1">
+          <mxGeometry height="60" width="160" x="1100" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="e_courses" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1;fontSize=13;" value="COURSES" vertex="1">
+          <mxGeometry height="60" width="160" x="1600" y="1400" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ug" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="has" vertex="1">
+          <mxGeometry height="60" width="120" x="720" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ug1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ug" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ug2" edge="1" parent="1" source="r_ug" style="edgeStyle=orthogonalEdgeStyle;" target="e_grades" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ue" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="has" vertex="1">
+          <mxGeometry height="60" width="120" x="940" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ue1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ue" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ue2" edge="1" parent="1" source="r_ue" style="edgeStyle=orthogonalEdgeStyle;" target="e_exams" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ul" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="submits" vertex="1">
+          <mxGeometry height="60" width="120" x="1160" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ul1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ul" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ul2" edge="1" parent="1" source="r_ul" style="edgeStyle=orthogonalEdgeStyle;" target="e_leave" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ula" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="approves" vertex="1">
+          <mxGeometry height="60" width="120" x="1380" y="590" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ula1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ula" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ula2" edge="1" parent="1" source="r_ula" style="edgeStyle=orthogonalEdgeStyle;" target="e_leave" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ubr" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="makes" vertex="1">
+          <mxGeometry height="60" width="120" x="1590" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ubr1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ubr" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ubr2" edge="1" parent="1" source="r_ubr" style="edgeStyle=orthogonalEdgeStyle;" target="e_bookreserv" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_bbr" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="referenced_by" vertex="1">
+          <mxGeometry height="60" width="140" x="1730" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="l_bbr1" edge="1" parent="1" source="e_books" style="edgeStyle=orthogonalEdgeStyle;" target="r_bbr" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_bbr2" edge="1" parent="1" source="r_bbr" style="edgeStyle=orthogonalEdgeStyle;" target="e_bookreserv" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_usr" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="makes" vertex="1">
+          <mxGeometry height="60" width="120" x="2000" y="710" as="geometry" />
+        </mxCell>
+        <mxCell id="l_usr1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_usr" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_usr2" edge="1" parent="1" source="r_usr" style="edgeStyle=orthogonalEdgeStyle;" target="e_seatreserv" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ssr" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="referenced_by" vertex="1">
+          <mxGeometry height="60" width="140" x="2170" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ssr1" edge="1" parent="1" source="e_seats" style="edgeStyle=orthogonalEdgeStyle;" target="r_ssr" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ssr2" edge="1" parent="1" source="r_ssr" style="edgeStyle=orthogonalEdgeStyle;" target="e_seatreserv" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ulf" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="publishes" vertex="1">
+          <mxGeometry height="60" width="120" x="500" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ulf1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ulf" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ulf2" edge="1" parent="1" source="r_ulf" style="edgeStyle=orthogonalEdgeStyle;" target="e_lostfound" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_ush" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="publishes" vertex="1">
+          <mxGeometry height="60" width="120" x="800" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ush1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_ush" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_ush2" edge="1" parent="1" source="r_ush" style="edgeStyle=orthogonalEdgeStyle;" target="e_secondhand" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_uht" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="publishes" vertex="1">
+          <mxGeometry height="60" width="120" x="1100" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="l_uht1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_uht" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_uht2" edge="1" parent="1" source="r_uht" style="edgeStyle=orthogonalEdgeStyle;" target="e_helptasks" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="r_uc" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=12;" value="owns" vertex="1">
+          <mxGeometry height="60" width="120" x="1600" y="1180" as="geometry" />
+        </mxCell>
+        <mxCell id="l_uc1" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="r_uc" value="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="l_uc2" edge="1" parent="1" source="r_uc" style="edgeStyle=orthogonalEdgeStyle;" target="e_courses" value="N">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_u_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1080" y="820" as="geometry" />
+        </mxCell>
+        <mxCell id="la_u_id" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="a_u_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_u_email" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="email" vertex="1">
+          <mxGeometry height="40" width="110" x="1080" y="880" as="geometry" />
+        </mxCell>
+        <mxCell id="la_u_email" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="a_u_email">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_u_role" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="role" vertex="1">
+          <mxGeometry height="40" width="110" x="1080" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="la_u_role" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="a_u_role">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_u_sid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="student_id" vertex="1">
+          <mxGeometry height="40" width="110" x="1080" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="la_u_sid" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="a_u_sid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_u_dept" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="department" vertex="1">
+          <mxGeometry height="40" width="110" x="1500" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="la_u_dept" edge="1" parent="1" source="e_users" style="edgeStyle=orthogonalEdgeStyle;" target="a_u_dept">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_g_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="200" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="la_g_id" edge="1" parent="1" source="e_grades" style="edgeStyle=orthogonalEdgeStyle;" target="a_g_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_g_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="200" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="la_g_uid" edge="1" parent="1" source="e_grades" style="edgeStyle=orthogonalEdgeStyle;" target="a_g_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_g_cname" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="course_name" vertex="1">
+          <mxGeometry height="40" width="110" x="200" y="620" as="geometry" />
+        </mxCell>
+        <mxCell id="la_g_cname" edge="1" parent="1" source="e_grades" style="edgeStyle=orthogonalEdgeStyle;" target="a_g_cname">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_g_score" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="score" vertex="1">
+          <mxGeometry height="40" width="110" x="200" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="la_g_score" edge="1" parent="1" source="e_grades" style="edgeStyle=orthogonalEdgeStyle;" target="a_g_score">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_g_sem" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="semester" vertex="1">
+          <mxGeometry height="40" width="110" x="200" y="740" as="geometry" />
+        </mxCell>
+        <mxCell id="la_g_sem" edge="1" parent="1" source="e_grades" style="edgeStyle=orthogonalEdgeStyle;" target="a_g_sem">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ex_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="710" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ex_id" edge="1" parent="1" source="e_exams" style="edgeStyle=orthogonalEdgeStyle;" target="a_ex_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ex_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="710" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ex_uid" edge="1" parent="1" source="e_exams" style="edgeStyle=orthogonalEdgeStyle;" target="a_ex_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ex_name" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="exam_name" vertex="1">
+          <mxGeometry height="40" width="110" x="710" y="420" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ex_name" edge="1" parent="1" source="e_exams" style="edgeStyle=orthogonalEdgeStyle;" target="a_ex_name">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ex_time" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="exam_time" vertex="1">
+          <mxGeometry height="40" width="110" x="710" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ex_time" edge="1" parent="1" source="e_exams" style="edgeStyle=orthogonalEdgeStyle;" target="a_ex_time">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lv_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="960" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lv_id" edge="1" parent="1" source="e_leave" style="edgeStyle=orthogonalEdgeStyle;" target="a_lv_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lv_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="960" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lv_uid" edge="1" parent="1" source="e_leave" style="edgeStyle=orthogonalEdgeStyle;" target="a_lv_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lv_apid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="approver_id (FK)" vertex="1">
+          <mxGeometry height="40" width="130" x="960" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lv_apid" edge="1" parent="1" source="e_leave" style="edgeStyle=orthogonalEdgeStyle;" target="a_lv_apid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lv_status" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="status" vertex="1">
+          <mxGeometry height="40" width="110" x="960" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lv_status" edge="1" parent="1" source="e_leave" style="edgeStyle=orthogonalEdgeStyle;" target="a_lv_status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_bk_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1460" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="la_bk_id" edge="1" parent="1" source="e_books" style="edgeStyle=orthogonalEdgeStyle;" target="a_bk_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_bk_title" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="title" vertex="1">
+          <mxGeometry height="40" width="110" x="1460" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="la_bk_title" edge="1" parent="1" source="e_books" style="edgeStyle=orthogonalEdgeStyle;" target="a_bk_title">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_bk_author" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="author" vertex="1">
+          <mxGeometry height="40" width="110" x="1460" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="la_bk_author" edge="1" parent="1" source="e_books" style="edgeStyle=orthogonalEdgeStyle;" target="a_bk_author">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_bk_copies" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="available_copies" vertex="1">
+          <mxGeometry height="40" width="130" x="1780" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="la_bk_copies" edge="1" parent="1" source="e_books" style="edgeStyle=orthogonalEdgeStyle;" target="a_bk_copies">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_br_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1400" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_br_id" edge="1" parent="1" source="e_bookreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_br_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_br_status" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="status" vertex="1">
+          <mxGeometry height="40" width="110" x="1400" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="la_br_status" edge="1" parent="1" source="e_bookreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_br_status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_br_queue" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="queue_position" vertex="1">
+          <mxGeometry height="40" width="120" x="1800" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_br_queue" edge="1" parent="1" source="e_bookreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_br_queue">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_st_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1960" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="la_st_id" edge="1" parent="1" source="e_seats" style="edgeStyle=orthogonalEdgeStyle;" target="a_st_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_st_floor" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="floor" vertex="1">
+          <mxGeometry height="40" width="110" x="1960" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="la_st_floor" edge="1" parent="1" source="e_seats" style="edgeStyle=orthogonalEdgeStyle;" target="a_st_floor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_st_area" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="area" vertex="1">
+          <mxGeometry height="40" width="110" x="2280" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="la_st_area" edge="1" parent="1" source="e_seats" style="edgeStyle=orthogonalEdgeStyle;" target="a_st_area">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_st_no" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d6b656;fontSize=11;" value="seat_no" vertex="1">
+          <mxGeometry height="40" width="110" x="2280" y="160" as="geometry" />
+        </mxCell>
+        <mxCell id="la_st_no" edge="1" parent="1" source="e_seats" style="edgeStyle=orthogonalEdgeStyle;" target="a_st_no">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sr_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1900" y="480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_sr_id" edge="1" parent="1" source="e_seatreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_sr_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sr_status" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="status" vertex="1">
+          <mxGeometry height="40" width="110" x="1900" y="540" as="geometry" />
+        </mxCell>
+        <mxCell id="la_sr_status" edge="1" parent="1" source="e_seatreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_sr_status">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sr_date" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="reserve_date" vertex="1">
+          <mxGeometry height="40" width="120" x="2310" y="500" as="geometry" />
+        </mxCell>
+        <mxCell id="la_sr_date" edge="1" parent="1" source="e_seatreserv" style="edgeStyle=orthogonalEdgeStyle;" target="a_sr_date">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lf_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="150" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lf_id" edge="1" parent="1" source="e_lostfound" style="edgeStyle=orthogonalEdgeStyle;" target="a_lf_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_lf_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="150" y="1540" as="geometry" />
+        </mxCell>
+        <mxCell id="la_lf_uid" edge="1" parent="1" source="e_lostfound" style="edgeStyle=orthogonalEdgeStyle;" target="a_lf_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sh_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="550" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_sh_id" edge="1" parent="1" source="e_secondhand" style="edgeStyle=orthogonalEdgeStyle;" target="a_sh_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_sh_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="550" y="1540" as="geometry" />
+        </mxCell>
+        <mxCell id="la_sh_uid" edge="1" parent="1" source="e_secondhand" style="edgeStyle=orthogonalEdgeStyle;" target="a_sh_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ht_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="950" y="1480" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ht_id" edge="1" parent="1" source="e_helptasks" style="edgeStyle=orthogonalEdgeStyle;" target="a_ht_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_ht_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="950" y="1540" as="geometry" />
+        </mxCell>
+        <mxCell id="la_ht_uid" edge="1" parent="1" source="e_helptasks" style="edgeStyle=orthogonalEdgeStyle;" target="a_ht_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_co_id" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="id (PK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1780" y="1380" as="geometry" />
+        </mxCell>
+        <mxCell id="la_co_id" edge="1" parent="1" source="e_courses" style="edgeStyle=orthogonalEdgeStyle;" target="a_co_id">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="a_co_uid" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="user_id (FK)" vertex="1">
+          <mxGeometry height="40" width="110" x="1780" y="1440" as="geometry" />
+        </mxCell>
+        <mxCell id="la_co_uid" edge="1" parent="1" source="e_courses" style="edgeStyle=orthogonalEdgeStyle;" target="a_co_uid">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_title" parent="1" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontStyle=1;fontSize=12;" value="图例 Legend" vertex="1">
+          <mxGeometry height="30" width="120" x="2500" y="900" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_entity" parent="1" style="shape=mxgraph.erd.entity;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;fontSize=11;" value="实体 Entity" vertex="1">
+          <mxGeometry height="40" width="120" x="2500" y="940" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_rel" parent="1" style="rhombus;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;fontSize=11;" value="关系 Relationship" vertex="1">
+          <mxGeometry height="50" width="140" x="2500" y="1000" as="geometry" />
+        </mxCell>
+        <mxCell id="legend_attr" parent="1" style="ellipse;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontSize=11;" value="属性 Attribute" vertex="1">
+          <mxGeometry height="40" width="120" x="2500" y="1070" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
